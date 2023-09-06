@@ -20,7 +20,7 @@
                     <form>
                         <div class="mb-1">
                             <label class="form-label">Hình Ảnh</label>
-                            <input type="text" class="form-control" placeholder="Nhập vào hình ảnh">
+                            <input type="file" class="form-control" placeholder="Nhập vào hình ảnh" multiple>
                         </div>
                         <div class="mb-1">
                             <label for="invoice-to" class="form-label">Thương Hiệu</label>

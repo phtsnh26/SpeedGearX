@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => '/admin'], function () {
@@ -17,11 +19,18 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'brands'], function () {
         Route::get('/', [AdminController::class, 'indexBrand'])->name('indexBrand');
+        Route::get('/data', [BrandController::class, 'data'])->name('dataBrand');
+        Route::post('/create', [BrandController::class, 'add'])->name('createBrand');
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
         Route::get('/', [AdminController::class, 'indexVehicle'])->name('indexVehicle');
     });
+
+    Route::group(['prefix' => 'classification'], function () {
+        Route::get('/', [AdminController::class, 'indexClassification'])->name('indexClassification');
+    });
+
 
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [AdminController::class, 'indexBooking'])->name('indexBooking');

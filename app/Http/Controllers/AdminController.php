@@ -27,6 +27,10 @@ class AdminController extends Controller
     {
         return view('page.admin.vehicle.index');
     }
+    public function indexClassification()
+    {
+        return view('page.admin.classification.index');
+    }
     public function indexBooking()
     {
         return view('page.admin.booking.index');
