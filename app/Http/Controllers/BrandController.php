@@ -84,6 +84,7 @@ class BrandController extends Controller
     {
         $brand = Brand::where('id', $request->id)->first();
         if ($brand) {
+            // tét
             $brand->tinh_trang = !$brand->tinh_trang;
             $brand->save();
         }
