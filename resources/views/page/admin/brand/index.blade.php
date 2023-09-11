@@ -14,7 +14,7 @@
                                 placeholder="Nhập vào hình ảnh">
                             <label>Tên Thương Hiệu:</label>
                             <input v-model="add.ten_thuong_hieu" type="text" class="form-control mt-1 mb-1"
-                                placeholder="Nhập vào tên thương hiệu">
+                                placeholder="Nhập vào tên thương hiệu" @input="generateSlug">
                             <label>Slug Thương Hiệu:</label>
                             <input v-model="add.slug_thuong_hieu" type="text" class="form-control mt-1"
                                 placeholder="Nhập vào slug thương hiệu">
@@ -72,11 +72,13 @@
                                             <td class="text-center algin-middle"> @{{ v.ten_thuong_hieu }}</td>
                                             <td class="text-center algin-middle">
                                                 <template v-if="v.tinh_trang == 1">
-                                                    <button type="button" class="btn btn-relief-success"
-                                                        v-on:click="doiTrangThai(v)">Hiển Thị</button>
+                                                    <button style="width: 120px" type="button"
+                                                        class="btn btn-relief-success" v-on:click="doiTrangThai(v)">Hiển
+                                                        Thị</button>
                                                 </template>
                                                 <template v-else>
-                                                    <button type="button" class="btn btn-relief-danger"
+                                                    <button style="width: 120px" type="button"
+                                                        class="btn btn-relief-danger"
                                                         v-on:click="doiTrangThai(v)">Khóa</button>
                                                 </template>
                                             </td>
@@ -168,7 +170,9 @@
                 el: '#app',
                 data: {
                     list: [],
-                    add: {},
+                    add: {
+                        tinh_trang: 1,
+                    },
                     del: {},
                     edit: {},
                     search: '',
@@ -245,6 +249,10 @@
                                 this.timKiem();
                                 toastr.success('Đã đổi trạng thái !', "Thành Công")
                             })
+                    },
+                    generateSlug() {
+                        const slug = this.add.ten_thuong_hieu.toLowerCase().replace(/ /g, "-");
+                        this.add.slug_thuong_hieu = slug;
                     }
                 },
             });
