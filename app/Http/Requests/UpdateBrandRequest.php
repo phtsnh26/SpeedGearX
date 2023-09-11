@@ -4,19 +4,18 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddBrandRequest extends FormRequest
+class UpdateBrandRequest extends FormRequest
 {
 
     public function authorize(): bool
     {
         return true;
     }
-
     public function rules(): array
     {
         return [
             'ten_thuong_hieu'        =>  'required|between:2,50',
-            'slug_thuong_hieu'       =>  'required|between:2,50|unique:brands,slug_thuong_hieu',
+            'slug_thuong_hieu'       =>  'required|between:2,50|unique:brands',
             'tinh_trang'            =>  'required|boolean',
             'hinh_anh'              =>  'required|max:195',
         ];

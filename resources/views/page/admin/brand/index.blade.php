@@ -81,7 +81,7 @@
                                             <td class="text-center algin-middle">
                                                 <i class="fa-solid fa-edit text-info"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#editModal"
-                                                    data-bs-toggle="modal"></i>
+                                                    data-bs-toggle="modal" v-on:click="edit = Object.assign({},v)"></i>
                                                 <i class="fa-solid fa-trash text-danger"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
                                                     data-bs-toggle="modal" v-on:click="del = v"></i>
@@ -101,16 +101,16 @@
                                         </div>
                                         <div class="modal-body">
                                             <label>Hình Ảnh:</label>
-                                            <input type="text" class="form-control mt-1 mb-1"
+                                            <input v-model="edit.hinh_anh" type="text" class="form-control mt-1 mb-1"
                                                 placeholder="Nhập vào hình ảnh">
                                             <label>Tên Thương Hiệu:</label>
-                                            <input type="text" class="form-control mt-1 mb-1"
-                                                placeholder="Nhập vào tên thương hiệu">
+                                            <input v-model="edit.ten_thuong_hieu" type="text"
+                                                class="form-control mt-1 mb-1" placeholder="Nhập vào tên thương hiệu">
                                             <label>Slug Thương Hiệu:</label>
-                                            <input type="text" class="form-control mt-1"
-                                                placeholder="Nhập vào slug thương hiệu">
+                                            <input v-model="edit.slug_thuong_hieu" type="text"
+                                                class="form-control mt-1" placeholder="Nhập vào slug thương hiệu">
                                             <label class="mt-1">Tình Trạng:</label>
-                                            <select class="form-select mt-1 mb-2">
+                                            <select v-model="edit.tinh_trang" class="form-select mt-1 mb-2">
                                                 <option value="1">Hiển Thị</option>
                                                 <option value="0">Khóa</option>
                                             </select>
@@ -119,7 +119,8 @@
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Thoát</button>
                                             <button data-bs-dismiss="modal"
-                                                class="btn btn-info waves-effect waves-float waves-light">Cập Nhật</button>
+                                                class="btn btn-info waves-effect waves-float waves-light"
+                                                v-on:click="sua()" data-bs-dismiss="modal">Cập Nhật</button>
                                         </div>
                                     </div>
                                 </div>
@@ -134,7 +135,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <h6> Bạn có chắc muốn xóa thương hiệu không ?
+                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>xxxx</b> không ?
                                             </h6>
                                             <h6>
                                                 <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
@@ -167,6 +168,7 @@
                     list: [],
                     add: {},
                     del: {},
+                    edit: {},
                     search: '',
                 },
                 created() {
@@ -216,8 +218,24 @@
                             .then((res) => {
                                 this.list = res.data.data;
                             })
-
-                    }
+                    },
+                    sua() {
+                        axios
+                            .post('{{ Route('updateBrand') }}', this.edit)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, "Thành công!");
+                                } else {
+                                    toastr.error(res.data.message, "Lỗi!");
+                                }
+                                this.timKiem();
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+                    },
                 },
             });
         })

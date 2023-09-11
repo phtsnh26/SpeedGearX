@@ -23,6 +23,7 @@ Route::group(['prefix' => '/admin'], function () {
         Route::post('/create', [BrandController::class, 'add'])->name('createBrand');
         Route::post('/del', [BrandController::class, 'del'])->name('delBrand');
         Route::post('/search', [BrandController::class, 'search'])->name('searchBrand');
+        Route::post('/update', [BrandController::class, 'update'])->name('updateBrand');
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
