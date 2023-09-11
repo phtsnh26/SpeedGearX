@@ -47,8 +47,10 @@
                                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                     </svg>
                                 </button>
-                                <input type="text" class="form-control" placeholder="Nhập tìm kiếm" aria-label="Amount">
-                                <button class="btn btn-outline-primary waves-effect" type="button">Search !</button>
+                                <input v-model="search" v-on:keyup.enter="timKiem()" type="text" class="form-control"
+                                    placeholder="Nhập tìm kiếm" aria-label="Amount">
+                                <button class="btn btn-outline-primary waves-effect" type="button"
+                                    v-on:click="timKiem()">Search !</button>
                             </div>
                             <table class="table table-bordered">
                                 <thead class="text-center algin-middle text-primary">
@@ -82,7 +84,7 @@
                                                     data-bs-toggle="modal"></i>
                                                 <i class="fa-solid fa-trash text-danger"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
-                                                    data-bs-toggle="modal"></i>
+                                                    data-bs-toggle="modal" v-on:click="del = v"></i>
                                             </td>
                                         </tr>
                                     </template>
@@ -132,7 +134,8 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>hhhh</b> không ?</h6>
+                                            <h6> Bạn có chắc muốn xóa thương hiệu không ?
+                                            </h6>
                                             <h6>
                                                 <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
                                                         phục!</span>
@@ -142,8 +145,8 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Thoát</button>
-                                            <button type="button" class="btn btn-danger"
-                                                data-bs-dismiss="modal">Xóa</button>
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                                v-on:click="xoa()">Xóa</button>
                                         </div>
                                     </div>
                                 </div>
@@ -163,6 +166,8 @@
                 data: {
                     list: [],
                     add: {},
+                    del: {},
+                    search: '',
                 },
                 created() {
                     this.getData();
@@ -186,9 +191,32 @@
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Error');
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
+                    },
+                    xoa() {
+                        axios
+                            .post('{{ Route('delBrand') }}', this.del)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, "Thành Công");
+                                    this.timKiem();
+                                } else {
+                                    toastr.error(res.data.message, "Lỗi")
+                                }
+                            })
+                    },
+                    timKiem() {
+                        var search = {
+                            'giaTri': this.search
+                        };
+                        axios
+                            .post('{{ Route('searchBrand') }}', search)
+                            .then((res) => {
+                                this.list = res.data.data;
+                            })
+
                     }
                 },
             });

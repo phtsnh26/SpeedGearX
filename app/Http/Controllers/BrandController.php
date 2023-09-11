@@ -23,4 +23,30 @@ class BrandController extends Controller
             'status'    => true,
         ]);
     }
+    public function del(Request $request)
+    {
+        $brand = Brand::where('id', $request->id)->first();
+
+        if ($brand) {
+            $brand->delete();
+
+            return response()->json([
+                'status'    => true,
+                'message'   => 'Đã xóa Brand thành công !',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => false,
+                'message'   => 'Brand không tồn tại !',
+            ]);
+        }
+    }
+    public function search(Request $request)
+    {
+        $giaTri = '%' . $request->giaTri . '%';
+        $data = Brand::where('ten_thuong_hieu', 'like', $giaTri)->get();
+        return response()->json([
+            'data' => $data,
+        ]);
+    }
 }
