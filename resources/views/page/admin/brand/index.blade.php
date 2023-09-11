@@ -72,10 +72,12 @@
                                             <td class="text-center algin-middle"> @{{ v.ten_thuong_hieu }}</td>
                                             <td class="text-center algin-middle">
                                                 <template v-if="v.tinh_trang == 1">
-                                                    <button type="button" class="btn btn-relief-success">Hiển Thị</button>
+                                                    <button type="button" class="btn btn-relief-success"
+                                                        v-on:click="doiTrangThai(v)">Hiển Thị</button>
                                                 </template>
                                                 <template v-else>
-                                                    <button type="button" class="btn btn-relief-danger">Khóa</button>
+                                                    <button type="button" class="btn btn-relief-danger"
+                                                        v-on:click="doiTrangThai(v)">Khóa</button>
                                                 </template>
                                             </td>
                                             <td class="text-center algin-middle">
@@ -135,7 +137,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>xxxx</b> không ?
+                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>@{{ del.ten_thuong_hieu }}</b> không ?
                                             </h6>
                                             <h6>
                                                 <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
@@ -236,6 +238,14 @@
                                 });
                             });
                     },
+                    doiTrangThai(x) {
+                        axios
+                            .post('{{ Route('statusBrand') }}', x)
+                            .then((res) => {
+                                this.timKiem();
+                                toastr.success('Đã đổi trạng thái !', "Thành Công")
+                            })
+                    }
                 },
             });
         })

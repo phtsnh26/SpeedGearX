@@ -80,4 +80,12 @@ class BrandController extends Controller
             'message'   => 'Cập nhật mới thành công',
         ]);
     }
+    public function status(Request $request)
+    {
+        $brand = Brand::where('id', $request->id)->first();
+        if ($brand) {
+            $brand->tinh_trang = !$brand->tinh_trang;
+            $brand->save();
+        }
+    }
 }

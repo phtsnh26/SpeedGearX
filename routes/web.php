@@ -24,6 +24,7 @@ Route::group(['prefix' => '/admin'], function () {
         Route::post('/del', [BrandController::class, 'del'])->name('delBrand');
         Route::post('/search', [BrandController::class, 'search'])->name('searchBrand');
         Route::post('/update', [BrandController::class, 'update'])->name('updateBrand');
+        Route::post('/status', [BrandController::class, 'status'])->name('statusBrand');
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
