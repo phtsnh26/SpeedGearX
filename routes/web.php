@@ -21,6 +21,8 @@ Route::group(['prefix' => '/admin'], function () {
         Route::get('/', [AdminController::class, 'indexBrand'])->name('indexBrand');
         Route::get('/data', [BrandController::class, 'data'])->name('dataBrand');
         Route::post('/create', [BrandController::class, 'add'])->name('createBrand');
+        Route::post('/del', [BrandController::class, 'del'])->name('delBrand');
+        Route::post('/search', [BrandController::class, 'search'])->name('searchBrand');
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
@@ -52,5 +54,3 @@ Route::group(['prefix' => '/admin'], function () {
 Route::get('/', [CustomerController::class, 'index'])->name('indexHome');
 Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
-Route::group(['prefix' => 'home'], function () {
-});
