@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Brand;
@@ -52,6 +53,10 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [AdminController::class, 'indexUser'])->name('indexUser');
+        Route::get('/data', [ClientController::class, 'data'])->name('dataUser');
+        Route::post('/status', [ClientController::class, 'status'])->name('statusUser');
+        Route::post('/search', [ClientController::class, 'search'])->name('searchUser');
+        Route::post('/del', [ClientController::class, 'del'])->name('delUser');
     });
 });
 
