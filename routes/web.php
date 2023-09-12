@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\VehicleController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'vehicles'], function () {
         Route::get('/', [AdminController::class, 'indexVehicle'])->name('indexVehicle');
+        Route::get('data', [VehicleController::class, 'data'])->name('dataVehicle');
     });
 
     Route::group(['prefix' => 'classification'], function () {
