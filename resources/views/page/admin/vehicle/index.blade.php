@@ -21,54 +21,85 @@
                         <form>
                             <div class="mb-1">
                                 <label class="form-label">Hình Ảnh</label>
-                                <input type="file" class="form-control" placeholder="Nhập vào hình ảnh" multiple>
+                                <input type="file" class="form-control" placeholder="Chọn hình ảnh" multiple
+                                    @change="chooseImages" accept="image/png, image/jpeg, image/jpg">
                             </div>
+                            <div>
+                                <div class="row">
+                                    <template style="gap: 5px;" v-for="(imageUrl, index) in imageUrls" class="mb-2 pe-2">
+                                        <div class="col-3 text-center">
+                                            <img style="width: 80px; height: 80px;" :src="imageUrl" class=""
+                                                alt="">
+                                            <i @click="removeImage(index)" class="fas fa-times-circle"></i>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="form-label">Hình Ảnh</label>
+                                <input type="file" class="form-control" placeholder="Chọn hình ảnh" multiple
+                                    @change="uploadImages" accept="image/png, image/jpeg, image/jpg">
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <template style="gap: 5px;" v-for="(imageUrl, index) in imageUrls" class="mb-2 pe-2">
+                                        <div class="col-3 text-center">
+                                            <img style="width: 80px; height: 80px;" src="http://127.0.0.1:8000/storage/abc/rq0sANq61Lscfr37MTUfhiB6dzfWFnPCoDXNhDHz.jpg" class=""
+                                                alt="">
+                                            <i @click="removeImage(index)" class="fas fa-times-circle"></i>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
                             <div class="mb-1">
                                 <label for="invoice-to" class="form-label">Thương Hiệu</label>
-                                <select class="form-select">
-                                    <option value="1">BMW</option>
-                                    <option value="2">Vinfast</option>
-                                    <option value="3">Mercedes</option>
-                                    <option value="4">Mazda</option>
+                                <select v-model='add.id_thuong_hieu' class="form-select">
+                                    <option v-for='(v, k) in brand' :value="v.id">@{{ v.ten_thuong_hieu }}</option>
+
                                 </select>
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Tên Xe</label>
-                                <input type="text" class="form-control" placeholder="Nhập tên xe">
+                                <input v-model='add.ten_xe' type="text" class="form-control" placeholder="Nhập tên xe">
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Slug Xe</label>
-                                <input type="text" class="form-control" placeholder="Nhập slug xe">
+                                <input v-model='add.slug_xe' type="text" class="form-control" placeholder="Nhập slug xe">
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-to" class="form-label">Loại Xe</label>
-                                <select class="form-select">
-                                    <option value="1">4</option>
-                                    <option value="2">7</option>
-                                    <option value="3">9</option>
-                                    <option value="4">12</option>
+                                <select v-model='add.id_loai_xe' class="form-select">
+                                    <option v-for='(v, k) in classification' :value="v.id">@{{ v.so_cho_ngoi }}
+                                    </option>
+
                                 </select>
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-message" class="form-label">Mô Tả Ngắn</label>
-                                <textarea class="form-control" cols="3" rows="7" placeholder="Nhập mô tả ngắn"></textarea>
+                                <textarea v-model='add.mo_ta_ngan' class="form-control" cols="3" rows="7" placeholder="Nhập mô tả ngắn"></textarea>
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-message" class="form-label">Mô Tả Chi Tiết</label>
-                                <textarea class="form-control" cols="3" rows="11" placeholder="Nhập mô tả chi tiết"></textarea>
+                                <textarea v-model='add.mo_ta_chi_tiet' class="form-control" cols="3" rows="11"
+                                    placeholder="Nhập mô tả chi tiết"></textarea>
                             </div>
 
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Giá Thuê/Giờ</label>
-                                <input type="text" class="form-control" placeholder="Nhập giá thuê theo giờ">
+                                <input v-model='add.gia_theo_gio' type="text" class="form-control"
+                                    placeholder="Nhập giá thuê theo giờ">
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Giá Thuê/Ngày</label>
-                                <input type="text" class="form-control" placeholder="Nhập giá thuê theo ngày">
+                                <input v-model='add.gia_theo_ngay' type="text" class="form-control"
+                                    placeholder="Nhập giá thuê theo ngày">
                             </div>
+
                             <div class="mb-2">
                                 <label for="invoice-to" class="form-label">Tình Trạng</label>
-                                <select class="form-select">
+                                <select v-model='add.tinh_trang' class="form-select">
                                     <option value="1">Hiển Thị</option>
                                     <option value="0">Khóa</option>
                                 </select>
@@ -78,7 +109,8 @@
                     </div>
                     <div class="modal-footer text-end">
                         <div class="mb-1 d-flex flex-wrap">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            <button @click='addVehicle()' type="button" class="btn btn-primary"
+                                data-bs-dismiss="modal">
                                 <i class="fa-solid fa-plus"></i>
                                 Thêm Mới
                             </button>
@@ -125,32 +157,34 @@
                                 <tr v-for='(v, k) in list'>
                                     <th>@{{ k + 1 }}</th>
                                     <td class="text-nowrap text-center align-middle">
-                                            <img v-bind:src="v.hinh_anh_xe"
-                                                style="height: 100px;width: 150px;">
+                                        <img v-bind:src="v.hinh_anh_xe" style="height: 100px;width: 150px;">
                                     </td>
-                                    <td class="text-nowrap align-middle text-center">@{{ v.ten_xe }}</td>
+                                    <td class="text-nowrap align-middle text-center">@{{ v.ten_thuong_hieu }}</td>
                                     <td class="text-nowrap align-middle text-center">@{{ v.ten_xe }}</td>
                                     <td class="text-center align-middle">
-                                        <i class="fa-solid fa-circle-info text-info"
+                                        <i v-on:click='mo_ta.mo_ta_ngan = v.mo_ta_ngan'
+                                            class="fa-solid fa-circle-info text-info"
                                             style="font-size: 35px; cursor: pointer;" data-bs-target="#moTaNganModal"
                                             data-bs-toggle="modal"></i>
                                     </td>
                                     <td class="text-center align-middle">
-                                        <i class="fa-solid fa-circle-info text-info"
+                                        <i v-on:click='mo_ta.mo_ta_chi_tiet = v.mo_ta_chi_tiet'
+                                            class="fa-solid fa-circle-info text-info"
                                             style="font-size: 35px; cursor: pointer;" data-bs-target="#moTaChiTietModal"
                                             data-bs-toggle="modal"></i>
                                     </td>
 
                                     <td class="text-center">
-                                        5 chỗ
+                                        @{{ v.so_cho_ngoi }} chỗ
                                     </td>
                                     <td class="text-nowrap text-center">
-                                        <p>Giá thuê/giờ: <b>1.200.000đ</b></p>
-                                        <p>Giá thuê/ngày: <b>2.200.000đ</b> </p>
+                                        <p>Giá thuê/giờ: <b>@{{ numberFormat(v.gia_theo_gio) }}</b></p>
+                                        <p>Giá thuê/ngày: <b>@{{ numberFormat(v.gia_theo_ngay) }}</b> </p>
                                     </td>
                                     <td class="text-center algin-middle text-nowrap">
-                                        <button type="button" class="btn btn-relief-success">Hiển Thị</button>
-                                        <button type="button" class="btn btn-relief-danger">Khóa</button>
+                                        <button v-if='v.tinh_trang' type="button" class="btn btn-relief-success">Hiển
+                                            Thị</button>
+                                        <button v-else type="button" class="btn btn-relief-danger">Khóa</button>
                                     </td>
                                     <td class="text-center algin-middle text-nowrap">
                                         <i class="fa-solid fa-edit text-info" style="font-size: 35px; cursor: pointer;"
@@ -172,7 +206,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    aaaaaaaaa
+                                    @{{ mo_ta.mo_ta_ngan }}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
@@ -191,7 +225,8 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    bbbbbbbbbbb
+                                    @{{ mo_ta.mo_ta_chi_tiet }}
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
@@ -329,6 +364,15 @@
                 el: '#app',
                 data: {
                     list: [],
+                    brand: [],
+                    classification: [],
+                    mo_ta: {
+                        mo_ta_ngan: '',
+                        mo_ta_chi_tiet: ''
+                    },
+                    imageUrls: [],
+                    add: {},
+                    check: ''
                 },
                 created() {
                     this.getData();
@@ -339,8 +383,80 @@
                             .get('{{ Route('dataVehicle') }}')
                             .then((res) => {
                                 this.list = res.data.data;
+                                this.brand = res.data.brand;
+                                this.classification = res.data.classification;
                             });
-                    }
+                    },
+                    numberFormat(number) {
+                        return new Intl.NumberFormat('vi-VI', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(number);
+                    },
+                    chooseImages(event) {
+                        const files = event.target.files;
+                        if (files) {
+                            for (let i = 0; i < files.length; i++) {
+                                const file = files[i];
+                                this.imageUrls.push(URL.createObjectURL(file));
+                            }
+                        } else {
+                            this.imageUrls = []; // Xóa danh sách ảnh nếu không có tệp nào được chọn
+                        }
+                    },
+                    removeImage(index) {
+                        this.imageUrls.splice(index, 1); // Xóa ảnh khỏi danh sách theo chỉ mục
+                        console.log(this.imageUrls);
+
+                    },
+                    addVehicle() {
+                        var payload = {
+                            'vehicle': this.add,
+                            'image': this.imageUrls,
+                            ...this
+                            .add // Sử dụng toán tử spread để chèn tất cả các phần tử trong this.add vào payload
+                        };
+
+
+                        console.log(payload);
+                        axios
+                            .post('{{ Route('createVehicle') }}', payload)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.getData();
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    uploadImages(event) {
+                        const formData = new FormData();
+                        const images = event.target.files[0];
+                        formData.append('images', images);
+
+                        
+
+                        // Gửi yêu cầu POST đến route upload.images
+                        axios
+                            .post('{{ Route('upLoadImage') }}', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                },
+                            }).then((res) => {
+                                this.imageUrls = res.data;
+                                console.log(this.imageUrls);
+                            }).catch((error) => {
+                                console.error(error);
+                            });
+                    },
+
+
                 },
             });
         });
