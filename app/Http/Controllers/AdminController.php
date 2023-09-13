@@ -47,4 +47,8 @@ class AdminController extends Controller
     {
         return  view('page.admin.user.index');
     }
+    public function indexAapplication()
+    {
+        return  view('page.admin.aapplication.index');
+    }
 }

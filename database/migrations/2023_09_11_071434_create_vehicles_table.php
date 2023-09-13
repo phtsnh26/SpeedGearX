@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('ten_xe');
             $table->string('slug_xe');
-            $table->string('mo_ta_ngan')->nullable();
-            $table->string('mo_ta_chi_tiet')->nullable();
-            $table->integer('gia_theo_gio')->nullable();
-            $table->integer('gia_theo_ngay')->nullable();
+            $table->text('mo_ta_ngan')->nullable();
+            $table->text('mo_ta_chi_tiet')->nullable();
+            $table->decimal('gia_theo_ngay')->nullable();
             $table->integer('so_luong')->default(1);
             $table->integer('tinh_trang')->default(1);
             $table->integer('id_thuong_hieu');
