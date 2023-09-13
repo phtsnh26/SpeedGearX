@@ -235,7 +235,6 @@
                                 if (res.data.status) {
                                     toastr.success(res.data.message, "Thành công!");
                                     this.$set(this.list, this.index, this.edit);
-                                    list[index] = edit
                                 } else {
                                     toastr.error(res.data.message, "Lỗi!");
                                 }
