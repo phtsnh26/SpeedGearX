@@ -87,5 +87,9 @@ class BrandController extends Controller
             $brand->tinh_trang = !$brand->tinh_trang;
             $brand->save();
         }
+        return response()->json([
+            'status'    => true,
+            'message'   => 'Đổi trạng thái thành công !',
+        ]);
     }
 }

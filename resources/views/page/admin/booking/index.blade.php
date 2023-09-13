@@ -61,9 +61,21 @@
                                                 data-bs-toggle="modal"></i>
                                         </td>
                                         <td class="text-nowrap text-center">
-                                            <button type="button" class="btn btn-relief-success">Đã Trả</button>
-                                            <button type="button" class="btn btn-relief-warning">Đã Thuê</button>
-                                            <button type="button" class="btn btn-relief-danger">Hết Hạn</button>
+                                            <button type="button" class="btn btn-relief-secondary" style="width: 130px">
+                                                Đang Xử Lý
+                                            </button>
+                                            <button type="button" class="btn btn-relief-warning" style="width: 130px">
+                                                Đã Thuê
+                                            </button>
+                                            <button type="button" class="btn btn-relief-success" style="width: 130px">
+                                                Đã Trả
+                                            </button>
+                                            <button type="button" class="btn btn-relief-danger" style="width: 130px">
+                                                Hết Hạn
+                                            </button>
+                                            <button type="button" class="btn btn-relief-dark" style="width: 130px">
+                                                Đã Hủy
+                                            </button>
                                         </td>
                                         <td class="text-nowrap text-center">
                                             <i class="fa-solid fa-trash text-danger"
