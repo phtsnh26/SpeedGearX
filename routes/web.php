@@ -39,6 +39,7 @@ Route::group(['prefix' => '/admin'], function () {
         Route::post('/changeStatus', [VehicleController::class, 'changeStatus'])->name('changeStatus');
         Route::post('/del', [VehicleController::class, 'del'])->name('deleteVehicle');
         Route::post('/edit_img', [VehicleController::class, 'upLoadImg'])->name('edit_img');
+        Route::post('/update', [VehicleController::class, 'update'])->name('updateVehicle');
     });
 
     Route::group(['prefix' => 'classification'], function () {

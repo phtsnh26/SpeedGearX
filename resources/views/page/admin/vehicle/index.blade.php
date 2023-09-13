@@ -19,22 +19,7 @@
                     </div>
                     <div class="modal-body flex-grow-1">
                         <form>
-                            {{-- <div class="mb-1">
-                                <label class="form-label">Hình Ảnh</label>
-                                <input type="file" class="form-control" placeholder="Chọn hình ảnh" multiple
-                                    @change="chooseImages" accept="image/png, image/jpeg, image/jpg">
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <template style="gap: 5px;" v-for="(imageUrl, index) in imageUrls" class="mb-2 pe-2">
-                                        <div class="col-3 text-center">
-                                            <img style="width: 80px; height: 80px;" :src="imageUrl" class=""
-                                                alt="">
-                                            <i @click="removeImage(index)" class="fas fa-times-circle"></i>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div> --}}
+
 
                             <div class="mb-1">
                                 <label class="form-label">Hình Ảnh</label>
@@ -62,7 +47,8 @@
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Tên Xe</label>
-                                <input v-model='add.ten_xe' type="text" class="form-control" placeholder="Nhập tên xe">
+                                <input @input='generateSlug' v-model='add.ten_xe' type="text"
+                                    class="form-control" placeholder="Nhập tên xe">
                             </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Slug Xe</label>
@@ -103,8 +89,7 @@
                     </div>
                     <div class="modal-footer text-end">
                         <div class="mb-1 d-flex flex-wrap">
-                            <button @click='addVehicle()' type="button" class="btn btn-primary"
-                                data-bs-dismiss="modal">
+                            <button @click='addVehicle()' type="button" class="btn btn-primary" data-bs-dismiss="modal">
                                 <i class="fa-solid fa-plus"></i>
                                 Thêm Mới
                             </button>
@@ -249,13 +234,26 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Hình Ảnh</label>
                                                 <input type="file" class="form-control" placeholder="Chọn hình ảnh"
-                                                    multiple @change="uploadImages"
+                                                    multiple @change="e_uploadImages"
                                                     accept="image/png, image/jpeg, image/jpg">
                                             </div>
                                             <div>
                                                 <div class="row">
                                                     <template style="gap: 5px;" v-for="(imageUrl, index) in e_imageUrls"
                                                         class="mb-2 pe-2">
+                                                        <div class="col-3 text-center">
+                                                            <img style="width: 80px; height: 80px;"
+                                                                :src="imageUrl.hinh_anh_xe" class="" alt="">
+                                                            <i @click="e_removeImage(index)"
+                                                                class="fas fa-times-circle"></i>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="row">
+                                                    <template style="gap: 5px;"
+                                                        v-for="(imageUrl, index) in update_imageUrls" class="mb-2 pe-2">
                                                         <div class="col-3 text-center">
                                                             <img style="width: 80px; height: 80px;"
                                                                 :src="'/image/' + imageUrl" class="" alt="">
@@ -278,7 +276,7 @@
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Tên Xe</label>
-                                                <input v-model='edit.ten_xe' type="text" placeholder="Nhập vào tên xe"
+                                                <input @input="e_generateSlug()" v-model='edit.ten_xe' type="text" placeholder="Nhập vào tên xe"
                                                     class="form-control">
                                             </div>
                                         </div>
@@ -335,7 +333,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Thoát</button>
-                                    <button data-bs-dismiss="modal"
+                                    <button @click='updateVehicle(edit)' data-bs-dismiss="modal"
                                         class="btn btn-info waves-effect waves-float waves-light">Cập Nhật</button>
                                 </div>
                             </div>
@@ -389,6 +387,7 @@
                     },
                     imageUrls: [],
                     e_imageUrls: [],
+                    update_imageUrls: [],
                     add: {},
                     key_search: '',
                     del: {},
@@ -439,9 +438,6 @@
                             ...this
                             .add // Sử dụng toán tử spread để chèn tất cả các phần tử trong this.add vào payload
                         };
-
-
-                        console.log(payload);
                         axios
                             .post('{{ Route('createVehicle') }}', payload)
                             .then((res) => {
@@ -481,6 +477,30 @@
                                 console.error(error);
                             });
                     },
+                    e_uploadImages(event) {
+                        this.e_imageUrls = [];
+                        const formData = new FormData();
+                        const images = event.target.files;
+                        // formData.append('images', images);
+
+                        // Thêm các tệp ảnh vào FormData
+                        for (let i = 0; i < images.length; i++) {
+                            formData.append('images[]', images[i]);
+                        }
+
+                        // Gửi yêu cầu POST đến route upload.images
+                        axios
+                            .post('{{ Route('upLoadImage') }}', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                },
+                            }).then((res) => {
+                                this.update_imageUrls = res.data.data;
+                                console.log(this.update_imageUrls);
+                            }).catch((error) => {
+                                console.error(error);
+                            });
+                    },
                     search() {
                         var payload = {
                             'key': this.key_search
@@ -503,7 +523,7 @@
                                 if (res.data.status) {
                                     toastr.success(res.data.message, 'Thành Công');
                                     this.list[this.index].tinh_trang = !this.list[this.index]
-                                    .tinh_trang;
+                                        .tinh_trang;
                                 } else {
                                     toastr.error(res.data.message, 'Lỗi');
                                 }
@@ -535,14 +555,54 @@
                         axios
                             .post('{{ Route('edit_img') }}', v)
                             .then((res) => {
-
+                                this.e_imageUrls = res.data.data;
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0] , 'error');
+                                    toastr.error(v[0], 'error');
                                 });
                             });
-                    }
+                    },
+                    updateVehicle(a) {
+                        var payload = {
+                            'vehicle': a,
+                            ...a,
+                            'image': this.update_imageUrls
+                        }
+                        axios
+                            .post('{{ Route('updateVehicle') }}', payload)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.getData();
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    toSlug(str) {
+                        str = str.toLowerCase();
+                        str = str
+                            .normalize('NFD') // chuyển chuỗi sang unicode tổ hợp
+                            .replace(/[\u0300-\u036f]/g, ''); // xóa các ký tự dấu sau khi tách tổ hợp
+                        str = str.replace(/[đĐ]/g, 'd');
+                        str = str.replace(/([^0-9a-z-\s])/g, '');
+                        str = str.replace(/(\s+)/g, '-');
+                        str = str.replace(/-+/g, '-');
+                        str = str.replace(/^-+|-+$/g, '');
+                        return str;
+                    },
+                    generateSlug() {
+                        this.add.slug_xe = this.toSlug(this.add.ten_xe);
+                    },
+                    e_generateSlug() {
+                        this.edit.slug_xe = this.toSlug(this.edit.ten_xe);
+                    },
 
 
                 },

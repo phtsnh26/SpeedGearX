@@ -97,8 +97,10 @@ class VehicleController extends Controller
     }
     public function upLoadImg(Request $request)
     {
-        $img = Images::where('id_xe', $request->id);
-
+        $img = Images::where('id_xe', $request->id)->get();
+        return response()->json([
+            'data'   => $img,
+        ]);
     }
 
     public function search(Request $request)
@@ -149,10 +151,37 @@ class VehicleController extends Controller
                 'status'    => 1,
                 'message'   => 'Đã xoá thành công!',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status'    => 0,
                 'message'   => 'Phương tiện này không tồn tại!',
+            ]);
+        }
+    }
+    public function update(Request $request)
+    {
+        $vehicle = Vehicle::find($request->vehicle['id'])->update($request->vehicle);
+
+        if ($vehicle) {
+            if ($request->image) {
+                $img = Images::where('id_xe', $request->vehicle['id'])->delete();
+                foreach ($request->image as $key => $value) {
+                    # code...
+                    $img = Images::create([
+                        'hinh_anh_xe'           => '/image/'.$value,
+                        'id_xe'         => $request->vehicle['id'],
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status'    => 1,
+                'message'   => 'Cập nhật thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Cập nhật thất bại!',
             ]);
         }
     }
