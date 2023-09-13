@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Brand;
@@ -25,6 +27,7 @@ Route::group(['prefix' => '/admin'], function () {
         Route::post('/del', [BrandController::class, 'del'])->name('delBrand');
         Route::post('/search', [BrandController::class, 'search'])->name('searchBrand');
         Route::post('/update', [BrandController::class, 'update'])->name('updateBrand');
+        Route::post('/status', [BrandController::class, 'status'])->name('statusBrand');
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
@@ -45,6 +48,7 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [AdminController::class, 'indexBooking'])->name('indexBooking');
+        Route::get('/data', [BookingController::class, 'data'])->name('dataBooking');
     });
 
     Route::group(['prefix' => 'testimonials'], function () {
@@ -57,6 +61,10 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [AdminController::class, 'indexUser'])->name('indexUser');
+        Route::get('/data', [ClientController::class, 'data'])->name('dataUser');
+        Route::post('/status', [ClientController::class, 'status'])->name('statusUser');
+        Route::post('/search', [ClientController::class, 'search'])->name('searchUser');
+        Route::post('/del', [ClientController::class, 'del'])->name('delUser');
     });
 });
 

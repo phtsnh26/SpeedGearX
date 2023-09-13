@@ -14,7 +14,7 @@
                                 placeholder="Nhập vào hình ảnh">
                             <label>Tên Thương Hiệu:</label>
                             <input v-model="add.ten_thuong_hieu" type="text" class="form-control mt-1 mb-1"
-                                placeholder="Nhập vào tên thương hiệu">
+                                placeholder="Nhập vào tên thương hiệu" @input="generateSlug">
                             <label>Slug Thương Hiệu:</label>
                             <input v-model="add.slug_thuong_hieu" type="text" class="form-control mt-1"
                                 placeholder="Nhập vào slug thương hiệu">
@@ -25,7 +25,7 @@
                             </select>
                         </div>
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary" v-on:click="themMoi()">
+                            <button class="btn btn-primary" v-on:click="themMoi();">
                                 <i class="fa-solid fa-plus"></i>
                                 Thêm Mới
                             </button>
@@ -72,19 +72,25 @@
                                             <td class="text-center algin-middle"> @{{ v.ten_thuong_hieu }}</td>
                                             <td class="text-center algin-middle">
                                                 <template v-if="v.tinh_trang == 1">
-                                                    <button type="button" class="btn btn-relief-success">Hiển Thị</button>
+                                                    <button style="width: 120px" type="button"
+                                                        class="btn btn-relief-success"
+                                                        v-on:click="doiTrangThai(v); index=k">Hiển
+                                                        Thị</button>
                                                 </template>
                                                 <template v-else>
-                                                    <button type="button" class="btn btn-relief-danger">Khóa</button>
+                                                    <button style="width: 120px" type="button"
+                                                        class="btn btn-relief-danger"
+                                                        v-on:click="doiTrangThai(v); index=k">Khóa</button>
                                                 </template>
                                             </td>
                                             <td class="text-center algin-middle">
                                                 <i class="fa-solid fa-edit text-info"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#editModal"
-                                                    data-bs-toggle="modal" v-on:click="edit = Object.assign({},v)"></i>
+                                                    data-bs-toggle="modal"
+                                                    v-on:click="edit = Object.assign({},v); index = k"></i>
                                                 <i class="fa-solid fa-trash text-danger"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
-                                                    data-bs-toggle="modal" v-on:click="del = v"></i>
+                                                    data-bs-toggle="modal" v-on:click="del = v; index = k"></i>
                                             </td>
                                         </tr>
                                     </template>
@@ -135,7 +141,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>xxxx</b> không ?
+                                            <h6> Bạn có chắc muốn xóa thương hiệu <b>@{{ del.ten_thuong_hieu }}</b> không ?
                                             </h6>
                                             <h6>
                                                 <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
@@ -147,7 +153,7 @@
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Thoát</button>
                                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                                                v-on:click="xoa()">Xóa</button>
+                                                v-on:click="xoa();">Xóa</button>
                                         </div>
                                     </div>
                                 </div>
@@ -166,10 +172,13 @@
                 el: '#app',
                 data: {
                     list: [],
-                    add: {},
+                    add: {
+                        tinh_trang: 1,
+                    },
                     del: {},
                     edit: {},
                     search: '',
+                    index: 0,
                 },
                 created() {
                     this.getData();
@@ -188,7 +197,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success("Đã thêm mới chuyên mục", "Thành công!");
-                                    this.getData();
+                                    this.list.push(this.add);
                                 }
                             })
                             .catch((res) => {
@@ -203,7 +212,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, "Thành Công");
-                                    this.timKiem();
+                                    this.list.splice(this.index, 1);
                                 } else {
                                     toastr.error(res.data.message, "Lỗi")
                                 }
@@ -225,10 +234,11 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, "Thành công!");
+                                    this.$set(this.list, this.index, this.edit);
+                                    list[index] = edit
                                 } else {
                                     toastr.error(res.data.message, "Lỗi!");
                                 }
-                                this.timKiem();
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
@@ -236,6 +246,23 @@
                                 });
                             });
                     },
+                    doiTrangThai(x) {
+                        axios
+                            .post('{{ Route('statusBrand') }}', x)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.list[this.index].tinh_trang = !this.list[this.index]
+                                        .tinh_trang;
+                                } else {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
+                            })
+                    },
+                    generateSlug() {
+                        const slug = this.add.ten_thuong_hieu.toLowerCase().replace(/ /g, "-");
+                        this.add.slug_thuong_hieu = slug;
+                    }
                 },
             });
         })
