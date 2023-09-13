@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
@@ -41,6 +42,7 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [AdminController::class, 'indexBooking'])->name('indexBooking');
+        Route::get('/data', [BookingController::class, 'data'])->name('dataBooking');
     });
 
     Route::group(['prefix' => 'testimonials'], function () {

@@ -21,6 +21,10 @@ class ClientController extends Controller
             $client->tinh_trang = !$client->tinh_trang;
             $client->save();
         }
+        return response()->json([
+            'status'    => true,
+            'message'   => 'Đổi trạng thái thành công !',
+        ]);
     }
     public function search(Request $request)
     {
