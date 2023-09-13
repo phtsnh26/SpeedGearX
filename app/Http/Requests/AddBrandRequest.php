@@ -33,4 +33,5 @@ class AddBrandRequest extends FormRequest
             'hinh_anh.*'                     =>  'Hình ảnh phải nhập và tối đa 195 ký tự',
         ];
     }
+
 }
