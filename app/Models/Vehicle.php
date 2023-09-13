@@ -14,7 +14,6 @@ class Vehicle extends Model
         'slug_xe',
         'mo_ta_ngan',
         'mo_ta_chi_tiet',
-        'gia_theo_gio',
         'gia_theo_ngay',
         'so_luong',
         'tinh_trang',
