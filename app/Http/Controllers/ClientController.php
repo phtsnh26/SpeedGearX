@@ -21,11 +21,20 @@ class ClientController extends Controller
             $client->tinh_trang = !$client->tinh_trang;
             $client->save();
         }
+        return response()->json([
+            'status'    => true,
+            'message'   => 'Đã đổi trạng thái thành công !',
+        ]);
     }
     public function search(Request $request)
     {
         $giaTri = '%' . $request->giaTri . '%';
-        $data = Client::where('ho_va_ten', 'like', $giaTri)->get();
+        $data = Client::where('ho_va_ten', 'like', $giaTri)
+                        ->orWhere('email','like', $giaTri)
+                        ->orWhere('so_dien_thoai','like', $giaTri)
+                        ->orWhere('dia_chi','like', $giaTri)
+                        ->orWhere('cccd','like', $giaTri)
+                        ->get();
         return response()->json([
             'data' => $data,
         ]);
