@@ -33,6 +33,7 @@
                                             <th>Ngày Đặt</th>
                                             <th>Ngày Trả</th>
                                             <th>Ghi Chú</th>
+                                            <th>Tổng Tiền</th>
                                             <th>Tình Trạng</th>
                                             <th>Phương Thức</th>
                                         </tr>
@@ -67,26 +68,40 @@
                                                         data-bs-target="#ghiChuModal" data-bs-toggle="modal"
                                                         v-on:click="ghiChu = v"></i>
                                                 </td>
+                                                <td class="text-nowrap">
+
+                                                </td>
                                                 <td class="text-nowrap text-center">
-                                                    <button type="button" class="btn btn-relief-secondary"
-                                                        style="width: 130px">
-                                                        Đang Xử Lý
-                                                    </button>
-                                                    <button type="button" class="btn btn-relief-warning"
-                                                        style="width: 130px">
-                                                        Đã Thuê
-                                                    </button>
-                                                    <button type="button" class="btn btn-relief-success"
-                                                        style="width: 130px">
-                                                        Đã Trả
-                                                    </button>
-                                                    <button type="button" class="btn btn-relief-danger"
-                                                        style="width: 130px">
-                                                        Hết Hạn
-                                                    </button>
-                                                    <button type="button" class="btn btn-relief-dark" style="width: 130px">
-                                                        Đã Hủy
-                                                    </button>
+                                                    <template v-if="v.tinh_trang == 0">
+                                                        <button type="button" class="btn btn-relief-secondary"
+                                                            style="width: 130px">
+                                                            Đang Xử Lý
+                                                        </button>
+                                                    </template>
+                                                    <template v-else-if="v.tinh_trang == 1">
+                                                        <button type="button" class="btn btn-relief-warning"
+                                                            style="width: 130px">
+                                                            Đã Thuê
+                                                        </button>
+                                                    </template>
+                                                    <template v-else-if="v.tinh_trang == 2">
+                                                        <button type="button" class="btn btn-relief-success"
+                                                            style="width: 130px">
+                                                            Đã Trả
+                                                        </button>
+                                                    </template>
+                                                    <template v-else-if="v.tinh_trang == -1">
+                                                        <button type="button" class="btn btn-relief-danger"
+                                                            style="width: 130px">
+                                                            Hết Hạn
+                                                        </button>
+                                                    </template>
+                                                    <template v-else-if="v.tinh_trang == -2">
+                                                        <button type="button" class="btn btn-relief-dark"
+                                                            style="width: 130px">
+                                                            Đã Hủy
+                                                        </button>
+                                                    </template>
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <i class="fa-solid fa-trash text-danger"
@@ -107,7 +122,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>@{{ ghiChu.ghi_chu }}</p>
+                                                <p class="mt-1">@{{ ghiChu.ghi_chu }}</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
