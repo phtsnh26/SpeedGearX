@@ -59,15 +59,9 @@
                 </li>
                 <li class="dropdown nav-item" data-menu="dropdown"><a
                         class="dropdown-toggle nav-link d-flex align-items-center" href="#"
-                        data-bs-toggle="dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-box">
-                            <path
-                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                            </path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg><span data-i18n="Misc">Manage</span></a>
+                        data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-clipboard"></i>
+                        <span data-i18n="Misc">Manage</span></a>
                     <ul class="dropdown-menu" data-bs-popper="none">
                         <li data-menu=""><a class="dropdown-item d-flex align-items-center"
                                 href="{{ Route('indexBrand') }}" data-bs-toggle="" data-i18n="Documentation">
@@ -87,21 +81,32 @@
                         </li>
                     </ul>
                 </li>
+                <li class="dropdown nav-item" data-menu="dropdown"><a
+                        class="dropdown-toggle nav-link d-flex align-items-center" href="#"
+                        data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-clipboard-user"></i>
+                        <span data-i18n="Misc">Manage Users</span></a>
+                    <ul class="dropdown-menu" data-bs-popper="none">
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexTestimonial') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fa-solid fa-user-check"></i>
+                                <span data-i18n="Documentation">Testimonials </span></a>
+                        </li>
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexReports') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fa-solid fa-user-pen"></i>
+                                <span data-i18n="Documentation">Reports</span></a>
+                        </li>
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexUser') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fa-solid fa-users"></i>
+                                <span data-i18n="Documentation">Registered Users</span></a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item"><a class="nav-link d-flex align-items-center"
                         href="{{ Route('indexBooking') }}"><i class="fa-solid fa-clipboard-list"></i><span>
                             Manage Booking</span></a>
-                </li>
-                <li class="nav-item"><a class="nav-link d-flex align-items-center"
-                        href="{{ Route('indexTestimonial') }}"><i class="fa-solid fa-user-check"></i><span>
-                            Manage Testimonials</span></a>
-                </li>
-                <li class="nav-item"><a class="nav-link d-flex align-items-center"
-                        href="{{ Route('indexReports') }}"><i class="fa-solid fa-user-pen"></i><span>
-                            Manage Reports</span></a>
-                </li>
-                <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexUser') }}"><i
-                            class="fa-solid fa-users"></i><span>
-                            Registered Users</span></a>
                 </li>
             </ul>
         </div>
