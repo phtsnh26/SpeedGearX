@@ -19,7 +19,7 @@
                     </div>
                     <div class="modal-body flex-grow-1">
                         <form>
-                            <div class="mb-1">
+                            {{-- <div class="mb-1">
                                 <label class="form-label">Hình Ảnh</label>
                                 <input type="file" class="form-control" placeholder="Chọn hình ảnh" multiple
                                     @change="chooseImages" accept="image/png, image/jpeg, image/jpg">
@@ -34,7 +34,7 @@
                                         </div>
                                     </template>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="mb-1">
                                 <label class="form-label">Hình Ảnh</label>
@@ -45,8 +45,8 @@
                                 <div class="row">
                                     <template style="gap: 5px;" v-for="(imageUrl, index) in imageUrls" class="mb-2 pe-2">
                                         <div class="col-3 text-center">
-                                            <img style="width: 80px; height: 80px;" src="http://127.0.0.1:8000/storage/abc/rq0sANq61Lscfr37MTUfhiB6dzfWFnPCoDXNhDHz.jpg" class=""
-                                                alt="">
+                                            <img style="width: 80px; height: 80px;" :src="'/image/' + imageUrl"
+                                                class="" alt="">
                                             <i @click="removeImage(index)" class="fas fa-times-circle"></i>
                                         </div>
                                     </template>
@@ -85,12 +85,6 @@
                                 <textarea v-model='add.mo_ta_chi_tiet' class="form-control" cols="3" rows="11"
                                     placeholder="Nhập mô tả chi tiết"></textarea>
                             </div>
-
-                            <div class="mb-1">
-                                <label for="invoice-subject" class="form-label">Giá Thuê/Giờ</label>
-                                <input v-model='add.gia_theo_gio' type="text" class="form-control"
-                                    placeholder="Nhập giá thuê theo giờ">
-                            </div>
                             <div class="mb-1">
                                 <label for="invoice-subject" class="form-label">Giá Thuê/Ngày</label>
                                 <input v-model='add.gia_theo_ngay' type="text" class="form-control"
@@ -126,7 +120,7 @@
                         <h2>Danh Sách Xe</h2>
                     </div>
                     <div class="input-group mb-1">
-                        <button class="btn btn-outline-primary waves-effect" type="button">
+                        <button @click='search()' class="btn btn-outline-primary waves-effect" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-search">
@@ -134,8 +128,10 @@
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
                         </button>
-                        <input type="text" class="form-control" placeholder="Nhập tìm kiếm" aria-label="Amount">
-                        <button class="btn btn-outline-primary waves-effect" type="button">Search !</button>
+                        <input @keyup.enter="search()" v-model='key_search' type="text" class="form-control"
+                            placeholder="Nhập tìm kiếm" aria-label="Amount">
+                        <button class="btn btn-outline-primary waves-effect" type="button" @click='search()'>Search
+                            !</button>
                     </div>
                     <div class="table table-responsive">
                         <table class="table table-bordered">
@@ -178,19 +174,22 @@
                                         @{{ v.so_cho_ngoi }} chỗ
                                     </td>
                                     <td class="text-nowrap text-center">
-                                        <p>Giá thuê/giờ: <b>@{{ numberFormat(v.gia_theo_gio) }}</b></p>
                                         <p>Giá thuê/ngày: <b>@{{ numberFormat(v.gia_theo_ngay) }}</b> </p>
                                     </td>
                                     <td class="text-center algin-middle text-nowrap">
-                                        <button v-if='v.tinh_trang' type="button" class="btn btn-relief-success">Hiển
+                                        <button style="width: 100px;" @click='changeStatus(v); index = k'
+                                            v-if='v.tinh_trang' type="button" class="btn btn-relief-success">Hiển
                                             Thị</button>
-                                        <button v-else type="button" class="btn btn-relief-danger">Khóa</button>
+                                        <button style="width: 100px;" @click='changeStatus(v); index = k' v-else
+                                            type="button" class="btn btn-relief-danger">Khóa</button>
                                     </td>
                                     <td class="text-center algin-middle text-nowrap">
-                                        <i class="fa-solid fa-edit text-info" style="font-size: 35px; cursor: pointer;"
+                                        <i @click='edit = Object.assign({}, v); index = k; loadEdit(v)'
+                                            class="fa-solid fa-edit text-info" style="font-size: 35px; cursor: pointer;"
                                             data-bs-target="#editModal" data-bs-toggle="modal"></i>
-                                        <i class="fa-solid fa-trash text-danger" style="font-size: 35px; cursor: pointer;"
-                                            data-bs-target="#deleteModal" data-bs-toggle="modal"></i>
+                                        <i @click='del = v; index = k' class="fa-solid fa-trash text-danger"
+                                            style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
+                                            data-bs-toggle="modal"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -247,29 +246,47 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-3">
-                                            <div class="mb-2"><label>Hình Ảnh</label> <input type="text"
-                                                    placeholder="Nhập hình ảnh" class="form-control"></div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Hình Ảnh</label>
+                                                <input type="file" class="form-control" placeholder="Chọn hình ảnh"
+                                                    multiple @change="uploadImages"
+                                                    accept="image/png, image/jpeg, image/jpg">
+                                            </div>
+                                            <div>
+                                                <div class="row">
+                                                    <template style="gap: 5px;" v-for="(imageUrl, index) in e_imageUrls"
+                                                        class="mb-2 pe-2">
+                                                        <div class="col-3 text-center">
+                                                            <img style="width: 80px; height: 80px;"
+                                                                :src="'/image/' + imageUrl" class="" alt="">
+                                                            <i @click="e_removeImage(index)"
+                                                                class="fas fa-times-circle"></i>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Thương Hiệu</label>
-                                                <select class="form-select">
-                                                    <option value="1">BMW</option>
-                                                    <option value="2">Vinfast</option>
+                                                <select v-model='edit.id_thuong_hieu' class="form-select">
+                                                    <option v-for='(v, k) in brand' :value="v.id">
+                                                        @{{ v.ten_thuong_hieu }}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Tên Xe</label>
-                                                <input type="text" placeholder="Nhập vào tên xe" class="form-control">
+                                                <input v-model='edit.ten_xe' type="text" placeholder="Nhập vào tên xe"
+                                                    class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Slug Xe</label>
-                                                <input type="text" placeholder="Nhập vào slug xe"
-                                                    class="form-control">
+                                                <input v-model='edit.slug_xe' type="text"
+                                                    placeholder="Nhập vào slug xe" class="form-control">
                                             </div>
                                         </div>
 
@@ -278,26 +295,22 @@
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Loại Xe</label>
-                                                <select class="form-select">
-                                                    <option value="1">4</option>
-                                                    <option value="2">7</option>
-                                                    <option value="3">9</option>
-                                                    <option value="4">12</option>
+                                                <select v-model='edit.id_loai_xe' class="form-select">
+                                                    <option v-for="(v, k) in classification" :value="v.id">
+                                                        @{{ v.so_cho_ngoi }}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-3">
-                                            <div class="mb-2"><label>Giá Thuê / Giờ</label> <input type="number"
-                                                    placeholder="Nhập giá thuê theo giờ" class="form-control"></div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="mb-2"><label>Giá Thuê / Ngày</label> <input type="number"
-                                                    placeholder="Nhập giá thuê theo ngày" class="form-control"></div>
+                                            <div class="mb-2"><label>Giá Thuê / Ngày</label>
+                                                <input v-model='edit.gia_theo_ngay' type="number"
+                                                    placeholder="Nhập giá thuê theo ngày" class="form-control">
+                                            </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="mb-2">
                                                 <label>Tình Trạng</label>
-                                                <select class="form-select">
+                                                <select v-model='edit.tinh_trang' class="form-select">
                                                     <option value="1">Hiển Thị</option>
                                                     <option value="0">Khóa</option>
                                                 </select>
@@ -307,12 +320,14 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="mb-2"><label>Mô Tả Ngắn</label>
-                                                <textarea cols="30" rows="10" placeholder="Nhập mô tả ngắn" class="form-control"></textarea>
+                                                <textarea v-model='edit.mo_ta_ngan' cols="30" rows="10" placeholder="Nhập mô tả ngắn"
+                                                    class="form-control"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="mb-2"><label>Mô Tả Chi Tiết</label>
-                                                <textarea cols="30" rows="10" placeholder="Nhập mô tả chi tiết" class="form-control"></textarea>
+                                                <textarea v-model='edit.mo_ta_chi_tiet' cols="30" rows="10" placeholder="Nhập mô tả chi tiết"
+                                                    class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -336,7 +351,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <h6> Bạn có chắc muốn xóa xe <b>hhhh</b> không ?</h6>
+                                    <h6> Bạn có chắc muốn xóa xe <b>@{{ del.ten_xe }}</b> không ?</h6>
                                     <h6>
                                         <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
                                                 phục!</span>
@@ -346,7 +361,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Thoát</button>
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Xóa</button>
+                                    <button @click='deleteVehicle(del)' type="button" class="btn btn-danger"
+                                        data-bs-dismiss="modal">Xóa</button>
                                 </div>
                             </div>
                         </div>
@@ -363,6 +379,7 @@
             new Vue({
                 el: '#app',
                 data: {
+                    index: 0,
                     list: [],
                     brand: [],
                     classification: [],
@@ -371,8 +388,11 @@
                         mo_ta_chi_tiet: ''
                     },
                     imageUrls: [],
+                    e_imageUrls: [],
                     add: {},
-                    check: ''
+                    key_search: '',
+                    del: {},
+                    edit: {},
                 },
                 created() {
                     this.getData();
@@ -404,9 +424,12 @@
                             this.imageUrls = []; // Xóa danh sách ảnh nếu không có tệp nào được chọn
                         }
                     },
+                    e_removeImage(index) {
+                        this.e_imageUrls.splice(index, 1); // Xóa ảnh khỏi danh sách theo chỉ mục
+
+                    },
                     removeImage(index) {
                         this.imageUrls.splice(index, 1); // Xóa ảnh khỏi danh sách theo chỉ mục
-                        console.log(this.imageUrls);
 
                     },
                     addVehicle() {
@@ -423,24 +446,27 @@
                             .post('{{ Route('createVehicle') }}', payload)
                             .then((res) => {
                                 if (res.data.status) {
-                                    toastr.success(res.data.message, 'Success');
-                                    this.getData();
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.search();
                                 } else {
-                                    toastr.error(res.data.message, 'Error');
+                                    toastr.error(res.data.message, 'Lỗi');
                                 }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'error');
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
                     },
                     uploadImages(event) {
                         const formData = new FormData();
-                        const images = event.target.files[0];
-                        formData.append('images', images);
+                        const images = event.target.files;
+                        // formData.append('images', images);
 
-                        
+                        // Thêm các tệp ảnh vào FormData
+                        for (let i = 0; i < images.length; i++) {
+                            formData.append('images[]', images[i]);
+                        }
 
                         // Gửi yêu cầu POST đến route upload.images
                         axios
@@ -449,12 +475,74 @@
                                     'Content-Type': 'multipart/form-data',
                                 },
                             }).then((res) => {
-                                this.imageUrls = res.data;
+                                this.imageUrls = res.data.data;
                                 console.log(this.imageUrls);
                             }).catch((error) => {
                                 console.error(error);
                             });
                     },
+                    search() {
+                        var payload = {
+                            'key': this.key_search
+                        }
+                        axios
+                            .post('{{ Route('searchVehicle') }}', payload)
+                            .then((res) => {
+                                this.list = res.data.data;
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+                    },
+                    changeStatus(v) {
+                        axios
+                            .post('{{ Route('changeStatus') }}', v)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.list[this.index].tinh_trang = !this.list[this.index]
+                                    .tinh_trang;
+                                } else {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+                    },
+                    deleteVehicle(a) {
+                        axios
+                            .post('{{ Route('deleteVehicle') }}', a)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.list.splice(this.index, 1);
+                                } else {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+                    },
+                    loadEdit(v) {
+                        axios
+                            .post('{{ Route('edit_img') }}', v)
+                            .then((res) => {
+
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0] , 'error');
+                                });
+                            });
+                    }
 
 
                 },

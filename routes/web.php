@@ -31,7 +31,11 @@ Route::group(['prefix' => '/admin'], function () {
         Route::get('/', [AdminController::class, 'indexVehicle'])->name('indexVehicle');
         Route::get('/data', [VehicleController::class, 'data'])->name('dataVehicle');
         Route::post('/create', [VehicleController::class, 'add'])->name('createVehicle');
-        Route::post('/abc', [VehicleController::class, 'upLoad'])->name('upLoadImage');
+        Route::post('/uploadImage', [VehicleController::class, 'upLoad'])->name('upLoadImage');
+        Route::post('/search', [VehicleController::class, 'search'])->name('searchVehicle');
+        Route::post('/changeStatus', [VehicleController::class, 'changeStatus'])->name('changeStatus');
+        Route::post('/del', [VehicleController::class, 'del'])->name('deleteVehicle');
+        Route::post('/edit_img', [VehicleController::class, 'upLoadImg'])->name('edit_img');
     });
 
     Route::group(['prefix' => 'classification'], function () {

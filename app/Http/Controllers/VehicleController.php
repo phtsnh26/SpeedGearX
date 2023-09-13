@@ -53,7 +53,7 @@ class VehicleController extends Controller
             if (count($request->image) > 0) {
                 foreach ($request->image as $k => $v) {
                     Images::create([
-                        'hinh_anh_xe'       => $v,
+                        'hinh_anh_xe'       => "/image/" . $v,
                         'id_xe'         => $vehicle->id,
                     ]);
                 }
@@ -76,16 +76,84 @@ class VehicleController extends Controller
     }
     public function upload(Request $request)
     {
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            $fileNames = [];
 
-        if($request->has('images')){
-            $file = $request->images;
-            $file_name = $file->getClientoriginalName();
-            $file->move(public_path('image'), $file_name);
-            $request->merge(['img' => $file_name]);
-            dd($request->all());
+            foreach ($images as $image) {
+                // Kiểm tra và xử lý mỗi hình ảnh
+                if ($image->isValid()) {
+                    $file_name = $image->getClientOriginalName();
+                    $image->move(public_path('image'), $file_name);
+                    $fileNames[] = $file_name;
+                }
+            }
+            // Sau khi xử lý tất cả hình ảnh, thêm danh sách các tên file vào yêu cầu
+            $request->merge(['img' => $fileNames]);
         }
+        return response()->json([
+            'data'   => $request->img,
+        ]);
+    }
+    public function upLoadImg(Request $request)
+    {
+        $img = Images::where('id_xe', $request->id);
 
+    }
 
+    public function search(Request $request)
+    {
+        $data = Vehicle::leftJoin(
+            DB::raw('(SELECT id_xe, MIN(id) AS min_id FROM images GROUP BY id_xe) AS first_images'),
+            'vehicles.id',
+            '=',
+            'first_images.id_xe'
+        )
+            ->leftJoin('images AS first_image', 'first_images.min_id', 'first_image.id')
+            ->leftJoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+            ->leftJoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            ->where('brands.ten_thuong_hieu', 'like', '%' . $request->key . '%')
+            ->orWhere('vehicles.ten_xe', 'like', '%' . $request->key . '%')
+            ->orWhere('classifications.so_cho_ngoi', 'like', '%' . $request->key . '%')
+            ->select('vehicles.*', 'first_image.hinh_anh_xe', 'brands.ten_thuong_hieu', 'classifications.so_cho_ngoi')
+            ->get();
+        return response()->json([
+            'data'   => $data,
+        ]);
+    }
+    public function changeStatus(Request $request)
+    {
+        $vehicle = Vehicle::find($request->id);
+        if ($vehicle) {
+            $vehicle->tinh_trang = !$vehicle->tinh_trang;
+            $vehicle->save();
+            return response()->json([
+                'status'    => 1,
+                'message'   => 'Đổi trạng thái thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Xảy ra lỗi!',
+            ]);
+        }
+    }
 
+    public function del(Request $request)
+    {
+        $vehicle = Vehicle::find($request->id);
+        if ($vehicle) {
+            $img = Images::where('id_xe', $request->id)->delete();
+            $vehicle->delete();
+            return response()->json([
+                'status'    => 1,
+                'message'   => 'Đã xoá thành công!',
+            ]);
+        }else{
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Phương tiện này không tồn tại!',
+            ]);
+        }
     }
 }
