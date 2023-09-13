@@ -54,19 +54,20 @@
                                             <td class="text-center text-nowrap align-middle">
                                                 <template v-if="v.tinh_trang == 1">
                                                     <button style="width: 120px" type="button"
-                                                        class="btn btn-relief-success" v-on:click="doitrangthai(v)">Hiển
+                                                        class="btn btn-relief-success"
+                                                        v-on:click="doitrangthai(v); index = k">Hiển
                                                         Thị</button>
                                                 </template>
                                                 <template v-else>
                                                     <button style="width: 120px" type="button"
                                                         class="btn btn-relief-danger"
-                                                        v-on:click="doitrangthai(v)">Khóa</button>
+                                                        v-on:click="doitrangthai(v); index = k">Khóa</button>
                                                 </template>
                                             </td>
                                             <td class="text-center text-nowrap align-middle">
                                                 <i class="fa-solid fa-trash text-danger"
                                                     style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
-                                                    data-bs-toggle="modal" v-on:click="del = v"></i>
+                                                    data-bs-toggle="modal" v-on:click="del = v; index = k"></i>
                                             </td>
                                         </tr>
                                     </template>
@@ -114,6 +115,7 @@
                     list: [],
                     search: '',
                     del: {},
+                    index: 0,
                 },
                 created() {
                     this.getData();
@@ -130,8 +132,8 @@
                         axios
                             .post('{{ Route('statusUser') }}', x)
                             .then((res) => {
-                                this.timKiem();
                                 toastr.success('Đã đổi trạng thái !', "Thành Công")
+                                this.list[this.index].tinh_trang = !this.list[this.index].tinh_trang
                             })
                     },
                     timKiem() {
@@ -150,7 +152,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, "Thành Công");
-                                    this.timKiem();
+                                    this.list.splice(this.index, 1);
                                 } else {
                                     toastr.error(res.data.message, "Lỗi")
                                 }
