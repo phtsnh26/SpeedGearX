@@ -22,7 +22,6 @@ class createVehicleRequest extends FormRequest
     public function rules()
     {
         return [
-<<<<<<< HEAD
             'ten_xe'            => 'required|between:2,50',
             'slug_xe'           => 'required|between:2,50|unique:vehicles,slug_xe',
             'mo_ta_ngan'        => 'nullable|string|between:4,500',
@@ -33,7 +32,6 @@ class createVehicleRequest extends FormRequest
             'tinh_trang'        => 'nullable|boolean',
             'id_thuong_hieu'    => 'required|integer',
             'id_loai_xe'        => 'required|integer',
-=======
             'ten_xe' => 'required|string|between:2,50',
             'slug_xe' => 'required|string|between:2,50|unique:vehicles,slug_xe',
             'mo_ta_ngan' => 'nullable|string|between:4,500',
@@ -43,14 +41,12 @@ class createVehicleRequest extends FormRequest
             'tinh_trang' => 'nullable|boolean',
             'id_thuong_hieu' => 'required|integer',
             'id_loai_xe' => 'required|integer',
->>>>>>> bf76881e973cba3adb19d8085d0b756976230889
         ];
     }
 
     public function messages()
     {
         return [
-<<<<<<< HEAD
             'ten_xe.required'            => 'Tên xe là trường bắt buộc.',
             'ten_xe.between'             => 'Tên xe phải có độ dài từ :min đến :max ký tự.',
             'slug_xe.required'           => 'Slug xe là trường bắt buộc.',
@@ -67,7 +63,6 @@ class createVehicleRequest extends FormRequest
             'id_loai_xe.required'        => 'Loại xe là trường bắt buộc.',
             'id_thuong_hieu.integer'     => 'Thương hiệu phải là một số nguyên.',
             'id_loai_xe.integer'         => 'Loại xe phải là một số nguyên.',
-=======
             'required' => ':attribute là trường bắt buộc.',
             'between' => ':attribute phải nằm trong khoảng :min và :max ký tự.',
             'string' => ':attribute phải là chuỗi.',
@@ -75,7 +70,6 @@ class createVehicleRequest extends FormRequest
             'integer' => ':attribute phải là số nguyên.',
             'unique' => ':attribute đã tồn tại.',
             'min' => ':attribute phải có ít nhất :min ký tự.',
->>>>>>> bf76881e973cba3adb19d8085d0b756976230889
         ];
     }
 }
