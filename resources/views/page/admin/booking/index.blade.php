@@ -14,7 +14,8 @@
                                     <table>
                                         <tr>
                                             <td>Search:</td>
-                                            <td><input type="text" class="form-control" placeholder="Nhập tìm kiếm"></td>
+                                            <td><input @keyup.enter='search()' v-model='gia_tri' type="text" class="form-control"
+                                                    placeholder="Nhập tìm kiếm"></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -50,17 +51,19 @@
                                                     </button>
 
                                                 </td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
-                                                <td class="text-nowrap"></td>
+                                                <td class="text-nowrap">@{{ v.ten_xe }}</td>
+                                                <td class="text-nowrap">@{{ v.ten_thuong_hieu }}</td>
+                                                <td class="text-nowrap">@{{ v.so_cho_ngoi }} chỗ</td>
                                                 <td class="text-nowrap text-center align-middle">
-                                                    <img src="" style="height: 100px;width: 130px;">
+                                                    <img :src="v.hinh_anh_xe" style="height: 100px;width: 130px;">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input v-model="v.ngay_dat" type="date" class="form-control">
+                                                    <input style="width: 170px;" v-model="v.ngay_dat" type="datetime"
+                                                        class="form-control">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input v-model="v.ngay_tra" type="date" class="form-control">
+                                                    <input style="width: 170px;" v-model="v.ngay_tra" type="datetime"
+                                                        class="form-control">
                                                 </td>
                                                 <td class="text-center">
                                                     <i class="fa-solid fa-circle-info text-info"
@@ -69,7 +72,7 @@
                                                         v-on:click="ghiChu = v"></i>
                                                 </td>
                                                 <td class="text-nowrap">
-
+                                                    @{{ numberFormat(v.gia_thue) }}
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <template v-if="v.tinh_trang == 0">
@@ -104,7 +107,7 @@
                                                     </template>
                                                 </td>
                                                 <td class="text-nowrap text-center">
-                                                    <i class="fa-solid fa-trash text-danger"
+                                                    <i @click='del = v; index = k' class="fa-solid fa-trash text-danger"
                                                         style="font-size: 35px; cursor: pointer;"
                                                         data-bs-target="#deleteModal" data-bs-toggle="modal"></i>
                                                 </td>
@@ -172,7 +175,8 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <h6> Bạn có chắc muốn xóa người thuê <b>xxxx</b> không ?</h6>
+                                                <h6> Bạn có chắc muốn xóa người thuê <b>@{{ del.ho_va_ten }}</b> không ?
+                                                </h6>
                                                 <h6>
                                                     <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
                                                             phục!</span>
@@ -182,7 +186,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-danger"
+                                                <button @click='xoa' type="button" class="btn btn-danger"
                                                     data-bs-dismiss="modal">Xóa</button>
                                             </div>
                                         </div>
@@ -205,6 +209,9 @@
                     list: [],
                     thongTin: {},
                     ghiChu: {},
+                    del: {},
+                    index: 0,
+                    gia_tri: ''
                 },
                 created() {
                     this.getData();
@@ -217,6 +224,44 @@
                                 this.list = res.data.data
                             });
                     },
+                    numberFormat(number) {
+                        return new Intl.NumberFormat('vi-VI', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(number);
+                    },
+                    xoa() {
+                        axios
+                            .post('{{ Route('deleteBooking') }}', this.del)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.list.splice(this.index, 1);
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    search(){
+                        var payload = {
+                            'gia_tri' : this.gia_tri
+                        }
+                        axios
+                            .post('{{ Route('searchBooking') }}', payload)
+                            .then((res) => {
+
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0] , 'error');
+                                });
+                            });
+                    }
                 },
             });
         })
