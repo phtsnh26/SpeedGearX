@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VehicleController;
@@ -19,7 +20,6 @@ Route::group(['prefix' => '/admin'], function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [AdminController::class, 'indexDashboard'])->name('indexDashboard');
     });
-
     Route::group(['prefix' => 'brands'], function () {
         Route::get('/', [AdminController::class, 'indexBrand'])->name('indexBrand');
         Route::get('/data', [BrandController::class, 'data'])->name('dataBrand');
@@ -44,12 +44,18 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'classification'], function () {
         Route::get('/', [AdminController::class, 'indexClassification'])->name('indexClassification');
+        Route::get('/data', [ClassificationController::class, 'data'])->name('dataClassification');
+        Route::post('/create', [ClassificationController::class, 'store'])->name('addClassification');
+        Route::post('/search', [ClassificationController::class, 'search'])->name('searchClassification');
+        Route::post('/delete', [ClassificationController::class, 'delete'])->name('deleteClassification');
     });
 
 
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [AdminController::class, 'indexBooking'])->name('indexBooking');
         Route::get('/data', [BookingController::class, 'data'])->name('dataBooking');
+        Route::post('/delete', [BookingController::class, 'delete'])->name('deleteBooking');
+        Route::post('/search', [BookingController::class, 'search'])->name('searchBooking');
     });
 
     Route::group(['prefix' => 'testimonials'], function () {
