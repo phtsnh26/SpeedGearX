@@ -7,13 +7,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="w-100 text-center">
-                                <h2>Thêm Mới Loại  Xe</h2>
+                                <h2>Thêm Mới Loại Xe</h2>
                             </div>
                             <label>Số Chỗ Ngồi</label>
-                            <input type="text" class="form-control mt-1" placeholder="Nhập vào số  chỗ ngồi">
+                            <input @change='check' v-model='add.so_cho_ngoi' type="number" class="form-control mt-1"
+                                placeholder="Nhập vào số  chỗ ngồi">
                         </div>
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary">
+                            <button @click='them_moi()' class="btn btn-primary">
                                 <i class="fa-solid fa-plus"></i>
                                 Thêm Mới
                             </button>
@@ -27,7 +28,7 @@
                                 <h2>Danh Sách Loại Xe</h2>
                             </div>
                             <div class="input-group mb-1">
-                                <button class="btn btn-outline-primary waves-effect" type="button">
+                                <button @click='search' class="btn btn-outline-primary waves-effect" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
@@ -35,8 +36,10 @@
                                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                     </svg>
                                 </button>
-                                <input type="text" class="form-control" placeholder="Nhập tìm kiếm" aria-label="Amount">
-                                <button class="btn btn-outline-primary waves-effect" type="button">Search !</button>
+                                <input @keyup.enter='search' v-model='gia_tri' type="text" class="form-control"
+                                    placeholder="Nhập tìm kiếm" aria-label="Amount">
+                                <button @click='search' class="btn btn-outline-primary waves-effect" type="button">Search
+                                    !</button>
                             </div>
                             <table class="table table-bordered">
                                 <thead class="text-center algin-middle text-primary">
@@ -47,14 +50,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th class="text-center algin-middle">1</th>
-
+                                    <tr v-for="(v, k) in list">
+                                        <th class="text-center algin-middle">@{{ k + 1 }}</th>
                                         <td class="text-center algin-middle">
-                                            7  chỗ
+                                            @{{ v.so_cho_ngoi }} chỗ
                                         </td>
                                         <td class="text-center algin-middle">
-                                            <i class="fa-solid fa-trash text-danger"
+                                            <i @click='del = v; index = k' class="fa-solid fa-trash text-danger"
                                                 style="font-size: 35px; cursor: pointer;" data-bs-target="#deleteModal"
                                                 data-bs-toggle="modal"></i>
                                         </td>
@@ -71,7 +73,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <h6> Bạn có chắc muốn xóa loại xe <b>hhhh</b> không ?</h6>
+                                            <h6> Bạn có chắc muốn xóa loại xe <b>@{{ del.so_cho_ngoi }} chỗ</b> không ?</h6>
                                             <h6>
                                                 <p><b>Lưu ý : </b> <span class="text-danger">Điều này không thể khôi
                                                         phục!</span>
@@ -81,7 +83,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Thoát</button>
-                                            <button type="button" class="btn btn-danger"
+                                            <button @click="xoa" type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Xóa</button>
                                         </div>
                                     </div>
@@ -100,13 +102,82 @@
             new Vue({
                 el: '#app',
                 data: {
-
+                    list: [],
+                    add: {},
+                    gia_tri: '',
+                    del: {},
+                    index: 0,
                 },
                 created() {
-
+                    this.getData();
                 },
                 methods: {
+                    getData() {
+                        axios
+                            .get('{{ Route('dataClassification') }}')
+                            .then((res) => {
+                                this.list = res.data.data;
+                            })
 
+                    },
+                    them_moi() {
+                        axios
+                            .post('{{ Route('addClassification') }}', this.add)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.list.push(this.add);
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    check() {
+                        var soChoNgoi = parseFloat(this.add.so_cho_ngoi);
+
+                        if (isNaN(soChoNgoi) || soChoNgoi <= 0 || !Number.isInteger(soChoNgoi)) {
+                            alert('Số chỗ ngồi phải là một số nguyên lớn hơn 1.');
+                            this.add.so_cho_ngoi = null;
+                        }
+                    },
+                    search() {
+                       
+                        var payload = {
+                            'gia_tri': this.gia_tri
+                        }
+                        axios
+                            .post('{{ Route('searchClassification') }}', payload)
+                            .then((res) => {
+                                this.list = res.data.data;
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    xoa() {
+                        axios
+                            .post('{{ Route('deleteClassification') }}', this.del)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.list.splice(this.index, 1);
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    }
                 },
             });
         })
