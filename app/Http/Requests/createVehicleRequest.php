@@ -38,7 +38,6 @@ class createVehicleRequest extends FormRequest
     public function messages()
     {
         return [
-
             'required' => ':attribute là trường bắt buộc.',
             'between' => ':attribute phải nằm trong khoảng :min và :max ký tự.',
             'string' => ':attribute phải là chuỗi.',
