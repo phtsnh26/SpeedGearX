@@ -76,7 +76,7 @@
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <template v-if="v.tinh_trang == 0">
-                                                        <button type="button" class="btn btn-relief-secondary"
+                                                        <button @click='changeStatus(v); index=k' type="button" class="btn btn-relief-secondary"
                                                             style="width: 130px">
                                                             Đang Xử Lý
                                                         </button>
@@ -211,7 +211,8 @@
                     ghiChu: {},
                     del: {},
                     index: 0,
-                    gia_tri: ''
+                    gia_tri: '',
+                    index : 0,
                 },
                 created() {
                     this.getData();
@@ -222,6 +223,7 @@
                             .get('{{ Route('dataBooking') }}')
                             .then((res) => {
                                 this.list = res.data.data
+                                console.log(this.list);
                             });
                     },
                     numberFormat(number) {
@@ -254,7 +256,24 @@
                         axios
                             .post('{{ Route('searchBooking') }}', payload)
                             .then((res) => {
-
+                                this.list = res.data.data;
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0] , 'error');
+                                });
+                            });
+                    },
+                    changeStatus(v){
+                        axios
+                            .post('{{ Route('changeStatusBooking') }}', v)
+                            .then((res) => {
+                                if(res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.list[this.index].tinh_trang = 1;
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {

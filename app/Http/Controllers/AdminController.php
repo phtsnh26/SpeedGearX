@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Booking;
+use App\Models\Brand;
+use App\Models\Client;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,5 +55,14 @@ class AdminController extends Controller
     {
         Auth::guard('admin')->logout();
         return redirect('/login/admin');
+    }
+    public function dataDashboard(){
+        $data['brand'] = Brand::all()->count();
+        $data['vehicle'] = Vehicle::all()->count();
+        $data['booking'] = Booking::all()->count();
+        $data['client'] = Client::all()->count();
+        return response()->json([
+            'data'   => $data,
+        ]);
     }
 }
