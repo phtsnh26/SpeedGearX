@@ -45,22 +45,38 @@
     </div>
     <div class="navbar-container d-flex content">
         <ul class="nav navbar-nav align-items-center ms-auto">
-            <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
-                    id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">Tánh Đẹp Trai</span><span
-                            class="user-status">Admin</span></div><span class="avatar"><img class="round"
-                            src="/vuexy/app-assets//images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40"
-                            width="40"><span class="avatar-status-online"></span></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
-                    <a class="dropdown-item" href="{{ Route('indexProfile') }}">
-                        <i class="me-50" data-feather="user"></i>
-                        Profile
+            <li class="nav-item dropdown dropdown-user">
+                @php
+                    $admin = Auth::guard('admin')->user();
+                @endphp
+                @if ($admin)
+                    <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="#"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none">
+                            <span class="user-name fw-bolder">
+                                {{ $admin->ho_va_ten }}
+                            </span>
+                            <span class="user-status">
+                                {{ $admin->ten_dang_nhap }}
+                            </span>
+                        </div>
+                        <span class="avatar">
+                            <img class="round" src="{{ $admin->hinh_anh }}" alt="avatar" height="40"
+                                width="40"><span class="avatar-status-online">
+                            </span>
+                        </span>
                     </a>
-                    <div class="dropdown-divider"></div><a class="dropdown-item" href="auth-login-cover.html"><i
-                            class="me-50" data-feather="power"></i> Logout</a>
-                </div>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href="{{ route('indexProfileAdmin') }}">
+                            <i class="me-50" data-feather="user"></i>
+                            Hồ sơ
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('signOut') }}">
+                            <i class="me-50" data-feather="power"></i> Đăng xuất
+                        </a>
+                    </div>
+                @endif
             </li>
         </ul>
     </div>

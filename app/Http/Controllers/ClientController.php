@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function indexUser()
+    {
+        return  view('page.admin.user.index');
+    }
     public function data()
     {
         $data = Client::get();

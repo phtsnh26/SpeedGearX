@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 
 class ClassificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function indexClassification()
+    {
+        return view('page.admin.classification.index');
+    }
     public function data()
     {
         $data = Classification::get();
@@ -38,7 +39,7 @@ class ClassificationController extends Controller
     {
 
         $data = Classification::where('so_cho_ngoi', $request->gia_tri)->get();
-        if($request->gia_tri == null){
+        if ($request->gia_tri == null) {
             $data = Classification::get();
         }
         return response()->json([

@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+    public function indexBrand()
+    {
+        return view('page.admin.brand.index');
+    }
     public function data()
     {
         $data   = Brand::get();

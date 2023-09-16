@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
+    public function indexBooking()
+    {
+        return view('page.admin.booking.index');
+    }
     public function data()
     {
         $data = Booking::leftJoin('clients', 'bookings.id_khach_hang', 'clients.id')
