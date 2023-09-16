@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\homapageController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
@@ -78,3 +79,4 @@ Route::group(['prefix' => '/admin'], function () {
 Route::get('/', [CustomerController::class, 'index'])->name('indexHome');
 Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');

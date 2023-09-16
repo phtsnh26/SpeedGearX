@@ -20,7 +20,7 @@ class BrandSeeder extends Seeder
                 'ten_thuong_hieu' => 'Roll Royce',
                 'slug_thuong_hieu' => 'roll-royce',
                 'tinh_trang' => 0,
-                'hinh_anh' => 'https://assets.stickpng.com/images/584290c1a6515b1e0ad75ac3.png',
+                'hinh_anh' => 'https://brademar.com/wp-content/uploads/2022/05/Rolls-Royce-Logo-PNG-1.png',
             ],
             [
                 'ten_thuong_hieu' => 'BMW',
