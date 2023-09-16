@@ -20,6 +20,7 @@ Route::group(['prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [AdminController::class, 'indexDashboard'])->name('indexDashboard');
+        Route::get('/data', [AdminController::class, 'dataDashboard'])->name('dataDashboard');
     });
     Route::group(['prefix' => 'brands'], function () {
         Route::get('/', [AdminController::class, 'indexBrand'])->name('indexBrand');
@@ -57,6 +58,7 @@ Route::group(['prefix' => '/admin'], function () {
         Route::get('/data', [BookingController::class, 'data'])->name('dataBooking');
         Route::post('/delete', [BookingController::class, 'delete'])->name('deleteBooking');
         Route::post('/search', [BookingController::class, 'search'])->name('searchBooking');
+        Route::post('/changeStatus', [BookingController::class, 'changeStatus'])->name('changeStatusBooking');
     });
 
     Route::group(['prefix' => 'testimonials'], function () {
