@@ -6,22 +6,29 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProfileAdminController;
 use App\Http\Controllers\VehicleController;
+use App\Models\Booking;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => '/admin'], function () {
-    Route::get('/login', [AdminController::class, 'indexSignin'])->name('indexSignin');
+Route::get('/login/admin', [AdminController::class, 'indexSignin'])->name('indexSignin');
+Route::post('/signIn', [AdminController::class, 'signIn'])->name('signIn');
+
+Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
+    Route::get('/signOut', [AdminController::class, 'signOut'])->name('signOut');
 
     Route::group(['prefix' => 'profile'], function () {
-        Route::get('/', [AdminController::class, 'indexProfile'])->name('indexProfile');
+        Route::get('/', [ProfileAdminController::class, 'indexProfile'])->name('indexProfileAdmin');
+        Route::get('/data', [ProfileAdminController::class, 'data'])->name('dataAdmin');
+        Route::post('/doi-mat-khau', [ProfileAdminController::class, 'changePass'])->name('changePass');
     });
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [AdminController::class, 'indexDashboard'])->name('indexDashboard');
     });
     Route::group(['prefix' => 'brands'], function () {
-        Route::get('/', [AdminController::class, 'indexBrand'])->name('indexBrand');
+        Route::get('/', [BrandController::class, 'indexBrand'])->name('indexBrand');
         Route::get('/data', [BrandController::class, 'data'])->name('dataBrand');
         Route::post('/create', [BrandController::class, 'add'])->name('createBrand');
         Route::post('/del', [BrandController::class, 'del'])->name('delBrand');
@@ -31,7 +38,7 @@ Route::group(['prefix' => '/admin'], function () {
     });
 
     Route::group(['prefix' => 'vehicles'], function () {
-        Route::get('/', [AdminController::class, 'indexVehicle'])->name('indexVehicle');
+        Route::get('/', [VehicleController::class, 'indexVehicle'])->name('indexVehicle');
         Route::get('/data', [VehicleController::class, 'data'])->name('dataVehicle');
         Route::post('/create', [VehicleController::class, 'add'])->name('createVehicle');
         Route::post('/uploadImage', [VehicleController::class, 'upLoad'])->name('upLoadImage');
@@ -43,7 +50,7 @@ Route::group(['prefix' => '/admin'], function () {
     });
 
     Route::group(['prefix' => 'classification'], function () {
-        Route::get('/', [AdminController::class, 'indexClassification'])->name('indexClassification');
+        Route::get('/', [ClassificationController::class, 'indexClassification'])->name('indexClassification');
         Route::get('/data', [ClassificationController::class, 'data'])->name('dataClassification');
         Route::post('/create', [ClassificationController::class, 'store'])->name('addClassification');
         Route::post('/search', [ClassificationController::class, 'search'])->name('searchClassification');
@@ -52,7 +59,7 @@ Route::group(['prefix' => '/admin'], function () {
 
 
     Route::group(['prefix' => 'bookings'], function () {
-        Route::get('/', [AdminController::class, 'indexBooking'])->name('indexBooking');
+        Route::get('/', [BookingController::class, 'indexBooking'])->name('indexBooking');
         Route::get('/data', [BookingController::class, 'data'])->name('dataBooking');
         Route::post('/delete', [BookingController::class, 'delete'])->name('deleteBooking');
         Route::post('/search', [BookingController::class, 'search'])->name('searchBooking');
@@ -67,7 +74,7 @@ Route::group(['prefix' => '/admin'], function () {
     });
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', [AdminController::class, 'indexUser'])->name('indexUser');
+        Route::get('/', [ClientController::class, 'indexUser'])->name('indexUser');
         Route::get('/data', [ClientController::class, 'data'])->name('dataUser');
         Route::post('/status', [ClientController::class, 'status'])->name('statusUser');
         Route::post('/search', [ClientController::class, 'search'])->name('searchUser');

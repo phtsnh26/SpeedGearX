@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class VehicleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function indexVehicle()
+    {
+        return view('page.admin.vehicle.index');
+    }
     public function data()
     {
         // $data = DB::select('SELECT vehicles.*, first_image.hinh_anh_xe
@@ -168,7 +169,7 @@ class VehicleController extends Controller
                 foreach ($request->image as $key => $value) {
                     # code...
                     $img = Images::create([
-                        'hinh_anh_xe'           => '/image/'.$value,
+                        'hinh_anh_xe'           => '/image/' . $value,
                         'id_xe'         => $request->vehicle['id'],
                     ]);
                 }

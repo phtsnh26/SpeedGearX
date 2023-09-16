@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -11,30 +12,12 @@ class AdminController extends Controller
     {
         return view('page.admin.account.signIn');
     }
-    public function indexProfile()
-    {
-        return view('page.admin.profile.index');
-    }
+
     public function indexDashboard()
     {
         return view('page.admin.dashboard.index');
     }
-    public function indexBrand()
-    {
-        return view('page.admin.brand.index');
-    }
-    public function indexVehicle()
-    {
-        return view('page.admin.vehicle.index');
-    }
-    public function indexClassification()
-    {
-        return view('page.admin.classification.index');
-    }
-    public function indexBooking()
-    {
-        return view('page.admin.booking.index');
-    }
+
     public function indexTestimonial()
     {
         return view("page.admin.testimonial.index");
@@ -43,12 +26,30 @@ class AdminController extends Controller
     {
         return view('page.admin.report.index');
     }
-    public function indexUser()
+
+    public function signIn(Request $request)
     {
-        return  view('page.admin.user.index');
+        $data = $request->all();
+        $check = Auth::guard('admin')->attempt($data);
+        if ($check) {
+            $admin = Admin::where('ten_dang_nhap', $request->ten_dang_nhap)
+                ->first();
+            if ($admin->is_active == 1) {
+                return response()->json([
+                    'status'    => true,
+                    'message'   => 'Đăng nhập thành công',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status'    => false,
+                'message'   => 'Tài khoản hoặc mật khẩu không đúng',
+            ]);
+        }
     }
-    public function indexAapplication()
+    public function signOut()
     {
-        return  view('page.admin.aapplication.index');
+        Auth::guard('admin')->logout();
+        return redirect('/login/admin');
     }
 }
