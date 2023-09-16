@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Booking;
+use App\Models\Brand;
+use App\Models\Client;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -50,5 +54,14 @@ class AdminController extends Controller
     public function indexAapplication()
     {
         return  view('page.admin.aapplication.index');
+    }
+    public function dataDashboard(){
+        $data['brand'] = Brand::all()->count();
+        $data['vehicle'] = Vehicle::all()->count();
+        $data['booking'] = Booking::all()->count();
+        $data['client'] = Client::all()->count();
+        return response()->json([
+            'data'   => $data,
+        ]);
     }
 }

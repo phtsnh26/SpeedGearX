@@ -89,123 +89,151 @@
             color: #fff;
         }
     </style>
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://storage.googleapis.com/f1-cms/2021/04/77256c3c-20210427_075604.jpg"
-                        style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>8</h1>
-                        <h2 class="card-text text-center">Brands</h2>
+    <div id="app">
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://storage.googleapis.com/f1-cms/2021/04/77256c3c-20210427_075604.jpg"
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>@{{ data.brand }}</h1>
+                            <h2 class="card-text text-center">Brands</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexBrand') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
                     </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexBrand') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://cly.1cdn.vn/2023/03/31/lamborghini-revuelto.jpg" style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>@{{ data.vehicle }}</h1>
+                            <h2 class="card-text text-center">Vehicles</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexVehicle') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://img.freepik.com/free-vector/hotel-booking-concept-illustration_114360-6497.jpg?"
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>@{{ data.booking }}</h1>
+                            <h2 class="card-text text-center">Total Bookings</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexBooking') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://vietnamcleanroom.com/vcr-media/23/3/10/danh-gia-noi-bo-9.jpg"
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>52</h1>
+                            <h2 class="card-text text-center">Testimonials</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexTestimonial') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://cly.1cdn.vn/2023/03/31/lamborghini-revuelto.jpg" style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>125</h1>
-                        <h2 class="card-text text-center">Vehicles</h2>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexVehicle') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://img.freepik.com/free-vector/hotel-booking-concept-illustration_114360-6497.jpg?"
-                        style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>52</h1>
-                        <h2 class="card-text text-center">Total Bookings</h2>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexBooking') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://img.freepik.com/premium-vector/illustration-vector-graphic-cartoon-character-company-activity-report_516790-1825.jpg"
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>23</h1>
+                            <h2 class="card-text text-center">Reports</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexReports') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://vietnamcleanroom.com/vcr-media/23/3/10/danh-gia-noi-bo-9.jpg" style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>52</h1>
-                        <h2 class="card-text text-center">Testimonials</h2>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexTestimonial') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://img.freepik.com/premium-vector/illustration-vector-graphic-cartoon-character-company-activity-report_516790-1825.jpg"
-                        style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>23</h1>
-                        <h2 class="card-text text-center">Reports</h2>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexReports') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
+                <div class="col-3">
+                    <div class="card">
+                        <img src="https://handsontek.net/images/Teams/Custom%20Backgrounds/hero.png" style="height: 300px">
+                        <div class="card-body">
+                            <h1 class='text-center'>@{{ data.client }}</h1>
+                            <h2 class="card-text text-center">Users</h2>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="learn-more" href="{{ Route('indexUser') }}">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Chi Tiết</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <img src="https://handsontek.net/images/Teams/Custom%20Backgrounds/hero.png" style="height: 300px">
-                    <div class="card-body">
-                        <h1 class='text-center'>23</h1>
-                        <h2 class="card-text text-center">Users</h2>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a class="learn-more" href="{{ Route('indexUser') }}">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Chi Tiết</span>
-                        </a>
-                    </div>
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <a class="learn-more" href="{{ Route('indexHome') }}">
+                        <span class="circle" aria-hidden="true">
+                            <span class="icon arrow"></span>
+                        </span>
+                        <span class="button-text">Trang Chủ</span>
+                    </a>
                 </div>
-            </div>
-            <div class="col-6 d-flex justify-content-center align-items-center">
-                <a class="learn-more" href="{{ Route('indexHome') }}">
-                    <span class="circle" aria-hidden="true">
-                        <span class="icon arrow"></span>
-                    </span>
-                    <span class="button-text">Trang Chủ</span>
-                </a>
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            new Vue({
+                el: '#app',
+                data: {
+                    data : {},
+                },
+                created() {
+                    this.getData();
+                },
+                methods: {
+                    getData() {
+                        axios
+                            .get('{{ Route('dataDashboard') }}')
+                            .then((res) => {
+                                this.data = res.data.data;
+                            });
+                    }
+                },
+            });
+        })
+    </script>
 @endsection
