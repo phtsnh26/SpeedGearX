@@ -67,8 +67,8 @@
                                         class="col-lg-3 col-md-4 col-sm-6 col-6 custom-col mb-30 ">
                                         <article class="product__card">
                                             <div class="product__card--thumbnail">
-                                                <a class="product__card--thumbnail__link display-block"
-                                                    href="{{ Route('indexDetail') }}">
+                                                <a class="product__card--thumbnail__link display-block" :href="`/detail/${v.slug_xe}`"
+                                                   >
                                                     <img style="width: 100%; height: 150px;" class=" product__card--thumbnail__img product__primary--img"
                                                         :src="v.images[0]"
                                                         alt="product-img">
@@ -80,7 +80,7 @@
                                             </div>
                                             <div class="product__card--content">
                                                 <h3 class="product__card--title">
-                                                    <a href="product-details.html">
+                                                    <a :href="`/detail/${v.slug_xe}`">
                                                         @{{ v.ten_xe }}
                                                     </a>
                                                 </h3>
@@ -100,7 +100,7 @@
                                                     <span class="old__price"> $362.00</span>
                                                 </div>
                                                 <div class="product__card--footer">
-                                                    <a class="product__card--btn primary__btn" href="javascript:void(0)"
+                                                    <a class="product__card--btn primary__btn" :href="`/detail/${v.slug_xe}`"
                                                         data-open="modal1">
                                                         <i class="fa-solid fa-dollar-sign"></i>
                                                         Thuê Xe
@@ -719,10 +719,9 @@
                                         }
                                     });
                                 });
-                                console.log(this.list_vehicles);
-
                             });
-                    }
+                    },
+
                 },
             });
         })

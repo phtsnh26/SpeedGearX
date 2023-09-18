@@ -80,5 +80,6 @@ Route::group(['prefix' => '/admin'], function () {
 
 Route::get('/', [CustomerController::class, 'index'])->name('indexHome');
 Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
-Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
 Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');
