@@ -66,18 +66,13 @@
                                         </div>
 
                                         <div class="mb-1">
-                                            <div class="d-flex justify-content-between">
-                                                <label class="form-label">Mật Khẩu</label>
-                                                <a href="">
-                                                    <small>Forgot Password?</small>
-                                                </a>
-                                            </div>
                                             <div class="input-group input-group-merge form-password-toggle">
                                                 <div class="input-group input-group-merge form-password-toggle">
-                                                    <input v-model="login.password" class="form-control form-control-merge"
-                                                        id="login-password" :type="showPass ? 'text' : 'password'"
-                                                        name="login-password" placeholder="············"
-                                                        aria-describedby="login-password" tabindex="2">
+                                                    <input v-on:keyup.enter="signIn()" v-model="login.password"
+                                                        class="form-control form-control-merge" id="login-password"
+                                                        :type="showPass ? 'text' : 'password'" name="login-password"
+                                                        placeholder="············" aria-describedby="login-password"
+                                                        tabindex="2">
                                                     <span class="input-group-text cursor-pointer"
                                                         @click="showPass = !showPass">
                                                         <i
@@ -90,7 +85,7 @@
                                     </form>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-primary w-100" tabindex="4" v-on:click="singIn()">Đăng
+                                    <button class="btn btn-primary w-100" tabindex="4" v-on:click="signIn()">Đăng
                                         Nhập</button>
                                 </div>
                             </div>
@@ -114,7 +109,7 @@
 
                 },
                 methods: {
-                    singIn() {
+                    signIn() {
                         axios
                             .post('{{ Route('signIn') }}', this.login)
                             .then((res) => {

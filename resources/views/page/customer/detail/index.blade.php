@@ -378,9 +378,8 @@
                         <form action="#">
                             <h2 class="product__details--info__title mb-15">BMW I8</h2>
                             <div class="product__details--info__price mb-12">
-                                <b>Ngày: <span class="current__price">2.200.000đ</span></b>
+                                <b>Giá Thuê / Ngày: <span class="current__price">2.200.000đ</span></b>
                                 <br>
-                                <b>Giờ: <span class="current__price">1.200.000đ</span></b>
                             </div>
                             <p class="product__details--info__desc mb-15">
                                 Mô tả ngắn ...
@@ -392,8 +391,9 @@
                                     </fieldset>
                                 </div>
                                 <div class="product__variant--list quantity d-flex align-items-center mb-20">
-                                    <div class="row">
-                                        <div class="col">
+                                    <div class="row w-100 text-nowrap">
+                                        <div class="col d-flex">
+                                            <label class="me-3"><b>Số Ngày Thuê: </b></label>
                                             <div class="quantity__box">
                                                 <button type="button"
                                                     class="quantity__value quickview__value--quantity decrease"
@@ -406,30 +406,9 @@
                                                 <button type="button"
                                                     class="quantity__value quickview__value--quantity increase"
                                                     aria-label="quantity value" value="Increase Value">+</button>
-                                                <button class="primary__btn quickview__cart--btn"
-                                                    type="submit">Ngày</button>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="quantity__box">
-                                                <button type="button"
-                                                    class="quantity__value quickview__value--quantity decrease"
-                                                    aria-label="quantity value" value="Decrease Value">-</button>
-                                                <label>
-                                                    <input type="number"
-                                                        class="quantity__number quickview__value--number" value="1"
-                                                        data-counter="">
-                                                </label>
-                                                <button type="button"
-                                                    class="quantity__value quickview__value--quantity increase"
-                                                    aria-label="quantity value" value="Increase Value">+</button>
-                                                <button class="primary__btn quickview__cart--btn"
-                                                    type="submit">Giờ</button>
-
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="product__variant--list mb-15">
                                     <button class="variant__buy--now__btn primary__btn" type="submit">Thuê Xe</button>
