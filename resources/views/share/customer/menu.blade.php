@@ -1,5 +1,12 @@
 <header class="header__section">
-
+    <style>
+        .categories__submenu {
+            width: 200px;
+        }
+        .categories__submenu.style2 .categories__submenu--items {
+            width: 100%;
+        }
+    </style>
     <div class="main__header header__sticky">
         <div class="container-fluid">
             <div class="main__header--inner position__relative d-flex justify-content-between align-items-center">
@@ -23,8 +30,9 @@
                     <nav class="header__menu--navigation">
                         <ul class="header__menu--wrapper d-flex">
                             <li class="header__menu--items">
-                                <a class="header__menu--link" href="{{ Route('indexHome') }}">Trang Chủ</a>
+                                <a class="header__menu--link check" href="{{ Route('indexHome') }}">Trang Chủ</a>
                             </li>
+
                             <li class="header__menu--items">
                                 <a class="header__menu--link" href="blog.html">Tất Cả Thương Hiệu
                                     <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -33,15 +41,52 @@
                                             transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"></path>
                                     </svg>
                                 </a>
+
                                 <ul class="header__sub--menu">
                                     <li class="header__sub--menu__items"><a href="blog.html"
                                             class="header__sub--menu__link">BMW</a></li>
                                     <li class="header__sub--menu__items"><a href="blog-details.html"
                                             class="header__sub--menu__link">Vinfast</a></li>
+
+
+                                    <li class="categories__menu--items">
+                                        <a style="padding: 0;" class="categories__menu--link py-1" href="shop.html">
+                                            Mercedes
+                                            <svg class="categories__menu--right__arrow--icon"
+                                                xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831"
+                                                viewBox="0 0 512 512">
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="48"
+                                                    d="M184 112l144 144-144 144"></path>
+                                            </svg>
+                                        </a>
+                                        <ul
+                                            class="categories__submenu style2 border-radius-10 d-flex justify-content-between">
+                                            <li class="categories__submenu--items"><a
+                                                    class="categories__submenu--items__text"
+                                                    href="shop.html"><strong>Fluids &amp; Chemicals</strong></a>
+                                                <ul class="categories__submenu--child">
+                                                    <li class="categories__submenu--child__items"><a
+                                                            class="categories__submenu--child__items--link"
+                                                            href="shop.html">Cabin Air Filters </a></li>
+                                                    <li class="categories__submenu--child__items"><a
+                                                            class="categories__submenu--child__items--link"
+                                                            href="shop.html">Pistons liners </a></li>
+                                                    <li class="categories__submenu--child__items"><a
+                                                            class="categories__submenu--child__items--link"
+                                                            href="shop.html">Oil &amp; lubricants </a></li>
+                                                    <li class="categories__submenu--child__items"><a
+                                                            class="categories__submenu--child__items--link"
+                                                            href="shop.html"> Paintworks
+                                                        </a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="header__menu--items">
-                                <a class="header__menu--link" href="{{Route('indexContact')}}">Liên Hệ</a>
+                                <a class="header__menu--link" href="{{ Route('indexContact') }}">Liên Hệ</a>
                             </li>
                         </ul>
                     </nav>
@@ -78,12 +123,14 @@
             </div>
         </div>
     </div>
+
     <!-- Start Offcanvas header menu -->
     <div class="offcanvas__header">
         <div class="offcanvas__inner">
             <div class="offcanvas__logo">
                 <a class="offcanvas__logo_link" href="index.html">
-                    <img src="/partsix/assets/img/logo/nav-log.webp" alt="Grocee Logo" width="158" height="36">
+                    <img src="/partsix/assets/img/logo/nav-log.webp" alt="Grocee Logo" width="158"
+                        height="36">
                 </a>
                 <button class="offcanvas__close--btn" data-offcanvas="">close</button>
             </div>
