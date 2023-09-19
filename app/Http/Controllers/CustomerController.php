@@ -11,10 +11,7 @@ class CustomerController extends Controller
     {
         return view('page.customer.home.index');
     }
-    public function indexContact()
-    {
-        return view('page.customer.contact.index');
-    }
+
     public function indexDetail()
     {
         return view('page.customer.detail.index');

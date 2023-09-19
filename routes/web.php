@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileAdminController;
 use App\Http\Controllers\homapageController;
@@ -90,6 +91,11 @@ Route::get('/login/client', [LoginCustomer::class, 'indexLoginCustomer'])->name(
 
 
 Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
-Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
+
+Route::group(['prefix' => 'contact'], function () {
+    Route::get('/', [ContactController::class, 'indexContact'])->name('indexContact');
+    Route::get('/data', [ContactController::class, 'data'])->name('dataContact');
+});
+
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
 Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');
