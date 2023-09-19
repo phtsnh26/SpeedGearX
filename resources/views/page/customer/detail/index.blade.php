@@ -399,7 +399,7 @@
                                     <div class="product__tab--content">
                                         <div class="product__tab--content__step mb-30">
                                             <h2 class="product__tab--content__title h4 mb-10">Mô Tả Chi Tiết</h2>
-                                            <p class="product__tab--content__desc">ở đây nhé ....</p>
+                                            <p class="product__tab--content__desc">@{{ data.mo_ta_chi_tiet }}</p>
                                         </div>
                                     </div>
                                 </div>

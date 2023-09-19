@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Classification;
 use App\Models\Customer;
 use App\Models\Images;
 use App\Models\Vehicle;
@@ -29,6 +31,14 @@ class CustomerController extends Controller
         $img = Images::where('id_xe', $request->id)->get();
         return response()->json([
             'image'   => $img,
+        ]);
+    }
+    public function getThuongHieu(){
+        $data = Brand::where('tinh_trang', 1)->get();
+        $classification = Classification::get();
+        return response()->json([
+            'data'   => $data,
+            'classification' => $classification
         ]);
     }
 }
