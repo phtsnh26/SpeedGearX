@@ -22,28 +22,18 @@
                     <div class="container">
                         <div class="search__filter--inner style5">
                             <div class="row" style="height: 50px">
-                                <div class="col-4 " style="height: 50px; ">
+                                <div class="col-5 " style="height: 50px; ">
                                     <select class="form-select h-100" style="font-size: 15px">
                                         <option value="">Thương Hiệu</option>
                                         <option v-for='(v, k) in list_brands' :value="v.id">@{{ v.ten_thuong_hieu }}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-3" style="height: 50px; ">
+                                <div class="col-5" style="height: 50px; ">
                                     <select class="form-select h-100" style="font-size: 15px">
                                         <option value="">Loại Xe</option>
                                         <option v-for='(v, k) in list_classification' :value="v.id">
                                             @{{ v.so_cho_ngoi }} chỗ</option>
-                                    </select>
-                                </div>
-                                <div class="col-3 " style="height: 50px; ">
-                                    <select class="form-select h-100" style="font-size: 15px">
-                                        <option value="">Năm</option>
-                                        <option value="">2023</option>
-                                        <option value="">2022</option>
-                                        <option value="">2021</option>
-                                        <option value="">2019</option>
-                                        <option value="">2018</option>
                                     </select>
                                 </div>
                                 <div class="col-2 " style="height: 50px; ">

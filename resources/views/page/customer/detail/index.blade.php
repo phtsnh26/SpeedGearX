@@ -313,7 +313,6 @@
                                         <button class="variant__buy--now__btn primary__btn" type="submit">Thuê
                                             Xe</button>
                                     </div>
-
                                 </div>
                                 <div class="quickview__social d-flex align-items-center mb-15">
                                     <label class="quickview__social--title">Chia Sẻ:</label>

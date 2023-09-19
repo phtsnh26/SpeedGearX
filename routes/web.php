@@ -11,6 +11,7 @@ use App\Http\Controllers\homapageController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Booking;
 use App\Models\Brand;
+use App\Models\LoginCustomer;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login/admin', [AdminController::class, 'indexSignin'])->name('indexSignin');
@@ -85,7 +86,10 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     });
 });
 
-Route::get('/', [CustomerController::class, 'index'])->name('indexHome');
+Route::get('/login/client', [LoginCustomer::class, 'indexLoginCustomer'])->name('indexLoginCustomer');
+
+
+Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
 Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
 Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
 Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
