@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Classification;
 use App\Models\Customer;
+use App\Models\Images;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -15,8 +19,26 @@ class CustomerController extends Controller
     {
         return view('page.customer.contact.index');
     }
-    public function indexDetail()
+    public function indexDetail($slug_xe)
     {
-        return view('page.customer.detail.index');
+        $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                        ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                        ->where('slug_xe', '=', $slug_xe)->first();
+        // dd($data);
+        return view('page.customer.detail.index', compact('data'));
+    }
+    public function loadImageDetail(Request $request){
+        $img = Images::where('id_xe', $request->id)->get();
+        return response()->json([
+            'image'   => $img,
+        ]);
+    }
+    public function getThuongHieu(){
+        $data = Brand::where('tinh_trang', 1)->get();
+        $classification = Classification::get();
+        return response()->json([
+            'data'   => $data,
+            'classification' => $classification
+        ]);
     }
 }

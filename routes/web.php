@@ -91,5 +91,9 @@ Route::get('/login/client', [LoginCustomer::class, 'indexLoginCustomer'])->name(
 
 Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
 Route::get('/contact', [CustomerController::class, 'indexContact'])->name('indexContact');
-Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
+Route::get('/data-thuong-hieu', [CustomerController::class, 'getThuongHieu'])->name('getThuongHieu');
+
 Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');
+Route::get('/all-product', [homapageController::class, 'allProduct'])->name('allProduct');
