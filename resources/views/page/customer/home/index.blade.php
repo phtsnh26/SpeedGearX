@@ -17,36 +17,7 @@
                 <img class="slider__thumbnail--img__style5" src="https://www.topgear.com/sites/default/files/2021/12/ff2.jpg"
                     alt="slider-img">
 
-                <!-- Start search filter area -->
-                <div class="search__filter--section search__filter--style5">
-                    <div class="container">
-                        <div class="search__filter--inner style5">
-                            <div class="row" style="height: 50px">
-                                <div class="col-5 " style="height: 50px; ">
-                                    <select class="form-select h-100" style="font-size: 15px">
-                                        <option value="">Thương Hiệu</option>
-                                        <option v-for='(v, k) in list_brands' :value="v.id">@{{ v.ten_thuong_hieu }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-5" style="height: 50px; ">
-                                    <select class="form-select h-100" style="font-size: 15px">
-                                        <option value="">Loại Xe</option>
-                                        <option v-for='(v, k) in list_classification' :value="v.id">
-                                            @{{ v.so_cho_ngoi }} chỗ</option>
-                                    </select>
-                                </div>
-                                <div class="col-2 " style="height: 50px; ">
-                                    <button class="btn btn-danger w-100 h-100" style="font-size: 15px">
-                                        <b>Tìm Kiếm</b>
-                                    </button>
-                                </div>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- End search filter area -->
             </div>
 
         </section>
@@ -631,58 +602,7 @@
         </div>
         <!-- End categories section -->
 
-        <!-- Start banner section -->
-        <section class="banner__section section--padding pt-0">
-            <div class="container">
-                <div class="row  mb--n30">
-                    <div class="col-lg-6 col-md-6 mb-30">
-                        <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
-                                    class="banner__thumbnail--img banner__max--height"
-                                    src="/partsix/assets/img/banner/banner1.webp" alt="banner-img">
-                                <div class="banner__content">
-                                    <span class="banner__content--subtitle text__secondary">Toyota Combo</span>
-                                    <h2 class="banner__content--title"><span class="banner__content--title__inner">CAR
-                                            PARTS</span> COLLECTION</h2>
-                                    <span class="banner__content--price">$22.99</span>
-                                    <span class="banner__content--btn">Buy now
-                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.8335 3.6178L8.26381 0.157332C8.21395 0.107774 8.1532 0.0681771 8.08544 0.0410843C8.01768 0.0139915 7.94441 0 7.87032 0C7.79624 0 7.72297 0.0139915 7.65521 0.0410843C7.58746 0.0681771 7.5267 0.107774 7.47684 0.157332C7.37199 0.262044 7.31393 0.39827 7.31393 0.539537C7.31393 0.680805 7.37199 0.817024 7.47684 0.921736L10.0943 3.45837H0.55625C0.405122 3.46829 0.26375 3.52959 0.160556 3.62994C0.057363 3.73029 0 3.86225 0 3.99929C0 4.13633 0.057363 4.26829 0.160556 4.36864C0.26375 4.46899 0.405122 4.53029 0.55625 4.54021H10.0927L7.47527 7.07826C7.37042 7.18298 7.31235 7.3192 7.31235 7.46047C7.31235 7.60174 7.37042 7.73796 7.47527 7.84267C7.52513 7.89223 7.58588 7.93182 7.65364 7.95892C7.7214 7.98601 7.79467 8 7.86875 8C7.94284 8 8.0161 7.98601 8.08386 7.95892C8.15162 7.93182 8.21238 7.89223 8.26223 7.84267L11.8335 4.38932C11.9406 4.28419 12 4.14649 12 4.00356C12 3.86063 11.9406 3.72293 11.8335 3.6178Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <span class="banner__badge">25% <br> off</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 mb-30">
-                        <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
-                                    class="banner__thumbnail--img banner__max--height"
-                                    src="/partsix/assets/img/banner/banner2.webp" alt="banner-img">
-                                <div class="banner__content right">
-                                    <span class="banner__badge--style2">20% Off</span>
-                                    <h2 class="banner__content--title">BODY PARTS <br> FOR ANY <span
-                                            class="banner__content--title__inner"> VEHICLE </span></h2>
-                                    <span class="banner__content--btn mt-0">Buy now
-                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.8335 3.6178L8.26381 0.157332C8.21395 0.107774 8.1532 0.0681771 8.08544 0.0410843C8.01768 0.0139915 7.94441 0 7.87032 0C7.79624 0 7.72297 0.0139915 7.65521 0.0410843C7.58746 0.0681771 7.5267 0.107774 7.47684 0.157332C7.37199 0.262044 7.31393 0.39827 7.31393 0.539537C7.31393 0.680805 7.37199 0.817024 7.47684 0.921736L10.0943 3.45837H0.55625C0.405122 3.46829 0.26375 3.52959 0.160556 3.62994C0.057363 3.73029 0 3.86225 0 3.99929C0 4.13633 0.057363 4.26829 0.160556 4.36864C0.26375 4.46899 0.405122 4.53029 0.55625 4.54021H10.0927L7.47527 7.07826C7.37042 7.18298 7.31235 7.3192 7.31235 7.46047C7.31235 7.60174 7.37042 7.73796 7.47527 7.84267C7.52513 7.89223 7.58588 7.93182 7.65364 7.95892C7.7214 7.98601 7.79467 8 7.86875 8C7.94284 8 8.0161 7.98601 8.08386 7.95892C8.15162 7.93182 8.21238 7.89223 8.26223 7.84267L11.8335 4.38932C11.9406 4.28419 12 4.14649 12 4.00356C12 3.86063 11.9406 3.72293 11.8335 3.6178Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End banner section -->
+
     </div>
 @endsection
 
@@ -692,11 +612,7 @@
             new Vue({
                 el: '#app',
                 data: {
-                    list_brands: [],
-                    list_classification: [],
-                    list_vehicles: [
-
-                    ],
+                    list_vehicles: [],
                     list_images: [],
                 },
                 created() {
