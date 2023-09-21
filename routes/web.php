@@ -96,6 +96,7 @@ Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
 Route::group(['prefix' => 'contact'], function () {
     Route::get('/', [ContactController::class, 'indexContact'])->name('indexContact');
     Route::get('/data', [ContactController::class, 'data'])->name('dataContact');
+    Route::post('/create', [ContactController::class, 'add'])->name('createContact');
 });
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
