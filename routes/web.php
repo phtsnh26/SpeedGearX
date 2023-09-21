@@ -87,6 +87,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 });
 
 Route::get('/login/client', [LoginCustomer::class, 'indexLoginCustomer'])->name('indexLoginCustomer');
+Route::get('/signup/client', [LoginCustomer::class, 'indexSignUp'])->name('indexSignUp');
 
 
 Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');

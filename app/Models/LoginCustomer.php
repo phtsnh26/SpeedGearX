@@ -11,4 +11,8 @@ class LoginCustomer extends Model
     {
         return view('page.customer.loginCustomer.index');
     }
+    public function indexSignUp()
+    {
+        return view('page.customer.loginCustomer.indexSignUp');
+    }
 }

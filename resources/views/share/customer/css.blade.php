@@ -5,6 +5,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="/partsix/assets/img/favicon.ico">
 
 <!-- ======= All CSS Plugins here ======== -->
+
 <link rel="stylesheet" href="/partsix/assets/css/plugins/swiper-bundle.min.css">
 <link rel="stylesheet" href="/partsix/assets/css/plugins/glightbox.min.css">
 <link
