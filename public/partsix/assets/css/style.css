@@ -2604,8 +2604,8 @@ body.overlay__active::before,
   width: 50rem;
   padding: 2rem;
   z-index: 9;
-  /* -webkit-transition: var(--transition); */
-  /* transition: var(--transition); */
+  -webkit-transition: var(--transition);
+  transition: var(--transition);
   opacity: 0;
   visibility: hidden;
   gap: 3rem;
@@ -3600,7 +3600,6 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .home1-slider1-bg {
-  background: url(../img/slider/home1-slider1-bg.webp);
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -4614,7 +4613,6 @@ input[type=number]::-webkit-outer-spin-button {
 */
 .sidebar__category {
   padding: 1rem;
-  background: url(../img/other/category-sidebar-bg.webp);
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
@@ -7676,7 +7674,7 @@ input[type=number]::-webkit-outer-spin-button {
     13. Quickview css
 */
 .modal {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
@@ -7697,7 +7695,7 @@ input[type=number]::-webkit-outer-spin-button {
   opacity: 0;
   -webkit-transition: all 0.35s ease-in;
   transition: all 0.35s ease-in;
-  z-index: 99;
+  /* z-index: 99; */
 }
 
 .modal.is-visible {

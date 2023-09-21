@@ -616,7 +616,8 @@
                     list_images: [],
                 },
                 created() {
-                    this.getData()
+                    this.getData();
+                    console.log(this.list_vehicles);
                 },
                 methods: {
                     getData() {

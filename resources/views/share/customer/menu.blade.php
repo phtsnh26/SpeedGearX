@@ -209,7 +209,7 @@
         <div class="minicart__product">
             <div class="minicart__product--items d-flex">
                 <div class="minicart__thumb">
-                    <a href="product-details.html"><img src="assets/img/product/small-product/product1.webp"
+                    <a href="product-details.html"><img src="/partsix/assets/img/product/small-product/product1.webp"
                             alt="prduct-img"></a>
                 </div>
                 <div class="minicart__text">
@@ -235,7 +235,7 @@
             </div>
             <div class="minicart__product--items d-flex">
                 <div class="minicart__thumb">
-                    <a href="product-details.html"><img src="assets/img/product/small-product/product2.webp"
+                    <a href="product-details.html"><img src="/partsix/assets/img/product/small-product/product2.webp"
                             alt="prduct-img"></a>
                 </div>
                 <div class="minicart__text">

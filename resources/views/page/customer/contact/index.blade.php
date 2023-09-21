@@ -12,34 +12,19 @@
                         </h3>
                         <form class="contact__form--inner" action="#">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6">
+                                <div class="col-lg-12 col-md-6">
                                     <div class="contact__form--list mb-20">
                                         <label class="contact__form--label" for="input1">
                                             <font style="vertical-align: inherit;">
-                                                <font style="vertical-align: inherit;">Tên</font>
+                                                <font style="vertical-align: inherit;">Họ và Tên</font>
                                             </font><span class="contact__form--label__star">
                                                 <font style="vertical-align: inherit;">
                                                     <font style="vertical-align: inherit;">*</font>
                                                 </font>
                                             </span>
                                         </label>
-                                        <input class="contact__form--input" name="firstname" id="input1"
-                                            placeholder="Tên của bạn" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="contact__form--list mb-20">
-                                        <label class="contact__form--label" for="input2">
-                                            <font style="vertical-align: inherit;">
-                                                <font style="vertical-align: inherit;">Họ</font>
-                                            </font><span class="contact__form--label__star">
-                                                <font style="vertical-align: inherit;">
-                                                    <font style="vertical-align: inherit;">*</font>
-                                                </font>
-                                            </span>
-                                        </label>
-                                        <input class="contact__form--input" name="lastname" id="input2"
-                                            placeholder="Tên của bạn" type="text">
+                                        <input v-model="add.ho_va_ten" class="contact__form--input" name="firstname"
+                                            id="input1" placeholder="Tên của bạn" type="text">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
@@ -53,8 +38,8 @@
                                                 </font>
                                             </span>
                                         </label>
-                                        <input class="contact__form--input" name="number" id="input3"
-                                            placeholder="Số điện thoại" type="text">
+                                        <input v-model="add.so_dien_thoai" class="contact__form--input" name="number"
+                                            id="input3" placeholder="Số điện thoại" type="text">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
@@ -68,8 +53,8 @@
                                                 </font>
                                             </span>
                                         </label>
-                                        <input class="contact__form--input" name="email" id="input4"
-                                            placeholder="E-mail" type="text">
+                                        <input v-model="add.email" class="contact__form--input" name="email"
+                                            id="input4" placeholder="E-mail" type="text">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -83,11 +68,12 @@
                                                 </font>
                                             </span>
                                         </label>
-                                        <textarea class="contact__form--textarea" name="message" id="input5" placeholder="Viết tin nhắn của bạn"></textarea>
+                                        <textarea v-model="add.loi_nhan" class="contact__form--textarea" name="message" id="input5"
+                                            placeholder="Viết tin nhắn của bạn"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <button class="contact__form--btn primary__btn" type="submit"> <span>
+                            <button class="contact__form--btn primary__btn" type="button" v-on:click='themMoi()'> <span>
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Xác Nhận</font>
                                     </font>
@@ -205,6 +191,7 @@
                 el: '#app',
                 data: {
                     list: {},
+                    add: {},
                 },
                 created() {
                     this.getData();
@@ -215,7 +202,25 @@
                             .get('{{ Route('dataContact') }}')
                             .then((res) => {
                                 this.list = res.data.data
+                                console.log(this.list);
                             });
+                    },
+                    themMoi() {
+                        axios
+                            .post('{{ Route('createContact') }}', this.add)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message,'Thành Công');
+                                } else {
+                                    toastr.error(res.data.message,'Lỗi');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+
                     },
                 },
             });

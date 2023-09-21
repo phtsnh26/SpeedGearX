@@ -6,9 +6,9 @@
 
 
   ----------------------------
-  [Table of contents CSS] 
+  [Table of contents CSS]
   ----------------------------
-  
+
   1. slider swiper activation
   2. product swiper column4 activation
   3. product swiper column4 style2 activation
@@ -37,13 +37,13 @@
 "use strict";
 
 // Preloader
-const preLoader = function () {
-  let preloaderWrapper = document.getElementById("preloader");
-  window.onload = () => {
-    preloaderWrapper.classList.add("loaded");
-  };
-};
-preLoader();
+// const preLoader = function () {
+//   let preloaderWrapper = document.getElementById("preloader");
+//   window.onload = () => {
+//     preloaderWrapper.classList.add("loaded");
+//   };
+// };
+// preLoader();
 
 // getSiblings
 var getSiblings = function (elem) {
