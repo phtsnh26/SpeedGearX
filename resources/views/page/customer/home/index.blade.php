@@ -1,5 +1,15 @@
 @extends('share.customer.masterPage')
 @section('content')
+    <style>
+        .description__short {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Số dòng tối đa bạn muốn hiển thị */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
     <div id="app">
         <!-- Start slider section -->
         <section class="hero__slider--section">
@@ -7,36 +17,7 @@
                 <img class="slider__thumbnail--img__style5" src="https://www.topgear.com/sites/default/files/2021/12/ff2.jpg"
                     alt="slider-img">
 
-                <!-- Start search filter area -->
-                <div class="search__filter--section search__filter--style5">
-                    <div class="container">
-                        <div class="search__filter--inner style5">
-                            <div class="row" style="height: 50px">
-                                <div class="col-5 " style="height: 50px; ">
-                                    <select class="form-select h-100" style="font-size: 15px">
-                                        <option value="">Thương Hiệu</option>
-                                        <option v-for='(v, k) in list_brands' :value="v.id">@{{ v.ten_thuong_hieu }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-5" style="height: 50px; ">
-                                    <select class="form-select h-100" style="font-size: 15px">
-                                        <option value="">Loại Xe</option>
-                                        <option v-for='(v, k) in list_classification' :value="v.id">
-                                            @{{ v.so_cho_ngoi }} chỗ</option>
-                                    </select>
-                                </div>
-                                <div class="col-2 " style="height: 50px; ">
-                                    <button class="btn btn-danger w-100 h-100" style="font-size: 15px">
-                                        <b>Tìm Kiếm</b>
-                                    </button>
-                                </div>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- End search filter area -->
             </div>
 
         </section>
@@ -55,43 +36,44 @@
                                 <div class="row mb--n30">
                                     <div v-for="(v, k) in list_vehicles"
                                         class="col-lg-3 col-md-4 col-sm-6 col-6 custom-col mb-30 ">
-                                        <article class="product__card">
+                                        <article class="product__card" style="height: 372px;">
                                             <div class="product__card--thumbnail">
                                                 <a class="product__card--thumbnail__link display-block"
-                                                    href="{{ Route('indexDetail') }}">
-                                                    <img style="width: 100%; height: 150px;" class=" product__card--thumbnail__img product__primary--img"
-                                                        :src="v.images[0]"
-                                                        alt="product-img">
-                                                    <img style="width: 100%; height: 150px;" class="product__card--thumbnail__img product__secondary--img"
-                                                        :src="v.images[1]"
-                                                        alt="product-img">
+                                                    :href="`/detail/${v.slug_xe}`">
+                                                    <img style="width: 100%; height: 150px;"
+                                                        class=" product__card--thumbnail__img product__primary--img"
+                                                        :src="v.images[0]" alt="product-img">
+                                                    <img style="width: 100%; height: 150px;"
+                                                        class="product__card--thumbnail__img product__secondary--img"
+                                                        :src="v.images[1]" alt="product-img">
                                                 </a>
                                                 <span class="product__badge">-14%</span>
                                             </div>
                                             <div class="product__card--content">
                                                 <h3 class="product__card--title">
-                                                    <a href="product-details.html">
+                                                    <a :href="`/detail/${v.slug_xe}`">
                                                         @{{ v.ten_xe }}
                                                     </a>
                                                 </h3>
                                                 <div class="row">
                                                     <div class="col ">
                                                         <i class="fa-solid fa-user"></i>
-                                                        4 Chỗ
+                                                        @{{ v.so_cho_ngoi }} Chỗ
+
                                                     </div>
-                                                    <div class="col  ">
-                                                        <i class="fa-solid fa-calendar-days"></i>
-                                                        2023 Model
-                                                    </div>
+
                                                 </div>
-                                                <p class="blog__card--desc">Mô tả ngắn chỗ này nè......</p>
+                                                <div class="row" style="height: 60px;">
+                                                    <p class="blog__card--desc description__short"> @{{ v.mo_ta_ngan }}
+                                                    </p>
+                                                </div>
                                                 <div class="product__card--price">
-                                                    <span class="current__price">$239.52</span>
-                                                    <span class="old__price"> $362.00</span>
+                                                    <span class="current__price">chưa cập nhật</span>
+                                                    <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                                 </div>
                                                 <div class="product__card--footer">
-                                                    <a class="product__card--btn primary__btn" href="javascript:void(0)"
-                                                        data-open="modal1">
+                                                    <a class="product__card--btn primary__btn"
+                                                        :href="`/detail/${v.slug_xe}`" data-open="modal1">
                                                         <i class="fa-solid fa-dollar-sign"></i>
                                                         Thuê Xe
                                                     </a>
@@ -620,58 +602,7 @@
         </div>
         <!-- End categories section -->
 
-        <!-- Start banner section -->
-        <section class="banner__section section--padding pt-0">
-            <div class="container">
-                <div class="row  mb--n30">
-                    <div class="col-lg-6 col-md-6 mb-30">
-                        <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
-                                    class="banner__thumbnail--img banner__max--height"
-                                    src="/partsix/assets/img/banner/banner1.webp" alt="banner-img">
-                                <div class="banner__content">
-                                    <span class="banner__content--subtitle text__secondary">Toyota Combo</span>
-                                    <h2 class="banner__content--title"><span class="banner__content--title__inner">CAR
-                                            PARTS</span> COLLECTION</h2>
-                                    <span class="banner__content--price">$22.99</span>
-                                    <span class="banner__content--btn">Buy now
-                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.8335 3.6178L8.26381 0.157332C8.21395 0.107774 8.1532 0.0681771 8.08544 0.0410843C8.01768 0.0139915 7.94441 0 7.87032 0C7.79624 0 7.72297 0.0139915 7.65521 0.0410843C7.58746 0.0681771 7.5267 0.107774 7.47684 0.157332C7.37199 0.262044 7.31393 0.39827 7.31393 0.539537C7.31393 0.680805 7.37199 0.817024 7.47684 0.921736L10.0943 3.45837H0.55625C0.405122 3.46829 0.26375 3.52959 0.160556 3.62994C0.057363 3.73029 0 3.86225 0 3.99929C0 4.13633 0.057363 4.26829 0.160556 4.36864C0.26375 4.46899 0.405122 4.53029 0.55625 4.54021H10.0927L7.47527 7.07826C7.37042 7.18298 7.31235 7.3192 7.31235 7.46047C7.31235 7.60174 7.37042 7.73796 7.47527 7.84267C7.52513 7.89223 7.58588 7.93182 7.65364 7.95892C7.7214 7.98601 7.79467 8 7.86875 8C7.94284 8 8.0161 7.98601 8.08386 7.95892C8.15162 7.93182 8.21238 7.89223 8.26223 7.84267L11.8335 4.38932C11.9406 4.28419 12 4.14649 12 4.00356C12 3.86063 11.9406 3.72293 11.8335 3.6178Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <span class="banner__badge">25% <br> off</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 mb-30">
-                        <div class="banner__items position__relative">
-                            <a class="banner__thumbnail display-block" href="shop.html"><img
-                                    class="banner__thumbnail--img banner__max--height"
-                                    src="/partsix/assets/img/banner/banner2.webp" alt="banner-img">
-                                <div class="banner__content right">
-                                    <span class="banner__badge--style2">20% Off</span>
-                                    <h2 class="banner__content--title">BODY PARTS <br> FOR ANY <span
-                                            class="banner__content--title__inner"> VEHICLE </span></h2>
-                                    <span class="banner__content--btn mt-0">Buy now
-                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.8335 3.6178L8.26381 0.157332C8.21395 0.107774 8.1532 0.0681771 8.08544 0.0410843C8.01768 0.0139915 7.94441 0 7.87032 0C7.79624 0 7.72297 0.0139915 7.65521 0.0410843C7.58746 0.0681771 7.5267 0.107774 7.47684 0.157332C7.37199 0.262044 7.31393 0.39827 7.31393 0.539537C7.31393 0.680805 7.37199 0.817024 7.47684 0.921736L10.0943 3.45837H0.55625C0.405122 3.46829 0.26375 3.52959 0.160556 3.62994C0.057363 3.73029 0 3.86225 0 3.99929C0 4.13633 0.057363 4.26829 0.160556 4.36864C0.26375 4.46899 0.405122 4.53029 0.55625 4.54021H10.0927L7.47527 7.07826C7.37042 7.18298 7.31235 7.3192 7.31235 7.46047C7.31235 7.60174 7.37042 7.73796 7.47527 7.84267C7.52513 7.89223 7.58588 7.93182 7.65364 7.95892C7.7214 7.98601 7.79467 8 7.86875 8C7.94284 8 8.0161 7.98601 8.08386 7.95892C8.15162 7.93182 8.21238 7.89223 8.26223 7.84267L11.8335 4.38932C11.9406 4.28419 12 4.14649 12 4.00356C12 3.86063 11.9406 3.72293 11.8335 3.6178Z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End banner section -->
+
     </div>
 @endsection
 
@@ -681,11 +612,7 @@
             new Vue({
                 el: '#app',
                 data: {
-                    list_brands: [],
-                    list_classification: [],
-                    list_vehicles: [
-
-                    ],
+                    list_vehicles: [],
                     list_images: [],
                 },
                 created() {
@@ -700,19 +627,27 @@
                                 this.list_classification = res.data.classification;
                                 this.list_vehicles = res.data.data;
                                 this.list_images = res.data.images;
+                                console.log(this.list_vehicles);
                                 this.list_vehicles.forEach(a => {
                                     a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
                                     this.list_images.forEach(b => {
                                         if (a.id === b.id_xe) {
                                             a.images.push(b
-                                            .hinh_anh_xe); // Thêm hình ảnh vào mảng images của đối tượng a
+                                                .hinh_anh_xe
+                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
                                         }
                                     });
                                 });
-                                console.log(this.list_vehicles);
-
                             });
-                    }
+                    },
+                    numberFormat(number) {
+                        return new Intl.NumberFormat('vi-VI', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(number);
+                    },
+
+
                 },
             });
         })

@@ -88,6 +88,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 });
 
 Route::get('/login/client', [LoginCustomer::class, 'indexLoginCustomer'])->name('indexLoginCustomer');
+Route::get('/signup/client', [LoginCustomer::class, 'indexSignUp'])->name('indexSignUp');
 
 
 Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
@@ -98,4 +99,9 @@ Route::group(['prefix' => 'contact'], function () {
 });
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
+Route::get('/data-thuong-hieu', [CustomerController::class, 'getThuongHieu'])->name('getThuongHieu');
+
 Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');
+Route::get('/all-product', [homapageController::class, 'allProduct'])->name('allProduct');

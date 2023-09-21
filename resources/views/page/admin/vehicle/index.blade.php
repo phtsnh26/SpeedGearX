@@ -603,8 +603,6 @@
                     e_generateSlug() {
                         this.edit.slug_xe = this.toSlug(this.edit.ten_xe);
                     },
-
-
                 },
             });
         });
