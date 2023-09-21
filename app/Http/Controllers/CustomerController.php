@@ -15,25 +15,26 @@ class CustomerController extends Controller
     {
         return view('page.customer.home.index');
     }
-    public function indexContact()
-    {
-        return view('page.customer.contact.index');
-    }
+
+
     public function indexDetail($slug_xe)
+
     {
         $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
-                        ->select('vehicles.*', 'classifications.so_cho_ngoi')
-                        ->where('slug_xe', '=', $slug_xe)->first();
+            ->select('vehicles.*', 'classifications.so_cho_ngoi')
+            ->where('slug_xe', '=', $slug_xe)->first();
         // dd($data);
         return view('page.customer.detail.index', compact('data'));
     }
-    public function loadImageDetail(Request $request){
+    public function loadImageDetail(Request $request)
+    {
         $img = Images::where('id_xe', $request->id)->get();
         return response()->json([
             'image'   => $img,
         ]);
     }
-    public function getThuongHieu(){
+    public function getThuongHieu()
+    {
         $data = Brand::where('tinh_trang', 1)->get();
         $classification = Classification::get();
         return response()->json([
