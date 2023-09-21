@@ -1,13 +1,27 @@
 @extends('share.customer.masterPage')
 @section('content')
     <div id="app">
+        <section class="breadcrumb__section breadcrumb__bg">
+            <div class="container">
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <div class="breadcrumb__content text-center">
+                            <ul class="breadcrumb__content--menu d-flex justify-content-center">
+                                <li class="breadcrumb__content--menu__items"><a href="{{ Route('indexHome') }}">Home</a></li>
+                                <li class="breadcrumb__content--menu__items"><span>Liên Hệ</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section class="contact__section section--padding">
             <div class="container">
                 <div class="main__contact--area position__relative">
                     <div class="contact__form">
                         <h3 class="contact__form--title mb-30">
                             <font style="vertical-align: inherit;">
-                                <font style="vertical-align: inherit;">Liên hệ với tôi</font>
+                                <font style="vertical-align: inherit;">Liên hệ với chúng tôi</font>
                             </font>
                         </h3>
                         <form class="contact__form--inner" action="#">
@@ -210,9 +224,9 @@
                             .post('{{ Route('createContact') }}', this.add)
                             .then((res) => {
                                 if (res.data.status) {
-                                    toastr.success(res.data.message,'Thành Công');
+                                    toastr.success(res.data.message, 'Thành Công');
                                 } else {
-                                    toastr.error(res.data.message,'Lỗi');
+                                    toastr.error(res.data.message, 'Lỗi');
                                 }
                             })
                             .catch((res) => {
