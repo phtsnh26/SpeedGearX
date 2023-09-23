@@ -106,3 +106,6 @@ Route::get('/data-thuong-hieu', [CustomerController::class, 'getThuongHieu'])->n
 
 Route::get('/data', [homapageController::class, 'data'])->name('dataHomePage');
 Route::get('/all-product', [homapageController::class, 'allProduct'])->name('allProduct');
+Route::get('/all-product/data-menu', [homapageController::class, 'dataMenuAllProduct'])->name('dataMenuAllProduct');
+
+Route::post('/all-product/fillter', [homapageController::class, 'filter'])->name('filterAllProduct');

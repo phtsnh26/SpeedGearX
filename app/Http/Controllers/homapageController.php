@@ -32,4 +32,59 @@ class homapageController extends Controller
     {
         return view('page.customer.all-product.index');
     }
+    public function dataMenuAllProduct()
+    {
+        $list = Brand::get();
+        $classification = Classification::get();
+        return response()->json([
+            'list'   => $list,
+            'classification' => $classification
+        ]);
+    }
+    public function filter(Request $request)
+    {
+        if (isset($request->min) && isset($request->max)) {
+            $min = $request->min;
+            $max = $request->max;
+        } else if (isset($request->min) || isset($request->max)) {
+            if (isset($request->min)) {
+                $min = $request->min;
+                $max = 999999999;
+            } else {
+                $min = 0;
+                $max = $request->max;
+            }
+        } else {
+            $min = 0;
+            $max = 999999999;
+        }
+        // $min = $request->input('min', 0);
+        // $max = $request->input('max', 999999999);
+
+        $brands = $request->input('id_brands', []);
+        $classifications = $request->input('id_classifications', []);
+
+        $query = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            ->select('vehicles.*', 'classifications.so_cho_ngoi')
+            ->where('gia_theo_ngay', '>=', $min)
+            ->where('gia_theo_ngay', '<=', $max)
+            ->where('tinh_trang', 1);
+
+        if (!empty($brands)) {
+            $query->whereIn('id_thuong_hieu', $brands);
+        }
+
+        if (!empty($classifications)) {
+            $query->whereIn('id_loai_xe', $classifications);
+        }
+
+        $data = $query->get();
+        $image = Images::get();
+
+        return response()->json([
+            'status' => 1,
+            'data' => $data,
+            'image' => $image,
+        ]);
+    }
 }
