@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ClassificationController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileAdminController;
 use App\Http\Controllers\homapageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VehicleController;
 use App\Models\Booking;
 use App\Models\Brand;
@@ -20,6 +22,11 @@ Route::post('/signIn', [AdminController::class, 'signIn'])->name('signIn');
 
 Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     Route::get('/signOut', [AdminController::class, 'signOut'])->name('signOut');
+
+    Route::group(['prefix' => '/notification'], function () {
+        Route::get('/abc/{id}', [NotificationController::class, 'indexNotification'])->name('indexNotification');
+        Route::get('/dataNotification', [NotificationController::class, 'data'])->name('dataNotification');
+    });
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [ProfileAdminController::class, 'indexProfile'])->name('indexProfileAdmin');
@@ -97,6 +104,10 @@ Route::group(['prefix' => 'contact'], function () {
     Route::get('/', [ContactController::class, 'indexContact'])->name('indexContact');
     Route::get('/data', [ContactController::class, 'data'])->name('dataContact');
     Route::post('/create', [ContactController::class, 'add'])->name('createContact');
+});
+
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('/', [BlogController::class, 'indexBlog'])->name('indexBlog');
 });
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
