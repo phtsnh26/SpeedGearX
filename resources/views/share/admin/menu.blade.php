@@ -108,6 +108,10 @@
                         href="{{ Route('indexBooking') }}"><i class="fa-solid fa-clipboard-list"></i><span>
                             Manage Booking</span></a>
                 </li>
+                <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexBlog') }}"><i
+                            class="fa-solid fa-clipboard-list"></i><span>
+                            Manage Blog</span></a>
+                </li>
             </ul>
         </div>
     </div>

@@ -3,6 +3,7 @@
 <!-- BEGIN: Head-->
 
 @include('share.admin.css')
+
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
@@ -12,6 +13,7 @@
 
     <!-- BEGIN: Header-->
     @include('share.admin.header')
+    @yield('jsHeader')
     <ul class="main-search-list-defaultlist d-none">
         <li class="d-flex align-items-center"><a href="#">
                 <h6 class="section-label mt-75 mb-0">Files</h6>
