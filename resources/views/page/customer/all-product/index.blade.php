@@ -45,8 +45,9 @@
                             <label class="price__filter--label" for="Filter-Price-GTE2">From</label>
                             <div class="price__filter--input border-radius-5 d-flex align-items-center">
                                 <span class="price__filter--currency">$</span>
-                                <input v-model='filter_price.min' class="price__filter--input__field border-0" name="filter.v.price.gte"
-                                    id="Filter-Price-GTE2" type="number" placeholder="0" min="0" max="250.00">
+                                <input v-model='filter_price.min' class="price__filter--input__field border-0"
+                                    name="filter.v.price.gte" id="Filter-Price-GTE2" type="number" placeholder="0"
+                                    min="0">
                             </div>
                         </div>
                         <div class="price__divider">
@@ -56,9 +57,9 @@
                             <label class="price__filter--label" for="Filter-Price-LTE2">To</label>
                             <div class="price__filter--input border-radius-5 d-flex align-items-center">
                                 <span class="price__filter--currency">$</span>
-                                <input v-model='filter_price.max' class="price__filter--input__field border-0" name="filter.v.price.lte"
-                                    id="Filter-Price-LTE2" type="number" min="0" placeholder="250.00"
-                                    max="250.00">
+                                <input v-model='filter_price.max' class="price__filter--input__field border-0"
+                                    name="filter.v.price.lte" id="Filter-Price-LTE2" type="number" min="0"
+                                    placeholder="25000.00" max="25000.00">
                             </div>
                         </div>
                     </div>
@@ -117,6 +118,41 @@
                     </div>
                 </div>
             </div>
+            <div class="pagination__area">
+                <nav class="pagination justify-content-center">
+                    <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
+                        <li class="pagination__list">
+                            <a @click='prePage()' class="pagination__item--arrow  link ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
+                                    viewBox="0 0 512 512">
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="48"
+                                        d="M244 400L100 256l144-144M120 256h292"></path>
+                                </svg>
+                                <span class="visually-hidden">page left arrow</span>
+                            </a>
+                        </li>
+                        <li>
+                        </li>
+                        <li style="cursor: pointer" v-for='(v, k) in 2' @click='changePage(k)' class="pagination__list">
+                            <span class="pagination__item pagination__item--current">@{{ k + 1 }}</span>
+                        </li>
+                        <li class="pagination__list">
+                            <a @click='nextPage()' class="pagination__item--arrow  link ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
+                                    viewBox="0 0 512 512">
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="48"
+                                        d="M268 112l144 144-144 144M392 256H100"></path>
+                                </svg>
+                                <span class="visually-hidden">page right arrow</span>
+                            </a>
+                        </li>
+                        <li>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 @endsection
@@ -133,7 +169,8 @@
                     list_classification: [],
                     id_thuong_hieus: [],
                     id_loai_xes: [],
-                    filter_price : {},
+                    filter_price: {},
+                    link: {},
                 },
                 created() {
                     this.getData();
@@ -144,7 +181,10 @@
                         axios
                             .get('{{ Route('dataHomePage') }}')
                             .then((res) => {
-                                this.list = res.data.data;
+                                this.link = res.data.data;
+                                console.log(this.link);
+                                console.log(this.link);
+                                this.list = res.data.data.data;
                                 this.list_images = res.data.images;
                                 this.list.forEach(a => {
                                     a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
@@ -220,6 +260,64 @@
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
                                     toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    nextPage() {
+                        axios
+                            .get(this.link.next_page_url)
+                            .then((res) => {
+                                this.link = res.data.data;
+                                this.list = res.data.data.data;
+                                this.list_images = res.data.images;
+                                this.list.forEach(a => {
+                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                    this.list_images.forEach(b => {
+                                        if (a.id === b.id_xe) {
+                                            a.images.push(b
+                                                .hinh_anh_xe
+                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                        }
+                                    });
+                                });
+                            });
+                    },
+                    prePage() {
+                        axios
+                            .get(this.link.prev_page_url)
+                            .then((res) => {
+
+                                this.link = res.data.data;
+                                this.list = res.data.data.data;
+                                this.list_images = res.data.images;
+                                this.list.forEach(a => {
+                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                    this.list_images.forEach(b => {
+                                        if (a.id === b.id_xe) {
+                                            a.images.push(b
+                                                .hinh_anh_xe
+                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                        }
+                                    });
+                                });
+                            });
+                    },
+                    changePage(k) {
+                        axios
+                            .get("http://127.0.0.1:9991/data?2=" + (k + 1))
+                            .then((res) => {
+                                this.link = res.data.data;
+                                this.list = res.data.data.data;
+                                this.list_images = res.data.images;
+                                this.list.forEach(a => {
+                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                    this.list_images.forEach(b => {
+                                        if (a.id === b.id_xe) {
+                                            a.images.push(b
+                                                .hinh_anh_xe
+                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                        }
+                                    });
                                 });
                             });
                     }

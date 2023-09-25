@@ -17,7 +17,8 @@ class homapageController extends Controller
         $classification = Classification::get();
         $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
-            ->where('tinh_trang', 1)->get();
+            ->where('tinh_trang', 1)
+            ->paginate(9, ['*'], 2);
         $image = Images::get();
         // dd($data->toArray());
         return response()->json([
