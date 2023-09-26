@@ -109,8 +109,26 @@
                             Manage Booking</span></a>
                 </li>
                 <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexBlog') }}"><i
-                            class="fa-solid fa-clipboard-list"></i><span>
+                            class="fa-brands fa-blogger-b"></i><span>
                             Manage Blog</span></a>
+                </li>
+                <li class="dropdown nav-item" data-menu="dropdown"><a
+                        class="dropdown-toggle nav-link d-flex align-items-center" href="#"
+                        data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-file-circle-check"></i>
+                        <span data-i18n="Misc">Enter WareHouse</span></a>
+                    <ul class="dropdown-menu" data-bs-popper="none">
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexWareHouse') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fa-solid fa-file-import"></i>
+                                <span data-i18n="Documentation">WareHouse </span></a>
+                        </li>
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexWR') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                                <span data-i18n="Documentation">Warehouse Receipt</span></a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

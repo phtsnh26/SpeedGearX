@@ -10,11 +10,15 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileAdminController;
 use App\Http\Controllers\homapageController;
+use App\Http\Controllers\NhapKhoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\WareHouseController;
+use App\Http\Controllers\WareHouseReceiptController;
 use App\Models\Booking;
 use App\Models\Brand;
 use App\Models\LoginCustomer;
+use App\Models\WareHouse;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login/admin', [AdminController::class, 'indexSignin'])->name('indexSignin');
@@ -34,10 +38,29 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::post('/doi-mat-khau', [ProfileAdminController::class, 'changePass'])->name('changePass');
     });
 
+    Route::group(['prefix' => 'warehouse'], function () {
+        Route::get('/', [WareHouseController::class, 'indexWareHouse'])->name('indexWareHouse');
+        Route::get('/data', [WareHouseController::class, 'data'])->name('dataWareHouse');
+        Route::get('/dataTemporaryWareHouse', [WareHouseController::class, 'dataTemporaryWareHouse'])->name('dataTemporaryWareHouse');
+        Route::post('/create', [WareHouseController::class, 'add'])->name('createWareHouse');
+        Route::post('/updateThanhTien', [WareHouseController::class, 'updateThanhTien'])->name('updateThanhTien');
+        Route::post('/delete', [WareHouseController::class, 'del'])->name('deleteWareHouse');
+        Route::post('/storeWareHouse', [WareHouseController::class, 'createWareHouse'])->name('storeWareHouse');
+        Route::post('/search', [WareHouseController::class, 'search'])->name('searchWareHouse');
+        Route::post('/update', [WareHouseController::class, 'update'])->name('updatehWareHouse');
+    });
+
+    Route::group(['prefix' => 'warehouse-receipt'], function () {
+        Route::get('/', [WareHouseReceiptController::class, 'indexWR'])->name('indexWR');
+        Route::post('/data', [WareHouseReceiptController::class, 'data'])->name('dataWR');
+        Route::post('/detail', [WareHouseReceiptController::class, 'detail'])->name('detailWareHouse');
+    });
+
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [AdminController::class, 'indexDashboard'])->name('indexDashboard');
         Route::get('/data', [AdminController::class, 'dataDashboard'])->name('dataDashboard');
     });
+
     Route::group(['prefix' => 'brands'], function () {
         Route::get('/', [BrandController::class, 'indexBrand'])->name('indexBrand');
         Route::get('/data', [BrandController::class, 'data'])->name('dataBrand');
