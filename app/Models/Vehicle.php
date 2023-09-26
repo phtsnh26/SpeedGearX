@@ -15,6 +15,7 @@ class Vehicle extends Model
         'mo_ta_ngan',
         'mo_ta_chi_tiet',
         'gia_theo_ngay',
+        'don_gia',
         'so_luong',
         'tinh_trang',
         'id_thuong_hieu',

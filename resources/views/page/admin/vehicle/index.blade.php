@@ -76,7 +76,11 @@
                                 <input v-model='add.gia_theo_ngay' type="text" class="form-control"
                                     placeholder="Nhập giá thuê theo ngày">
                             </div>
-
+                            <div class="mb-1">
+                                <label for="invoice-subject" class="form-label">Đơn Giá</label>
+                                <input v-model='add.don_gia' type="text" class="form-control"
+                                    placeholder="Nhập đơn giá">
+                            </div>
                             <div class="mb-2">
                                 <label for="invoice-to" class="form-label">Tình Trạng</label>
                                 <select v-model='add.tinh_trang' class="form-select">
@@ -304,6 +308,11 @@
                                                 <input v-model='edit.gia_theo_ngay' type="number"
                                                     placeholder="Nhập giá thuê theo ngày" class="form-control">
                                             </div>
+                                        </div>
+                                        <div class="mb-1 col-3">
+                                            <label for="invoice-subject" class="form-label">Đơn Giá</label>
+                                            <input v-model='edit.don_gia' type="text" class="form-control"
+                                                placeholder="Nhập đơn giá">
                                         </div>
                                         <div class="col-3">
                                             <div class="mb-2">
