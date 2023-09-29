@@ -135,8 +135,10 @@
                         <li>
                         </li>
                         <li style="cursor: pointer" v-for='(v, k) in 2' @click='changePage(k)' class="pagination__list">
-                            <span class="pagination__item pagination__item--current">@{{ k + 1 }}</span>
+                            <span
+                                :class="{ 'pagination__item': true, 'pagination__item--current': k == currentPage }">@{{ k + 1 }}</span>
                         </li>
+
                         <li class="pagination__list">
                             <a @click='nextPage()' class="pagination__item--arrow  link ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
@@ -171,6 +173,7 @@
                     id_loai_xes: [],
                     filter_price: {},
                     link: {},
+                    currentPage: 0,
                 },
                 created() {
                     this.getData();
@@ -179,7 +182,7 @@
                 methods: {
                     getData() {
                         axios
-                            .get('{{ Route('dataHomePage') }}')
+                            .get('{{ Route('dataHomePageAll') }}')
                             .then((res) => {
                                 this.link = res.data.data;
                                 console.log(this.link);
@@ -264,6 +267,7 @@
                             });
                     },
                     nextPage() {
+                        console.log(this.link.next_page_url);
                         axios
                             .get(this.link.next_page_url)
                             .then((res) => {
@@ -303,8 +307,9 @@
                             });
                     },
                     changePage(k) {
+                        this.currentPage = k;
                         axios
-                            .get("http://127.0.0.1:9991/data?2=" + (k + 1))
+                            .get("http://127.0.0.1:8000/data-all?2=" + (k + 1))
                             .then((res) => {
                                 this.link = res.data.data;
                                 this.list = res.data.data.data;

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Client extends Model
+
+class Client extends Authenticatable
 {
     use HasFactory;
     protected $table = 'clients';
@@ -21,5 +23,8 @@ class Client extends Model
         'cccd',
         'bang_lai_xe',
         'tinh_trang',
+        'is_active',
+        'hash_reset',
+        'hash_active',
     ];
 }

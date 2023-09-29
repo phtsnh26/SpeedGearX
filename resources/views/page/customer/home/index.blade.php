@@ -15,7 +15,7 @@
         <section class="hero__slider--section">
             <div class="slider__thumbnail--style5 position-relative">
                 <img class="slider__thumbnail--img__style5" src="https://www.topgear.com/sites/default/files/2021/12/ff2.jpg"
-                    alt="slider-img">
+                    alt="slider-img" style="height: 400px">
 
 
             </div>
@@ -74,8 +74,8 @@
                                                 <div class="product__card--footer">
                                                     <a class="product__card--btn primary__btn"
                                                         :href="`/detail/${v.slug_xe}`" data-open="modal1">
-                                                        <i class="fa-solid fa-dollar-sign"></i>
-                                                        Thuê Xe
+                                                        <i class="fa-solid fa-car"></i>
+                                                        Add my car
                                                     </a>
                                                 </div>
                                             </div>
@@ -617,7 +617,6 @@
                 },
                 created() {
                     this.getData();
-                    console.log(this.list_vehicles);
                 },
                 methods: {
                     getData() {

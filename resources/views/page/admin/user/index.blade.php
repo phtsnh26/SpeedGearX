@@ -32,6 +32,7 @@
                                         <th class="text-center text-nowrap align-middle">Số Điện Thoại</th>
                                         <th class="text-center text-nowrap align-middle">Địa Chỉ</th>
                                         <th class="text-center text-nowrap align-middle">Ngày Tháng Năm Sinh</th>
+                                        <th class="text-center text-nowrap align-middle">Giới Tính</th>
                                         <th class="text-center text-nowrap align-middle">Căn Cước Công Dân</th>
                                         <th class="text-center text-nowrap align-middle">Bằng Lái Xe</th>
                                         <th class="text-center text-nowrap align-middle">Tình Trạng</th>
@@ -47,6 +48,7 @@
                                             <td class=" text-nowrap align-middle">@{{ v.so_dien_thoai }}</td>
                                             <td class=" text-nowrap align-middle">@{{ v.dia_chi }}</td>
                                             <td class=" text-nowrap align-middle">@{{ v.ngay_sinh }}</td>
+                                            <td class=" text-nowrap align-middle">@{{ v.gioi_tinh }}</td>
                                             <td class=" text-nowrap align-middle">@{{ v.cccd }}</td>
                                             <td class=" text-nowrap align-middle">
                                                 @{{ v.bang_lai_xe }}
