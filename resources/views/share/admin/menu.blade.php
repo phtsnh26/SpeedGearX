@@ -108,10 +108,10 @@
                         href="{{ Route('indexBooking') }}"><i class="fa-solid fa-clipboard-list"></i><span>
                             Manage Booking</span></a>
                 </li>
-                <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexBlog') }}"><i
+                {{-- <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexBlog') }}"><i
                             class="fa-brands fa-blogger-b"></i><span>
                             Manage Blog</span></a>
-                </li>
+                </li> --}}
                 <li class="dropdown nav-item" data-menu="dropdown"><a
                         class="dropdown-toggle nav-link d-flex align-items-center" href="#"
                         data-bs-toggle="dropdown">

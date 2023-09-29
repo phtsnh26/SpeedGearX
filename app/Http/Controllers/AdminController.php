@@ -65,4 +65,6 @@ class AdminController extends Controller
             'data'   => $data,
         ]);
     }
+
+
 }
