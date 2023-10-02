@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Booking;
 use App\Models\Brand;
 use App\Models\Client;
+use App\Models\Personnel;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,12 @@ class AdminController extends Controller
         $data = $request->all();
         $check = Auth::guard('admin')->attempt($data);
         if ($check) {
-            $admin = Admin::where('ten_dang_nhap', $request->ten_dang_nhap)
+            $admin = Personnel::where('ten_dang_nhap', $request->ten_dang_nhap)
                 ->first();
-            if ($admin->is_active == 1) {
                 return response()->json([
                     'status'    => true,
                     'message'   => 'Đăng nhập thành công',
                 ]);
-            }
         } else {
             return response()->json([
                 'status'    => false,
