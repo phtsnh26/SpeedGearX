@@ -209,6 +209,7 @@
                 },
                 created() {
                     this.getData();
+                    // setInterval(this.getData, 5000)
                 },
                 methods: {
                     getData() {

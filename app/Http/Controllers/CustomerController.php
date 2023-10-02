@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Classification;
+use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Images;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
+
     public function indexHome()
     {
         return view('page.customer.home.index');
@@ -41,5 +44,10 @@ class CustomerController extends Controller
             'data'   => $data,
             'classification' => $classification
         ]);
+    }
+    public function logout()
+    {
+        Auth::guard('client')->logout();
+        return redirect('/');
     }
 }

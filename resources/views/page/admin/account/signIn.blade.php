@@ -62,22 +62,20 @@
                                         <div class="mb-1">
                                             <label class="form-label">Tên Đăng Nhập</label>
                                             <input v-model="login.ten_dang_nhap" type="text" class="form-control"
-                                                placeholder="Nhập tên đăng nhập" />
+                                                placeholder="Nhập tên đăng nhập" tabindex="1" />
                                         </div>
-
                                         <div class="mb-1">
                                             <div class="input-group input-group-merge form-password-toggle">
                                                 <div class="input-group input-group-merge form-password-toggle">
                                                     <input v-on:keyup.enter="signIn()" v-model="login.password"
-                                                        class="form-control form-control-merge" id="login-password"
-                                                        :type="showPass ? 'text' : 'password'" name="login-password"
-                                                        placeholder="············" aria-describedby="login-password"
-                                                        tabindex="2">
+                                                        class="form-control" :type="showPass ? 'text' : 'password'"
+                                                        placeholder="············" tabindex="1">
                                                     <span class="input-group-text cursor-pointer"
                                                         @click="showPass = !showPass">
                                                         <i
                                                             :class="showPass ? 'fa-regular fa-eye' :
-                                                                'fa-regular fa-eye-slash'"></i>
+                                                                'fa-regular fa-eye-slash'">
+                                                        </i>
                                                     </span>
                                                 </div>
                                             </div>

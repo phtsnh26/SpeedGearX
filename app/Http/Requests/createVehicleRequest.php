@@ -28,6 +28,7 @@ class createVehicleRequest extends FormRequest
             'mo_ta_ngan' => 'nullable|string|between:4,500',
             'mo_ta_chi_tiet' => 'nullable|string|min:5',
             'gia_theo_ngay' => 'nullable|numeric',
+            'don_gia' => 'nullable|numeric',
             'so_luong' => 'nullable|integer|min:1',
             'tinh_trang' => 'nullable|boolean',
             'id_thuong_hieu' => 'required|integer',

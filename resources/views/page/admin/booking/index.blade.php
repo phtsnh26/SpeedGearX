@@ -43,8 +43,8 @@
                                         <template v-for="(v,k) in list">
                                             <tr class="align-middle">
                                                 <th>@{{ k + 1 }}</th>
-                                                <td class="text-nowrap">
-                                                    <button class="btn a1" data-bs-toggle="modal"
+                                                <td class="text-nowrap ">
+                                                    <button class="btn a1 text-danger" data-bs-toggle="modal"
                                                         data-bs-target="#thongtinModal"
                                                         v-on:click="thongTin = Object.assign({},v);">
                                                         @{{ v.ho_va_ten }}

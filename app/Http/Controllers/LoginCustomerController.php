@@ -2,64 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SignUpRequest;
+use App\Mail\ActiveMail;
+use App\Models\Client;
 use App\Models\LoginCustomer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class LoginCustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function indexLoginCustomer()
     {
-        //
+        return view('page.customer.loginCustomer.index');
+    }
+    public function signIn(Request $request)
+    {
+        $check_1 = Auth::guard('client')->attempt(['email' => $request->ten_dang_nhap, 'password' => $request->password]);
+        $check_2 = Auth::guard('client')->attempt(['so_dien_thoai' => $request->ten_dang_nhap, 'password' => $request->password]);
+        $check_3 = Auth::guard('client')->attempt(['ten_dang_nhap' => $request->ten_dang_nhap, 'password' => $request->password]);
+        if ($check_1 || $check_2 || $check_3) {
+            $client   =   Auth::guard('client')->user();
+            if ($client->is_active == 0) {
+                Auth::guard('client')->logout();  // Ép nó logout
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Vui lòng kích hoạt tài khoản!',
+                ]);
+            } else if ($client->tinh_trang == 0) {
+                Auth::guard('client')->logout();
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Tài khoản bạn đã bị khóa',
+                ]);
+            }
+            return response()->json([
+                'status'    => 1,
+                'message'   => 'Đã đăng nhập thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Tài khoản hoặc mật khẩu không đúng',
+            ]);
+        }
+    }
+    public function activeAccount($code)
+    {
+        $customer   =   Client::where('hash_active', $code)->first();
+
+        if ($customer) {
+            $customer->is_active    = 1;
+            $customer->hash_active  = NULL;
+            $customer->tinh_trang = $customer->is_active ? 1 : 0;
+            $customer->save();
+            toastr()->success('Đã kích hoạt tài khoản thành công!');
+            return redirect('/login/client');
+        } else {
+            toastr()->error('Liên kết không tồn tại!');
+            return redirect('/login/client');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function indexSignUp()
     {
-        //
+        return view('page.customer.loginCustomer.indexSignUp');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function signUp(SignUpRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(LoginCustomer $loginCustomer)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(LoginCustomer $loginCustomer)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, LoginCustomer $loginCustomer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(LoginCustomer $loginCustomer)
-    {
-        //
+        $data = $request->all();
+        $data['hash_active']    = Str::uuid();
+        $data['password']       = bcrypt($request->password);
+        Client::create($data);
+        $dataA['link']          =   env('APP_URL') . '/active/' . $data['hash_active'];
+        $dataA['full_name']      =   $request->ho_va_ten;
+        Mail::to($request->email)->send(new ActiveMail($dataA));
+        return response()->json([
+            'status'    => 1,
+            'message'   => 'Bạn vui lòng kiểm tra email để kích hoạt tài khoản !',
+        ]);
     }
 }
