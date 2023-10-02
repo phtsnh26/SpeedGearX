@@ -58,7 +58,7 @@
                                     <h4 class="card-title mb-1">Xin chào Admin! 👋</h4>
                                     <p class="card-text mb-2">Vui lòng đăng nhập vào tài khoản để quản lý trang Web</p>
 
-                                    <form class="auth-login-form mt-2" action="index.html" method="POST">
+                                    <div class="auth-login-form mt-2" action="index.html" method="POST">
                                         <div class="mb-1">
                                             <label class="form-label">Tên Đăng Nhập</label>
                                             <input v-model="login.ten_dang_nhap" type="text" class="form-control"
@@ -80,7 +80,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                     <button class="btn btn-primary w-100" tabindex="4" v-on:click="signIn()">Đăng

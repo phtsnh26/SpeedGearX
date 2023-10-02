@@ -96,10 +96,10 @@
                                     </a>
                                 </li>
                                 <li class="header__account--items header__minicart--items hi">
-                                    <a class="header__account--btn minicart__open--btn" href="javascript:void(0)"
-                                        data-offcanvas="">
+                                    <a v-on:click="listGioHang()" class="header__account--btn minicart__open--btn"
+                                        href="javascript:void(0)" data-offcanvas="">
                                         <i class="fa-solid fa-car fa-xl"></i>
-                                        <span class="items__count mb-2 bello">2</span>
+                                        <span id="mycar2" class="items__count mb-2 bello"></span>
                                         <span class="minicart__btn--text hello">My Car<br></span>
                                     </a>
                                 </li>
@@ -161,7 +161,7 @@
                                     <a class="header__account--btn minicart__open--btn" href="javascript:void(0)"
                                         data-offcanvas="">
                                         <i class="fa-solid fa-car fa-xl"></i>
-                                        <span class="items__count mb-2 bello">2</span>
+                                        <span id="mycar1" class="items__count mb-2 bello"></span>
                                         <span class="minicart__btn--text hello">My Car<br></span>
                                     </a>
                                 </li>
@@ -261,55 +261,145 @@
                     </div>
                 </div>
                 <div class="minicart__product">
-                    <div class="minicart__product--items d-flex">
-                        <div class="minicart__thumb">
-                            <a href="product-details.html">
-                                <img src="/partsix/assets/img/product/small-product/product2.webp" alt="prduct-img">
-                            </a>
-                        </div>
-                        <div class="minicart__text">
-                            <h4 class="minicart__subtitle">
-                                <a href="product-details.html">Tên xeeee</a>
-                            </h4>
-                            <span class="color__variant">
-                                <b>Số chỗ:</b> xxx
-                            </span>
-                            <div class="minicart__price">
-                                <span class="minicart__current--price">Giá thuê/ngày: </span>
+                    <template v-for='i in listCar.length'>
+                        <div class="minicart__product--items d-flex">
+                            <div class="minicart__thumb" style="display: flex;align-items: center">
+                                <a v-bind:href="'/detail/' + listCar[i].slug_xe">
+                                    <img v-bind:src="listCar[i].hinh_anh_xe" alt="prduct-img">
+                                </a>
                             </div>
-                            <div class="minicart__text--footer d-flex align-items-center">
-                                <div class="quantity__box minicart__quantity">
-                                    <button type="button" class="quantity__value decrease"
-                                        aria-label="quantity value" value="Decrease Value">-</button>
-                                    <label>
-                                        <input type="number" class="quantity__number" value="1" data-counter />
-                                    </label>
-                                    <button type="button" class="quantity__value increase"
-                                        aria-label="quantity value" value="Increase Value">+</button>
+                            <div class="minicart__text">
+                                <h4 class="minicart__subtitle">
+                                    <a v-bind:href="'/detail/' + listCar[i].slug_xe">@{{ listCar[i].ten_xe }}</a>
+                                </h4>
+                                <span class="color__variant">
+                                    <b>Số chỗ:</b> @{{ listCar[i].so_cho_ngoi }}
+                                </span>
+                                <div class="minicart__price">
+                                    <span class="minicart__current--price">Giá thuê/ngày: @{{ numberFormat(listCar[i].gia_theo_ngay) }}</span>
                                 </div>
-                                <button class="minicart__product--remove" type="button">Remove</button>
+                                <div class="minicart__text--footer d-flex align-items-center">
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <input @blur='update(listCar[i]),index = i' v-model='listCar[i].so_luong'
+                                                style="font-size: 13px" type="number"
+                                                class="form-control text-center" placeholder=""
+                                                aria-label="Example text with button addon"
+                                                aria-describedby="button-addon1">
+                                        </div>
+                                        <div class="col-5">
+                                            <button v-on:click="xoa(listCar[i])" class="minicart__product--remove"
+                                                type="button">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
                 </div>
                 <div class="minicart__amount">
                     <div class="minicart__amount_list d-flex justify-content-between">
                         <span>Tổng tiền:</span>
-                        <span><b>$240.00</b></span>
+                        <span><b>@{{ numberFormat(tongTien) }} </b></span>
                     </div>
                     <div class="minicart__amount_list d-flex justify-content-between">
                         <span>Đặt cọc trước 30%:</span>
-                        <span><b>$240.00</b></span>
+                        <span><b>@{{ numberFormat(tienCoc) }}</b></span>
                     </div>
                 </div>
                 <div class="minicart__conditions text-center">
 
                 </div>
                 <div class="minicart__button d-flex justify-content-center">
-                    <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
-                    <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
+                    <a class="primary__btn minicart__button--link" href="{{ Route('indexCheckout') }}">Checkout</a>
                 </div>
             </div>
         @endif
     </div>
 </header>
+<script>
+    new Vue({
+        el: '#app_header',
+        data: {
+            listCar: [],
+            tongTien: 0,
+            tienCoc: 0,
+            index: 0
+        },
+        created() {
+            this.listGioHang();
+        },
+        methods: {
+            listGioHang() {
+                axios
+                    .get('{{ Route('dataGioHang') }}')
+                    .then((res) => {
+                        this.listCar = res.data.data;
+                        mycar1 = this.listCar.length;
+                        mycar2 = this.listCar.length;
+                        $("#mycar1").html(mycar1);
+                        $("#mycar2").html(mycar2);
+
+                        this.tongTien = 0;
+                        this.listCar.forEach(i => {
+                            this.tongTien += i.tong_tien
+                        });
+                        this.tienCoc = 0;
+                        this.listCar.forEach(i => {
+                            this.tienCoc += i.tien_coc
+                        });
+                    });
+            },
+            xoa(value) {
+                axios
+                    .post('{{ Route('delGioHang') }}', value)
+                    .then((res) => {
+                        if (res.data.status) {
+                            toastr.success(res.data.message, 'Thành Công');
+                            this.listGioHang();
+                            // this.data.so_luong = res.data.soLuong;
+                        } else {
+                            toastr.error(res.data.message, 'Lỗi');
+                        }
+                    })
+                    .catch((res) => {
+                        $.each(res.response.data.errors, function(k, v) {
+                            toastr.error(v[0], 'Error');
+                        });
+                    });
+            },
+            numberFormat(number) {
+                return new Intl.NumberFormat('vi-VI', {
+                    style: 'currency',
+                    currency: 'VND'
+                }).format(number);
+            },
+            update(v) {
+                axios
+                    .post('{{ Route('updateGioHang') }}', v)
+                    .then((res) => {
+                        if (res.data.status == 1) {
+                            this.listGioHang();
+                        } else if (res.data.status == -2) {
+                            toastr.error(res.data.message, 'Lỗi');
+                            this.listCar[this.index].so_luong = 100;
+                        } else if (res.data.status == -1) {
+                            toastr.error(res.data.message, 'Lỗi');
+                            this.listCar[this.index].so_luong = 1;
+                        } else if (res.data.status == -3) {
+                            toastr.error(res.data.message, 'Lỗi');
+                            this.listCar[this.index].so_luong = res.data.soLuong
+                        } else {
+                            toastr.error(res.data.message, 'Lỗi');
+                        }
+                    })
+                    .catch((res) => {
+                        $.each(res.response.data.errors, function(k, v) {
+                            toastr.error(v[0], 'Error');
+                        });
+                    });
+            },
+
+        },
+    });
+</script>

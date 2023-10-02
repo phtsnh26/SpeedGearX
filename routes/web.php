@@ -159,9 +159,12 @@ Route::post('/client/signUp', [LoginCustomerController::class, 'signUp'])->name(
 Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
 
 
-Route::group(['middleware' => 'client', 'prefix' => '/client'], function () {
+Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
     Route::group(['prefix' => 'cart'], function () {
         Route::get('/data', [GioHangController::class, 'data'])->name('dataGioHang');
+        Route::post('/del', [GioHangController::class, 'del'])->name('delGioHang');
+        Route::post('/create', [GioHangController::class, 'create'])->name('createGioHang');
+        Route::post('/update', [GioHangController::class, 'update'])->name('updateGioHang');
     });
 
     Route::group(['prefix' => '/profile'], function () {
@@ -172,14 +175,18 @@ Route::group(['middleware' => 'client', 'prefix' => '/client'], function () {
         Route::post('/updatePassword', [ProfileClientController::class, 'updatePassword'])->name('updatePassword');
         Route::get('/order', [ProfileClientController::class, 'order'])->name('orderClient');
     });
-});
 
+    Route::group(['prefix' => '/checkout'], function () {
+        Route::get('/', [GioHangController::class, 'indexCheckout'])->name('indexCheckout');
+    });
+});
 
 Route::group(['prefix' => 'contact'], function () {
     Route::get('/', [ContactController::class, 'indexContact'])->name('indexContact');
     Route::get('/data', [ContactController::class, 'data'])->name('dataContact');
     Route::post('/create', [ContactController::class, 'add'])->name('createContact');
 });
+
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
 Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');

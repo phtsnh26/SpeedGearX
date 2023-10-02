@@ -7,17 +7,13 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-10">
+                                <div class="col-8">
                                     <h2>Danh Sách Thuê Xe</h2>
                                 </div>
-                                <div class="col-2 text-end">
-                                    <table>
-                                        <tr>
-                                            <td>Search:</td>
-                                            <td><input @keyup.enter='search()' v-model='gia_tri' type="text" class="form-control"
-                                                    placeholder="Nhập tìm kiếm"></td>
-                                        </tr>
-                                    </table>
+                                <div class="col-4 text-end d-flex">
+                                    <label class='me-1' style="display: flex;align-items: center">Search: </label>
+                                    <input @keyup.enter='search()' v-model='gia_tri' type="text"
+                                        class="form-control w-100" placeholder="Nhập tìm kiếm">
                                 </div>
                             </div>
                             <hr class="mt-1">
@@ -26,14 +22,11 @@
                                     <thead class="text-primary">
                                         <tr class="text-center align-middle text-nowrap">
                                             <th>#</th>
+                                            <th>Mã Hóa Đơn</th>
                                             <th>Tên Người Thuê</th>
-                                            <th>Xe</th>
-                                            <th>Thương Hiệu</th>
-                                            <th>Loại Xe</th>
-                                            <th>Hình Ảnh</th>
                                             <th>Ngày Đặt</th>
                                             <th>Ngày Trả</th>
-                                            <th>Ghi Chú</th>
+                                            <th>Ngày Nhận Xe</th>
                                             <th>Tổng Tiền</th>
                                             <th>Tình Trạng</th>
                                             <th>Phương Thức</th>
@@ -43,19 +36,15 @@
                                         <template v-for="(v,k) in list">
                                             <tr class="align-middle">
                                                 <th>@{{ k + 1 }}</th>
+                                                <td class="text-nowrap">
+                                                    @{{ v.ma_hoa_don }}
+                                                </td>
                                                 <td class="text-nowrap ">
                                                     <button class="btn a1 text-danger" data-bs-toggle="modal"
                                                         data-bs-target="#thongtinModal"
                                                         v-on:click="thongTin = Object.assign({},v);">
                                                         @{{ v.ho_va_ten }}
                                                     </button>
-
-                                                </td>
-                                                <td class="text-nowrap">@{{ v.ten_xe }}</td>
-                                                <td class="text-nowrap">@{{ v.ten_thuong_hieu }}</td>
-                                                <td class="text-nowrap">@{{ v.so_cho_ngoi }} chỗ</td>
-                                                <td class="text-nowrap text-center align-middle">
-                                                    <img :src="v.hinh_anh_xe" style="height: 100px;width: 130px;">
                                                 </td>
                                                 <td class="text-center">
                                                     <input style="width: 170px;" v-model="v.ngay_dat" type="datetime"
@@ -66,18 +55,16 @@
                                                         class="form-control">
                                                 </td>
                                                 <td class="text-center">
-                                                    <i class="fa-solid fa-circle-info text-info"
-                                                        style="font-size: 35px;cursor: pointer;"
-                                                        data-bs-target="#ghiChuModal" data-bs-toggle="modal"
-                                                        v-on:click="ghiChu = v"></i>
+                                                    <input style="width: 170px;" v-model="v.ngay_nhan_xe" type="datetime"
+                                                        class="form-control">
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    @{{ numberFormat(v.gia_thue) }}
+                                                    @{{ numberFormat(v.thanh_tien) }}
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <template v-if="v.tinh_trang == 0">
-                                                        <button @click='changeStatus(v); index=k' type="button" class="btn btn-relief-secondary"
-                                                            style="width: 130px">
+                                                        <button @click='changeStatus(v)' type="button"
+                                                            class="btn btn-relief-secondary" style="width: 130px">
                                                             Đang Xử Lý
                                                         </button>
                                                     </template>
@@ -107,16 +94,68 @@
                                                     </template>
                                                 </td>
                                                 <td class="text-nowrap text-center">
-                                                    <i @click='del = v; index = k' class="fa-solid fa-trash text-danger"
-                                                        style="font-size: 35px; cursor: pointer;"
-                                                        data-bs-target="#deleteModal" data-bs-toggle="modal"></i>
+                                                    <button data-bs-target="#chiTietModal" data-bs-toggle="modal"
+                                                        class='btn btn-primary'>Chi Tiết</button>
+                                                    <button @click='del = v; index = k' data-bs-target="#deleteModal"
+                                                        data-bs-toggle="modal" class='btn btn-danger'>Xóa</button>
                                                 </td>
                                             </tr>
                                         </template>
                                     </tbody>
                                 </table>
-                                <div class="modal fade" id="ghiChuModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                <div class="modal fade" id="chiTietModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Chi Tiết</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr class='text-primary text-center'>
+                                                            <th>Tên Xe</th>
+                                                            <th>Hình Ảnh</th>
+                                                            <th>Thương Hiệu</th>
+                                                            <th>Số Chỗ</th>
+                                                            <th>Đơn Giá</th>
+                                                            <th>Số Ngày Thuê</th>
+                                                            <th>Số Lượng</th>
+                                                            <th>Ghi Chú</th>
+                                                            <th>Tổng Tiền</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="align-middle text-nowrap">
+                                                            <td>Tên Xe</td>
+                                                            <td>
+                                                                <img src="" class="img-fluid">
+                                                            </td>
+                                                            <td>Thương Hiệu</td>
+                                                            <td>Số Chỗ</td>
+                                                            <td>Đơn Giá</td>
+                                                            <td>Số Ngày Thuê</td>
+                                                            <td>Số Lượng</td>
+                                                            <td>
+                                                                <textarea class='form-control'cols="30" rows="5">
+                                                                </textarea>
+                                                            </td>
+                                                            <td>Tổng Tiền</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Thoát</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="ghiChuModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -212,7 +251,6 @@
                     del: {},
                     index: 0,
                     gia_tri: '',
-                    index : 0,
                 },
                 created() {
                     this.getData();
@@ -237,10 +275,10 @@
                             .post('{{ Route('deleteBooking') }}', this.del)
                             .then((res) => {
                                 if (res.data.status) {
-                                    toastr.success(res.data.message, 'Success');
+                                    toastr.success(res.data.message, 'Thành Công');
                                     this.list.splice(this.index, 1);
                                 } else {
-                                    toastr.error(res.data.message, 'Error');
+                                    toastr.error(res.data.message, 'Lỗi');
                                 }
                             })
                             .catch((res) => {
@@ -249,9 +287,9 @@
                                 });
                             });
                     },
-                    search(){
+                    search() {
                         var payload = {
-                            'gia_tri' : this.gia_tri
+                            'gia_tri': this.gia_tri
                         }
                         axios
                             .post('{{ Route('searchBooking') }}', payload)
@@ -260,24 +298,24 @@
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0] , 'error');
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
                     },
-                    changeStatus(v){
+                    changeStatus(v) {
                         axios
                             .post('{{ Route('changeStatusBooking') }}', v)
                             .then((res) => {
-                                if(res.data.status) {
-                                    toastr.success(res.data.message, 'Success');
-                                    this.list[this.index].tinh_trang = 1;
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.getData();
                                 } else {
-                                    toastr.error(res.data.message, 'Error');
+                                    toastr.error(res.data.message, 'Lỗi');
                                 }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0] , 'error');
+                                    toastr.error(v[0], 'error');
                                 });
                             });
                     }

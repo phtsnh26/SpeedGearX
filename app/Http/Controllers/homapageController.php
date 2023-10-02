@@ -16,8 +16,11 @@ class homapageController extends Controller
         $brand = Brand::where('tinh_trang', 1)->get();
         $classification = Classification::get();
         $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
-            ->where('tinh_trang', 1)
+            ->where('brands.tinh_trang', 1)
+            ->where('vehicles.tinh_trang', 1)
+            ->orderByDESC('vehicles.created_at')
             ->get();
         $image = Images::get();
         // dd($data->toArray());
@@ -33,9 +36,12 @@ class homapageController extends Controller
     {
         $brand = Brand::where('tinh_trang', 1)->get();
         $classification = Classification::get();
-        $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+        $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
-            ->where('tinh_trang', 1)
+            ->where('brands.tinh_trang', 1)
+            ->where('vehicles.tinh_trang', 1)
+            ->orderByDESC('vehicles.created_at')
             ->paginate(9, ["*"], 2);
         $image = Images::get();
         // dd($data->toArray());

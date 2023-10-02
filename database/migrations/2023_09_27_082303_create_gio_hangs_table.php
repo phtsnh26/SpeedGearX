@@ -13,8 +13,15 @@ return new class extends Migration
     {
         Schema::create('gio_hangs', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_xe');
+            $table->string('ten_xe');
             $table->integer('so_luong');
+            $table->dateTime('ngay_dat');
+            $table->dateTime('ngay_tra');
+            $table->double('tong_tien');
+            $table->double('tien_coc')->nullable();
+            $table->integer('id_khach_hang');
+            $table->integer('id_xe');
+            $table->integer('id_thue_xe');
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Classification;
 use App\Models\Client;
 use App\Models\Customer;
+use App\Models\GioHang;
 use App\Models\Images;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -50,4 +51,5 @@ class CustomerController extends Controller
         Auth::guard('client')->logout();
         return redirect('/');
     }
+
 }

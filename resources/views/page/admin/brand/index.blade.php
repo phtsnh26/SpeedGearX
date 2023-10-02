@@ -195,7 +195,6 @@
                         axios
                             .post('{{ Route('createBrand') }}', this.add)
                             .then((res) => {
-
                                 if(res.data.status) {
                                     toastr.success(res.data.message, 'Success');
                                     this.search();
@@ -262,7 +261,7 @@
                             })
                     },
                     generateSlug() {
-                        this.add.slug_thuong_hieu = this.toSlug(this.add.ten_thuong_hieu    );
+                        this.add.slug_thuong_hieu = this.toSlug(this.add.ten_thuong_hieu);
                     },
                     toSlug(str) {
                         str = str.toLowerCase();
