@@ -104,12 +104,31 @@
                         </li>
                     </ul>
                 </li>
+                <li class="dropdown nav-item" data-menu="dropdown"><a
+                        class="dropdown-toggle nav-link d-flex align-items-center" href="#"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-user-cog"></i>
+                        <span data-i18n="Misc">Manage Personnel</span></a>
+                    <ul class="dropdown-menu" data-bs-popper="none">
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('indexPersonnel') }}" data-bs-toggle="" data-i18n="Documentation">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="Documentation">Personnel</span></a>
+                        </li>
+                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
+                                href="{{ Route('viewPermision') }}" data-bs-toggle=""
+                                data-i18n="Documentation">
+                                <i class="fas fa-user-lock"></i>
+                                <span data-i18n="Documentation">Permision</span></a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item"><a class="nav-link d-flex align-items-center"
                         href="{{ Route('indexBooking') }}"><i class="fa-solid fa-clipboard-list"></i><span>
                             Manage Booking</span></a>
                 </li>
-                <li class="nav-item"><a class="nav-link d-flex align-items-center" href="{{ Route('indexBlog') }}"><i
-                            class="fa-solid fa-clipboard-list"></i><span>
+                <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                        href="{{ Route('indexBlog') }}"><i class="fa-solid fa-clipboard-list"></i><span>
                             Manage Blog</span></a>
                 </li>
             </ul>

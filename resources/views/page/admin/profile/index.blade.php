@@ -6,7 +6,7 @@
                 <h4 class="card-title">Thông Tin Cá Nhân</h4>
             </div>
             <div class="card-body py-2 my-25">
-                <div class="d-flex"><a href="#" class="me-25"><img :src="list.hinh_anh" id="account-upload-img"
+                <div class="d-flex"><a href="#" class="me-25"><img :src="list.anh_minh_chung" id="account-upload-img"
                             alt="profile image" height="100" width="100" class="uploadedAvatar rounded me-50"></a>
                 </div>
                 <form novalidate="novalidate" class="validate-form mt-2 pt-50">

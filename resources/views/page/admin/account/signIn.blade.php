@@ -116,7 +116,7 @@
                                 if (res.data.status == 1) {
                                     window.location.replace('{{ Route('indexDashboard') }}');
                                 } else {
-                                    toastr.error(res.data.message, 'Lỗi');
+                                    toastr.error(res.data.message, 'Lỗi ');
                                 }
                             })
                     }

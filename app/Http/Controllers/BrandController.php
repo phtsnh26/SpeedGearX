@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use App\Models\Brand;
+use App\Models\PermisionDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
@@ -22,11 +24,27 @@ class BrandController extends Controller
     }
     public function add(AddBrandRequest $request)
     {
-        $data =  $request->all();
-        Brand::create($data);
-        return response()->json([
-            'status'    => true,
-        ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+            ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Xe', $check)) {
+            $data =  $request->all();
+            Brand::create($data);
+            return response()->json([
+                'status'    => true,
+                'message'   => 'Thêm thương hiệu thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
+            ]);
+        }
+
     }
     public function del(Request $request)
     {
