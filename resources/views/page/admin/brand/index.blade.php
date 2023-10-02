@@ -195,9 +195,11 @@
                         axios
                             .post('{{ Route('createBrand') }}', this.add)
                             .then((res) => {
-                                if (res.data.status) {
-                                    toastr.success("Đã thêm mới chuyên mục", "Thành công!");
+                                if(res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
                                     this.search();
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
                                 }
                             })
                             .catch((res) => {

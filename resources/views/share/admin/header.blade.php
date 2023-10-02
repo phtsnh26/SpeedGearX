@@ -92,11 +92,11 @@
                                     {{ $admin->ho_va_ten }}
                                 </span>
                                 <span class="user-status">
-                                    {{ $admin->ten_dang_nhap }}
+                                    @{{ chuc_vu }}
                                 </span>
                             </div>
                             <span class="avatar">
-                                <img class="round" src="{{ $admin->hinh_anh }}" alt="avatar" height="40"
+                                <img class="round" src="{{ $admin->anh_minh_chung }}" alt="avatar" height="40"
                                     width="40"><span class="avatar-status-online">
                                 </span>
                             </span>
@@ -132,6 +132,7 @@
             el: '#appHeader',
             data: {
                 list: [],
+                chuc_vu : '',
             },
             created() {
                 this.getData();
@@ -143,6 +144,7 @@
                         .get('{{ Route('dataNotification') }}')
                         .then((res) => {
                             this.list = res.data.data
+                            this.chuc_vu = res.data.chuc_vu.ten_quyen;
                         });
                 },
                 forMat(text, maxLength) {

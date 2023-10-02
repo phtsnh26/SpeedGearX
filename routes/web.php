@@ -14,6 +14,8 @@ use App\Http\Controllers\homapageController;
 use App\Http\Controllers\LoginCustomerController;
 use App\Http\Controllers\NhapKhoController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PermisionController;
+use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileClientController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WareHouseController;
@@ -32,6 +34,26 @@ Route::post('/signIn', [AdminController::class, 'signIn'])->name('signIn');
 
 Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     Route::get('/signOut', [AdminController::class, 'signOut'])->name('signOut');
+    Route::get('/', [AdminController::class, 'indexDashboard'])->name('indexDashboard');
+
+    Route::group(['prefix' => '/personnel'], function () {
+        Route::get('/', [PersonnelController::class, 'indexPersonnel'])->name('indexPersonnel');
+        Route::get('/data', [PersonnelController::class, 'dataPersonnel'])->name('dataPersonnel');
+        Route::post('/create', [PersonnelController::class, 'store'])->name('createPersonnel');
+        Route::post('/update', [PersonnelController::class, 'update'])->name('updatePersonnel');
+        Route::post('/delete', [PersonnelController::class, 'destroy'])->name('deletePersonnel');
+        Route::post('/changeStatus', [PersonnelController::class, 'changeStatus'])->name('changeStatusPersonnel');
+        Route::get('/dataNotification', [PermisionController::class, 'index'])->name('viewPermision');
+    });
+    Route::group(['prefix' => '/permision'], function () {
+        Route::get('/', [PermisionController::class, 'index'])->name('viewPermision');
+        Route::get('/data', [PermisionController::class, 'data'])->name('dataPermision');
+        Route::post('/create', [PermisionController::class, 'create'])->name('createPermision');
+        Route::post('/delete', [PermisionController::class, 'delete'])->name('deletePermision');
+        Route::post('/capQuyen', [PermisionController::class, 'capQuyen'])->name('capQuyen');
+        Route::post('/addListPhanQuyen', [PermisionController::class, 'addListPhanQuyen'])->name('addListPhanQuyen');
+        Route::post('/xoaListPhanQuyen', [PermisionController::class, 'xoaListPhanQuyen'])->name('xoaListPhanQuyen');
+    });
 
     Route::group(['prefix' => '/notification'], function () {
         Route::get('/abc/{id}', [NotificationController::class, 'indexNotification'])->name('indexNotification');
