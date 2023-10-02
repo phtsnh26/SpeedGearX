@@ -24,5 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ClassificationSeeder::class);
         $this->call(ImageVehicleSeeder::class);
         $this->call(ClientSeeder::class);
+        $this->call(ListPermisionSeeder::class);
+        $this->call(PersonnelSeeder::class);
+        $this->call(PermisionSeeder::class);
+        $this->call(PermisionDetailSeeder::class);
     }
 }
