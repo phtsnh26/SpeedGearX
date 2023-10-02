@@ -275,60 +275,68 @@
                                 <h2 class="product__details--info__title mb-15 ">@{{ data.ten_xe }}</h2>
                                 <div class="product__details--info__price mb-12">
                                     <b>Giá Thuê / Ngày: <span class="current__price">@{{ numberFormat(data.gia_theo_ngay) }}</span></b>
-                                    <br>
                                 </div>
                                 <p class="product__details--info__desc mb-15">
                                     @{{ data.mo_ta_ngan }}
                                 </p>
                                 <div class="product__variant">
-                                    <div class="product__variant--list mb-10">
-                                        <fieldset class="variant__input--fieldset">
-                                            <legend class="product__variant--title mb-8">Số Chỗ: @{{ data.so_cho_ngoi }}
-                                            </legend>
-                                        </fieldset>
-                                    </div>
-                                    <div class="product__variant--list quantity d-flex align-items-center mb-20">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="quantity__box">
-                                                    <span class="mt-1 me-3"><b>Số Ngày Thuê:</b></span>
-                                                    <button type="button"
-                                                        class="quantity__value quickview__value--quantity decrease"
-                                                        aria-label="quantity value" value="Decrease Value">-</button>
-                                                    <label>
-                                                        <input type="number"
-                                                            class="quantity__number quickview__value--number"
-                                                            value="1" data-counter="">
-                                                    </label>
-                                                    <button type="button"
-                                                        class="quantity__value quickview__value--quantity increase"
-                                                        aria-label="quantity value" value="Increase Value">+</button>
-
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-nowrap d-flex">
+                                                <legend class="product__variant--title mb-8">
+                                                    Số Chỗ: @{{ data.so_cho_ngoi }}
+                                                </legend>
                                             </div>
-                                            <div class="col">
-                                                <div class="quantity__box">
-                                                    <span class="mt-1 me-3"><b>Số Ngày Thuê:</b></span>
-                                                    <button type="button"
-                                                        class="quantity__value quickview__value--quantity decrease"
-                                                        aria-label="quantity value" value="Decrease Value">-</button>
-                                                    <label>
-                                                        <input type="number"
-                                                            class="quantity__number quickview__value--number"
-                                                            value="1" data-counter="">
-                                                    </label>
-                                                    <button type="button"
-                                                        class="quantity__value quickview__value--quantity increase"
-                                                        aria-label="quantity value" value="Increase Value">+</button>
-
+                                        </div>
+                                    </div>
+                                    <div class="row mb-20">
+                                        <div class="col-6">
+                                            <div class="text-nowrap d-flex">
+                                                <span class="mt-1 me-3"><b>Ngày Đặt:</b></span>
+                                                <input v-model="add.ngay_dat" type="date" class="form-control"
+                                                    style="border-radius: 15px;font-size: 13px">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-nowrap d-flex">
+                                                <span class="mt-1 me-3"><b>Ngày Trả:</b></span>
+                                                <input v-model="add.ngay_tra" type="date" class="form-control"
+                                                    style="border-radius: 15px;font-size: 13px">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-20">
+                                        <div class="col-5">
+                                            <div class="text-nowrap d-flex">
+                                                <span class="mt-1 me-3"><b>Số Lượng:</b></span>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group mb-3">
+                                                        <button @click="tru()" class="btn btn-secondary" type="button"
+                                                            id="button-addon1" style="background-color: transparent;">
+                                                            <i class="fa-solid fa-minus text-dark"></i>
+                                                        </button>
+                                                        <input v-model="add.so_luong" style="font-size: 13px"
+                                                            type="number" class="form-control text-center"
+                                                            placeholder="" aria-label="Example text with button addon"
+                                                            aria-describedby="button-addon1">
+                                                        <button @click="cong()" class="btn btn-secondary" type="button"
+                                                            id="button-addon1" style="background-color: transparent;">
+                                                            <i class="fa-solid fa-plus text-dark"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="col-3">
+                                            <small class="text-secondary">@{{ data.so_luong }} xe có
+                                                sẵn</small>
+                                        </div>
                                     </div>
                                     <div class="product__variant--list mb-15">
-                                        <button class="variant__buy--now__btn primary__btn" type="submit">Thuê
-                                            Xe</button>
+                                        <button @click="themMoi()" class="variant__buy--now__btn primary__btn"
+                                            type="button">
+                                            <i class="fa-solid fa-car"></i> ADD MY CAR
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -659,10 +667,15 @@
                     images: [{
                         hinh_anh_xe: ''
                     }],
-                    index: 0
+                    index: 0,
+                    add: {
+                        'so_luong': 1,
+                    },
                 },
                 created() {
                     this.loadImage();
+                    this.listGioHang();
+                    this.loadMyCar();
                 },
                 methods: {
                     numberFormat(number) {
@@ -687,19 +700,82 @@
                         this.index++;
                         if (this.index > this.images.length - 1) {
                             this.index = 0;
-
                         }
                     },
                     preImage() {
                         this.index--;
                         if (this.index < 0) {
                             this.index = this.images.length - 1;
-
                         }
                     },
                     selectImage(k) {
                         this.index = k;
+                    },
+                    listGioHang() {
+                        axios
+                            .get('{{ Route('dataGioHang') }}')
+                            .then((res) => {
+                                this.listCar = res.data.data
+                                mycar1 = this.listCar.length;
+                                mycar2 = this.listCar.length;
+                                $("#mycar1").html(mycar1);
+                                $("#mycar2").html(mycar2);
+                            });
+                    },
+                    loadMyCar() {
+                        axios
+                            .get('{{ Route('dataGioHang') }}')
+                            .then((res) => {
+                                mycar1 = this.listCar.length;
+                                mycar2 = this.listCar.length;
+                                $("#mycar1").html(mycar1);
+                                $("#mycar2").html(mycar2);
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Error');
+                                });
+                            });
+                    },
+                    themMoi() {
+                        var payload = {
+                            ...this.add,
+                            id: this.data['id'],
+                            tong_tien: this.data['tong_tien'],
+                            tien_coc: this.data['tien_coc']
+                        }
+                        axios
+                            .post('{{ Route('createGioHang') }}', payload)
+                            .then((res) => {
+                                if (res.data.status == 1) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.listGioHang();
+                                } else if (res.data.status == 0) {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                } else {
+                                    toastr.error('Bạn cần đăng nhập trước khi thêm vào My Car');
+                                    setTimeout(() => {
+                                        location.href = "/login/client";
+                                    }, 1500);
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
+                                });
+                            });
+                    },
+                    cong() {
+                        if (this.add.so_luong >= 0) {
+                            this.add.so_luong++;
+                        }
+                    },
+                    tru() {
+                        if (this.add.so_luong > 1) {
+                            this.add.so_luong--;
+                        }
                     }
+
                 },
             });
         })

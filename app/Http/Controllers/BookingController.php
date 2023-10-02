@@ -55,14 +55,27 @@ class BookingController extends Controller
             ->leftJoin('vehicles', 'vehicles.id', 'booking_details.id_xe')
             ->leftJoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
             ->leftJoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
-            ->select('bookings.*', 'clients.*', 'booking_details.gia_thue', 'vehicles.ten_xe', 'brands.ten_thuong_hieu', 'classifications.so_cho_ngoi')
+            ->select(
+                'bookings.*',
+                'clients.ho_va_ten',
+                'clients.ngay_sinh',
+                'clients.gioi_tinh',
+                'clients.dia_chi',
+                'clients.so_dien_thoai',
+                'clients.cccd',
+                'clients.bang_lai_xe',
+                'booking_details.gia_thue',
+                'vehicles.ten_xe',
+                'brands.ten_thuong_hieu',
+                'classifications.so_cho_ngoi'
+            )
             ->addSelect('images.hinh_anh_xe')
             ->leftJoin('images', function ($join) {
                 $join->on('images.id_xe', '=', 'vehicles.id')
                     ->whereRaw('images.id = (SELECT MIN(id) FROM images WHERE images.id_xe = vehicles.id)');
             })
             ->where('clients.ho_va_ten', 'like', $gia_tri)
-            ->orWhere('vehicles.ten_xe', 'like', $gia_tri)
+            ->orWhere('bookings.ma_hoa_don', 'like', $gia_tri)
             ->orWhere('brands.ten_thuong_hieu', 'like', $gia_tri)
             ->orWhere('classifications.so_cho_ngoi', $gia_tri)
             ->get();
@@ -73,14 +86,14 @@ class BookingController extends Controller
     public function changeStatus(Request $request)
     {
         $booking = Booking::find($request->id);
-        if($booking){
+        if ($booking) {
             $booking->tinh_trang = !$booking->tinh_trang;
             $booking->save();
             return response()->json([
                 'status'    => 1,
                 'message'   => 'Đổi trạng thái thành công!',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status'    => 0,
                 'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này!',

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('mo_ta_chi_tiet')->nullable();
             $table->double('gia_theo_ngay')->nullable();
             $table->double('don_gia')->nullable();
-            $table->integer('so_luong')->default(1);
+            $table->integer('so_luong')->default(0);
             $table->integer('tinh_trang')->default(1);
             $table->integer('id_thuong_hieu');
             $table->integer('id_loai_xe');

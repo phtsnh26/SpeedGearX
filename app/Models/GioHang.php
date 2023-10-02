@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class GioHang extends Model
 {
     use HasFactory;
-    protected $table = 'gio-gio_hangs';
+    protected $table = 'gio_hangs';
     protected $fillable = [
-        'id_xe',
+        'ten_xe',
         'so_luong',
+        'ngay_dat',
+        'ngay_tra',
+        'tong_tien',
+        'tien_coc',
+        'id_khach_hang',
+        'id_xe',
+        'id_thue_xe',
     ];
 }

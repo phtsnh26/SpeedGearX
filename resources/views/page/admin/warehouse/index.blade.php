@@ -290,7 +290,8 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, 'Thành Công');
-                                    this.list_kho.splice(0, this.list_kho.length)
+                                    this.nhapkho.ma_nhap = '';
+                                    this.list_kho.splice(0, this.list_kho.length);
                                 } else {
                                     toastr.error(res.data.message, 'Lỗi');
                                 }

@@ -20,9 +20,8 @@ class LoginCustomerController extends Controller
     public function signIn(Request $request)
     {
         $check_1 = Auth::guard('client')->attempt(['email' => $request->ten_dang_nhap, 'password' => $request->password]);
-        $check_2 = Auth::guard('client')->attempt(['so_dien_thoai' => $request->ten_dang_nhap, 'password' => $request->password]);
         $check_3 = Auth::guard('client')->attempt(['ten_dang_nhap' => $request->ten_dang_nhap, 'password' => $request->password]);
-        if ($check_1 || $check_2 || $check_3) {
+        if ($check_1 || $check_3) {
             $client   =   Auth::guard('client')->user();
             if ($client->is_active == 0) {
                 Auth::guard('client')->logout();  // Ép nó logout

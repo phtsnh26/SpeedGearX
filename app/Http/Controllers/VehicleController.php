@@ -38,8 +38,9 @@ class VehicleController extends Controller
             ->leftJoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
             ->leftJoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
             ->select('vehicles.*', 'first_image.hinh_anh_xe', 'brands.ten_thuong_hieu', 'classifications.so_cho_ngoi')
+            ->where('brands.tinh_trang', 1)
             ->get();
-        $brand = Brand::get();
+        $brand = Brand::where('tinh_trang', 1)->get();
         $classification = Classification::get();
         return response()->json([
             'data'   => $data,

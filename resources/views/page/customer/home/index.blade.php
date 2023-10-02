@@ -72,10 +72,9 @@
                                                     <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                                 </div>
                                                 <div class="product__card--footer">
-                                                    <a class="product__card--btn primary__btn"
-                                                        :href="`/detail/${v.slug_xe}`" data-open="modal1">
-                                                        <i class="fa-solid fa-car"></i>
-                                                        Add my car
+                                                    <a :href="`/detail/${v.slug_xe}`"
+                                                        class="product__card--btn primary__btn" data-open="modal1">
+                                                        Chi Tiết Xe
                                                     </a>
                                                 </div>
                                             </div>
@@ -120,8 +119,8 @@
                                                             height="22.443" viewBox="0 0 512 512">
                                                             <path
                                                                 d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                                                                fill="none" stroke="currentColor"
-                                                                stroke-miterlimit="10" stroke-width="32"></path>
+                                                                fill="none" stroke="currentColor" stroke-miterlimit="10"
+                                                                stroke-width="32"></path>
                                                             <path fill="none" stroke="currentColor"
                                                                 stroke-linecap="round" stroke-miterlimit="10"
                                                                 stroke-width="32" d="M338.29 338.29L448 448"></path>
@@ -646,8 +645,6 @@
                             currency: 'VND'
                         }).format(number);
                     },
-
-
                 },
             });
         })

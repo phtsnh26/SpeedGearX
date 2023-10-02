@@ -94,7 +94,6 @@
                                     <div class="col ">
                                         <i class="fa-solid fa-user"></i>
                                         @{{ v.so_cho_ngoi }} Chỗ
-
                                     </div>
 
                                 </div>
@@ -107,10 +106,9 @@
                                     <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                 </div>
                                 <div class="product__card--footer">
-                                    <a class="product__card--btn primary__btn" :href="`/detail/${v.slug_xe}`"
+                                    <a :href="`/detail/${v.slug_xe}`" class="product__card--btn primary__btn"
                                         data-open="modal1">
-                                        <i class="fa-solid fa-dollar-sign"></i>
-                                        Thuê Xe
+                                        Chi Tiết Xe
                                     </a>
                                 </div>
                             </div>
@@ -126,8 +124,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443"
                                     viewBox="0 0 512 512">
                                     <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="48"
-                                        d="M244 400L100 256l144-144M120 256h292"></path>
+                                        stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292">
+                                    </path>
                                 </svg>
                                 <span class="visually-hidden">page left arrow</span>
                             </a>
@@ -178,6 +176,8 @@
                 created() {
                     this.getData();
                     this.getMenu();
+                    this.listGioHang();
+                    this.loadMyCar();
                 },
                 methods: {
                     getData() {
@@ -323,6 +323,55 @@
                                             ); // Thêm hình ảnh vào mảng images của đối tượng a
                                         }
                                     });
+                                });
+                            });
+                    },
+                    listGioHang() {
+                        axios
+                            .get('{{ Route('dataGioHang') }}')
+                            .then((res) => {
+                                this.listCar = res.data.data
+                                mycar1 = this.listCar.length;
+                                mycar2 = this.listCar.length;
+                                $("#mycar1").html(mycar1);
+                                $("#mycar2").html(mycar2);
+                                // console.log(this.list);
+                            });
+                    },
+                    loadMyCar() {
+                        axios
+                            .get('{{ Route('dataGioHang') }}')
+                            .then((res) => {
+                                mycar1 = this.listCar.length;
+                                mycar2 = this.listCar.length;
+                                $("#mycar1").html(mycar1);
+                                $("#mycar2").html(mycar2);
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Error');
+                                });
+                            });
+                    },
+                    themMoi() {
+                        var payload = {
+                            ...this.add,
+                            id: this.data['id'],
+                            don_gia: this.data['don_gia'],
+                        }
+                        axios
+                            .post('{{ Route('createGioHang') }}', payload)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.listGioHang();
+                                } else {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
                     }

@@ -197,7 +197,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success("Đã thêm mới chuyên mục", "Thành công!");
-                                    this.list.push(this.add);
+                                    this.search();
                                 }
                             })
                             .catch((res) => {
@@ -259,7 +259,7 @@
                             })
                     },
                     generateSlug() {
-                        this.add.slug_thuong_hieu = this.toSlug(this.add.ten_thuong_hieu    );
+                        this.add.slug_thuong_hieu = this.toSlug(this.add.ten_thuong_hieu);
                     },
                     toSlug(str) {
                         str = str.toLowerCase();

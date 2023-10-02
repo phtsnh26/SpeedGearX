@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->string('ma_hoa_don');
+            $table->double('thanh_tien');
             $table->dateTime('ngay_dat');
             $table->dateTime('ngay_tra');
+            $table->dateTime('ngay_nhan_xe');
             $table->text('ghi_chu')->nullable();
             $table->integer('tinh_trang')->default(0);
             $table->integer('id_khach_hang');

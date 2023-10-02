@@ -38,16 +38,11 @@
                         <div class="mb-1">
                             <label>Tên Đăng Nhập</label>
                             <input v-model="signIn.ten_dang_nhap" class="form-control" type="text"
-                                placeholder="Nhập email, tên đăng nhập hoặc số điện thoại" autofocus="" tabindex="1">
+                                placeholder="Nhập email hoặc tên đăng nhập" autofocus="" tabindex="1">
                         </div>
                         <div class="mb-1">
                             <div class="d-flex justify-content-between">
                                 <label>Mật Khẩu</label>
-                                <a href="auth-forgot-password-cover.html">
-                                    <small class="text-danger">
-                                        Forgot Password?
-                                    </small>
-                                </a>
                             </div>
                             <div class="input-group input-group-merge form-password-toggle">
                                 <input v-on:keyup.enter='dangNhap()' v-model="signIn.password" class="form-control"
