@@ -134,8 +134,13 @@
                         axios
                             .post('{{ Route('statusUser') }}', x)
                             .then((res) => {
-                                toastr.success('Đã đổi trạng thái !', "Thành Công")
+                                if(res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
                                 this.list[this.index].tinh_trang = !this.list[this.index].tinh_trang
+
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
                             })
                     },
                     timKiem() {

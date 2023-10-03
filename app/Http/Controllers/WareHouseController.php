@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PermisionDetail;
 use App\Models\TemporaryWareHouse;
 use App\Models\Vehicle;
 use App\Models\WareHouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WareHouseController extends Controller
@@ -33,23 +35,38 @@ class WareHouseController extends Controller
 
     public function add(Request $request)
     {
-        $xe = Vehicle::find($request->id);
-        if ($xe) {
-            $thanh_tien = $request->don_gia * $request->so_luong;
-            TemporaryWareHouse::create([
-                'id_xe' => $request->id,
-                'don_gia' => $request->don_gia,
-                'so_luong' => 1,
-                'thanh_tien' => $request->don_gia,
-            ]);
-            return response()->json([
-                'status'    => 1,
-                'message'   => 'Đã thêm danh sách nhập kho',
-            ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            $xe = Vehicle::find($request->id);
+            if ($xe) {
+                $thanh_tien = $request->don_gia * $request->so_luong;
+                TemporaryWareHouse::create([
+                    'id_xe' => $request->id,
+                    'don_gia' => $request->don_gia,
+                    'so_luong' => 1,
+                    'thanh_tien' => $request->don_gia,
+                ]);
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Đã thêm danh sách nhập kho',
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Thêm thất bại, xe không tồn tại',
+                ]);
+            }
         } else {
             return response()->json([
                 'status'    => 0,
-                'message'   => 'Thêm thất bại, xe không tồn tại',
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }
@@ -68,85 +85,145 @@ class WareHouseController extends Controller
 
     public function updateThanhTien(Request $request)
     {
-        $thanh_tien = $request->so_luong * $request->don_gia;
-        $check = TemporaryWareHouse::find($request->id);
-        if ($check) {
-            $check->update([
-                'so_luong' => $request->so_luong,
-                'thanh_tien' => $thanh_tien
-            ]);
-            return response()->json([
-                'status'    => 1,
-                'thanh_tien' => $thanh_tien,
-            ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            $thanh_tien = $request->so_luong * $request->don_gia;
+            $check = TemporaryWareHouse::find($request->id);
+            if ($check) {
+                $check->update([
+                    'so_luong' => $request->so_luong,
+                    'thanh_tien' => $thanh_tien
+                ]);
+                return response()->json([
+                    'status'    => 1,
+                    'thanh_tien' => $thanh_tien,
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => 0,
+                ]);
+            }
         } else {
             return response()->json([
                 'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }
     public function del(Request $request)
     {
-        $xoaTWH = TemporaryWareHouse::find($request->id);
-        if ($xoaTWH) {
-            $xoaTWH->delete();
-            return response()->json([
-                'status'    => 1,
-                'message'   => 'Đã xóa thành công',
-            ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            $xoaTWH = TemporaryWareHouse::find($request->id);
+            if ($xoaTWH) {
+                $xoaTWH->delete();
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Đã xóa thành công',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Xóa thất bại',
+                ]);
+            }
         } else {
             return response()->json([
-                'status' => 0,
-                'message' => 'Xóa thất bại',
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }
     public function createWareHouse(Request $request)
     {
-        if (!isset($request->ma_nhap)) {
-            return response()->json([
-                'status'    => 0,
-                'message'   => 'Bạn chưa nhập mã nhập kho',
-            ]);
-        }
-        $ngay_nhap      = Carbon::now();
-        $check = WareHouse::where('ma_nhap', $request->ma_nhap)->first();
-        if ($check) {
-            return response()->json([
-                'status'    => 0,
-                'message'   => 'Mã nhập kho đã tồn tại',
-            ]);
-        }
-        $data      = TemporaryWareHouse::leftjoin('vehicles', 'temporary_ware_houses.id_xe', 'vehicles.id')
-            ->select('temporary_ware_houses.*', 'vehicles.ten_xe')
-            ->get();
-        foreach ($data as $key => $value) {
-            WareHouse::create([
-                'ma_nhap' => $request->ma_nhap,
-                'ngay_nhap' => $ngay_nhap,
-                'ten_xe' => $value->ten_xe,
-                'so_luong' => $value->so_luong,
-                'don_gia' => $value->don_gia,
-                'thanh_tien' => $value->thanh_tien,
-                'ghi_chu' => $value->ghi_chu,
-                'id_xe' => $value->id_xe,
-            ]);
-            $this->updateVehicleQuantity($value->id_xe, $value->so_luong);
-            $value->delete();
-        }
+        $who = Auth::guard('admin')->user();
 
-        return response()->json([
-            'status'    => 1,
-            'message'   => 'Nhập kho thành công',
-        ]);
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+            ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            if (!isset($request->ma_nhap)) {
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Bạn chưa nhập mã nhập kho',
+                ]);
+            }
+            $ngay_nhap      = Carbon::now();
+            $check = WareHouse::where('ma_nhap', $request->ma_nhap)->first();
+            if ($check) {
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Mã nhập kho đã tồn tại',
+                ]);
+            }
+            $data      = TemporaryWareHouse::leftjoin('vehicles', 'temporary_ware_houses.id_xe', 'vehicles.id')
+                ->select('temporary_ware_houses.*', 'vehicles.ten_xe')
+                ->get();
+            foreach ($data as $key => $value) {
+                WareHouse::create([
+                    'ma_nhap' => $request->ma_nhap,
+                    'ngay_nhap' => $ngay_nhap,
+                    'ten_xe' => $value->ten_xe,
+                    'so_luong' => $value->so_luong,
+                    'don_gia' => $value->don_gia,
+                    'thanh_tien' => $value->thanh_tien,
+                    'ghi_chu' => $value->ghi_chu,
+                    'id_xe' => $value->id_xe,
+                ]);
+                $this->updateVehicleQuantity($value->id_xe, $value->so_luong);
+                $value->delete();
+            }
+
+            return response()->json([
+                'status'    => 1,
+                'message'   => 'Nhập kho thành công',
+            ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
+            ]);
+        }
     }
     public function updateVehicleQuantity($id_xe, $so_luong)
     {
-        DB::table('vehicles')
-            ->where('id', $id_xe)
-            ->update([
-                'so_luong' => DB::raw("so_luong + $so_luong")
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            DB::table('vehicles')
+                ->where('id', $id_xe)
+                ->update([
+                    'so_luong' => DB::raw("so_luong + $so_luong")
+                ]);
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
+        }
     }
 
     public function search(Request $request)
@@ -167,19 +244,34 @@ class WareHouseController extends Controller
     }
     public function update(Request $request)
     {
-        $data               = $request->all();
-        $tmpNhapKho         = TemporaryWareHouse::where('id', $request->id)
-            ->first();
-        if ($tmpNhapKho) {
-            $tmpNhapKho->update($data);
-            return response()->json([
-                'status'    => 1,
-                'message'   => 'Đã cập nhật dữ liệu!',
-            ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Kho', $check)) {
+
+            $data               = $request->all();
+            $tmpNhapKho         = TemporaryWareHouse::where('id', $request->id)
+                ->first();
+            if ($tmpNhapKho) {
+                $tmpNhapKho->update($data);
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Đã cập nhật dữ liệu!',
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Dữ liệu không tồn tại!',
+                ]);
+            }
         } else {
             return response()->json([
                 'status'    => 0,
-                'message'   => 'Dữ liệu không tồn tại!',
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }
