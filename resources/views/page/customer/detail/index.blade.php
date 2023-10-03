@@ -669,10 +669,13 @@
                     }],
                     index: 0,
                     add: {
+                        ngay_dat: '',
                         'so_luong': 1,
                     },
                 },
                 created() {
+                    const today = new Date().toISOString().split('T')[0];
+                    this.add.ngay_dat = today;
                     this.loadImage();
                     this.listGioHang();
                     this.loadMyCar();
