@@ -36,7 +36,7 @@ class CreateGioHangRequest extends FormRequest
         return [
             'required' => 'Vui lòng điền đủ thông tin',
             'so_luong.min' => 'Số lượng phải lớn hơn hoặc bằng 1',
-            'so_luong.max' => 'Số lượng > 100, giá thuê/sỉ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
+            'so_luong.max' => 'Số lượng > 100, giá thuê/lẻ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
             'ngay_dat.required' => 'Vui lòng chọn ngày đặt xe',
             'ngay_dat.date' => 'Ngày đặt xe phải là một ngày hợp lệ',
             'ngay_dat.after_or_equal' => 'Ngày đặt xe phải là ngày hiện tại hoặc sau ngày hiện tại',

@@ -8,7 +8,7 @@
                         <div class="breadcrumb__content text-center">
                             <ul class="breadcrumb__content--menu d-flex justify-content-center">
                                 <li class="breadcrumb__content--menu__items"><a href="{{ Route('indexHome') }}">Home</a></li>
-                                <li class="breadcrumb__content--menu__items"><span>Liên Hệ</span></li>
+                                <li class="breadcrumb__content--menu__items"><span>Contact</span></li>
                             </ul>
                         </div>
                     </div>
