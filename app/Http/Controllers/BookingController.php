@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\BookingDetail;
+use App\Models\PermisionDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -36,13 +38,28 @@ class BookingController extends Controller
 
     public function delete(Request $request)
     {
-        $booking = Booking::find($request->id);
-        if ($booking) {
-            BookingDetail::where('id_thue_xe', $request->id)->delete();
-            $booking->delete();
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Đơn Hàng', $check)) {
+
+            $booking = Booking::find($request->id);
+            if ($booking) {
+                BookingDetail::where('id_thue_xe', $request->id)->delete();
+                $booking->delete();
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Xoá người thuê thành công!',
+                ]);
+            }
+        } else {
             return response()->json([
-                'status'    => 1,
-                'message'   => 'Xoá người thuê thành công!',
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }
@@ -85,18 +102,33 @@ class BookingController extends Controller
     }
     public function changeStatus(Request $request)
     {
-        $booking = Booking::find($request->id);
-        if ($booking) {
-            $booking->tinh_trang = !$booking->tinh_trang;
-            $booking->save();
-            return response()->json([
-                'status'    => 1,
-                'message'   => 'Đổi trạng thái thành công!',
-            ]);
+        $who = Auth::guard('admin')->user();
+
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+        ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Đơn Hàng', $check)) {
+
+            $booking = Booking::find($request->id);
+            if ($booking) {
+                $booking->tinh_trang = !$booking->tinh_trang;
+                $booking->save();
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Đổi trạng thái thành công!',
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Không tìm thấy đơn hàng này!',
+                ]);
+            }
         } else {
             return response()->json([
                 'status'    => 0,
-                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này!',
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
     }

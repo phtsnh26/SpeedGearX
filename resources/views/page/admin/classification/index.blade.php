@@ -126,7 +126,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, 'Success');
-                                    this.list.push(this.add);
+                                    this.search();
                                 } else {
                                     toastr.error(res.data.message, 'Error');
                                 }
@@ -146,7 +146,7 @@
                         }
                     },
                     search() {
-                       
+
                         var payload = {
                             'gia_tri': this.gia_tri
                         }
