@@ -68,7 +68,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="product__card--price">
-                                                    <span class="current__price">chưa cập nhật</span>
+                                                    <span class="current__price">Giá thuê/ngày:</span>
                                                     <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                                 </div>
                                                 <div class="product__card--footer">

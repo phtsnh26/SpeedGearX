@@ -37,14 +37,17 @@ class GioHangController extends Controller
             ->where('id_khach_hang', $client->id)
             ->get();
         $so_luong = 0;
+        $tong_tien = 0;
         foreach ($data as $key => $value) {
             $so_luong = $so_luong + $value->so_luong;
+            $tong_tien = $tong_tien + $value->tong_tien;
         }
         // dd($data->toArray());
 
         return response()->json([
             'data' => $data,
             'so_luong'  => $so_luong,
+            'tong_tien'  => $tong_tien,
         ]);
     }
     public function del(Request $request)
@@ -91,7 +94,7 @@ class GioHangController extends Controller
                 if ($so_luong > 100) {
                     return response()->json([
                         'status'    => 0,
-                        'message'   => 'Số lượng > 100, giá thuê/sỉ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
+                        'message'   => 'Số lượng > 100, giá thuê/lẻ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
                     ]);
                 } else if ($so_luong > $xe->so_luong) {
                     return response()->json([
@@ -148,6 +151,7 @@ class GioHangController extends Controller
     }
     public function update(Request $request)
     {
+        // dd($request->all());
         $client = Auth::guard('client')->user();
         $gioHang = GioHang::where('id', $request->id)
             ->where('id_khach_hang', $client->id)
@@ -157,34 +161,118 @@ class GioHangController extends Controller
             if ($request->so_luong > 100) {
                 if ($xe->so_luong < 100) {
                     $gioHang->so_luong = $xe->so_luong;
-                } else
+                    $gioHang->tong_tien = $xe->so_luong * $xe->gia_theo_ngay;
+                    $gioHang->save();
+                    $test = 0;
+                    $ids = collect($request->hi)->pluck('id')->toArray();
+                    $abd = GioHang::whereIn('id', $ids)->get();
+                    foreach ($abd as $key => $value) {
+                        $test += $value['tong_tien'];
+                    }
+                    return response()->json([
+                        'status'    => -1,
+                        'test'  => $test,
+                        'tongTien'    => $gioHang->tong_tien,
+                        'soLuong'   => $gioHang->so_luong,
+                        'message'   => $xe->ten_xe . ' chỉ còn ' . $xe->so_luong . ' chiếc',
+                    ]);
+                } else {
                     $gioHang->so_luong = 100;
-                $gioHang->save();
-                return response()->json([
-                    'status'    => -2,
-                    'message'   => 'Số lượng > 100, giá thuê/sỉ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
-                ]);
+                    $gioHang->tong_tien = 100 * $xe->gia_theo_ngay;
+                    $gioHang->save();
+                    $test = 0;
+                    $ids = collect($request->hi)->pluck('id')->toArray();
+                    $abd = GioHang::whereIn('id', $ids)->get();
+                    foreach ($abd as $key => $value) {
+                        $test += $value['tong_tien'];
+                    }
+                    return response()->json([
+                        'status'    => -1,
+                        'test'  => $test,
+                        'tongTien'    => $gioHang->tong_tien,
+                        'soLuong'   => $gioHang->so_luong,
+                        'message'   => 'Số lượng > 100, giá thuê/lẻ sẽ không được áp dụng, liên hệ trực tiếp chúng tôi để biết thêm thông tin',
+                    ]);
+                }
             } else if ($request->so_luong < 1) {
-
                 $gioHang->so_luong = 1;
+                $gioHang->tong_tien = 1 * $xe->gia_theo_ngay;
                 $gioHang->save();
+                $test = 0;
+                $ids = collect($request->hi)->pluck('id')->toArray();
+                $abd = GioHang::whereIn('id', $ids)->get();
+                foreach ($abd as $key => $value) {
+                    $test += $value['tong_tien'];
+                }
                 return response()->json([
                     'status'    => -1,
+                    'test'  => $test,
+                    'tongTien'    => $gioHang->tong_tien,
+                    'soLuong'   => $gioHang->so_luong,
                     'message'   => 'Số lượng phải lớn hơn hoặc bằng 1',
                 ]);
             } else if ($request->so_luong > $xe->so_luong) {
                 $gioHang->so_luong = $xe->so_luong;
+                $gioHang->tong_tien = $xe->so_luong * $xe->gia_theo_ngay;
                 $gioHang->save();
+                $test = 0;
+                $ids = collect($request->hi)->pluck('id')->toArray();
+                $abd = GioHang::whereIn('id', $ids)->get();
+                foreach ($abd as $key => $value) {
+                    $test += $value['tong_tien'];
+                }
                 return response()->json([
-                    'status'    => -3,
-                    'soLuong'   => $xe->so_luong,
-                    'message'   => 'Bạn đã nhập quá số lượng xe có sẵn',
+                    'status'    => -1,
+                    'test'  => $test,
+                    'tongTien'    => $gioHang->tong_tien,
+                    'soLuong'   => $gioHang->so_luong,
+                    'message'   => $xe->ten_xe . ' chỉ còn ' . $xe->so_luong . ' chiếc',
                 ]);
+            } else if ($request->ngay_dat != $gioHang->ngay_dat || $request->ngay_tra != $gioHang->ngay_tra) {
+                $ngayDat = Carbon::parse($request->ngay_dat);
+                $ngayTra = Carbon::parse($request->ngay_tra);
+                $soNgay = $ngayTra->diffInDays($ngayDat);
+
+                $soLuongMoi = $request->so_luong;
+                $tongSoLuongMoi = $gioHang->so_luong + $soLuongMoi;
+
+                if ($tongSoLuongMoi <= $xe->so_luong) {
+                    $gioHang->so_luong = $tongSoLuongMoi;
+                    $gioHang->tong_tien = $tongSoLuongMoi * $xe->gia_theo_ngay * $soNgay;
+                    $gioHang->save();
+                    $test = 0;
+                    $ids = collect($request->hi)->pluck('id')->toArray();
+                    $abd = GioHang::whereIn('id', $ids)->get();
+                    foreach ($abd as $key => $value) {
+                        $test += $value['tong_tien'];
+                    }
+                    return response()->json([
+                        'status'    => -1,
+                        'test'  => $test,
+                        'soLuong'   => $gioHang->so_luong,
+                        'tongTien'  => $gioHang->tong_tien,
+                    ]);
+                } else {
+                    return response()->json([
+                        'status'    => 0,
+                        'message'   => 'Tổng số lượng vượt quá số lượng xe có sẵn',
+                    ]);
+                }
             } else {
                 $gioHang->so_luong = $request->so_luong;
+                $gioHang->tong_tien = $request->so_luong * $xe->gia_theo_ngay;
                 $gioHang->save();
+                $test = 0;
+                $ids = collect($request->hi)->pluck('id')->toArray();
+                $abd = GioHang::whereIn('id', $ids)->get();
+                foreach ($abd as $key => $value) {
+                    $test += $value['tong_tien'];
+                }
                 return response()->json([
+                    'test' => $test,
                     'status'    => 1,
+                    'soLuong'   => $gioHang->so_luong,
+                    'tongTien'    => $gioHang->tong_tien,
                 ]);
             }
         } else {

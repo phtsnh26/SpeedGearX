@@ -165,6 +165,7 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
         Route::post('/del', [GioHangController::class, 'del'])->name('delGioHang');
         Route::post('/create', [GioHangController::class, 'create'])->name('createGioHang');
         Route::post('/update', [GioHangController::class, 'update'])->name('updateGioHang');
+
     });
 
     Route::group(['prefix' => '/profile'], function () {
