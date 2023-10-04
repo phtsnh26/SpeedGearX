@@ -333,10 +333,10 @@
                                         </div>
                                     </div>
                                     <div class="product__variant--list mb-15">
-                                        <button @click="themMoi()" class="variant__buy--now__btn primary__btn"
-                                            type="button">
-                                            <i class="fa-solid fa-car"></i> ADD MY CAR
-                                        </button>
+                                        <a href="{{ Route('indexCheckOut') }}" class="product__card--btn primary__btn"
+                                            data-open="modal1">
+                                            Thuê Xe
+                                        </a>
                                     </div>
                                 </div>
                             </div>

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('ten_xe');
             $table->integer('so_luong');
-            $table->dateTime('ngay_dat');
-            $table->dateTime('ngay_tra');
+            $table->date('ngay_dat');
+            $table->date('ngay_tra');
             $table->double('tong_tien');
             $table->double('tien_coc')->nullable();
             $table->integer('id_khach_hang');

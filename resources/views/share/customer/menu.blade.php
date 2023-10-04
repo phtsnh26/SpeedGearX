@@ -97,10 +97,10 @@
                                 </li>
                                 <li class="header__account--items header__minicart--items hi">
                                     <a class="header__account--btn minicart__open--btn"
-                                        href="{{ Route('indexCheckout') }}">
-                                        <i class="fa-solid fa-car fa-xl"></i>
-                                        <span id="mycar2" class="items__count mb-2 bello"></span>
-                                        <span class="minicart__btn--text hello">My Car<br></span>
+                                        href="{{ Route('indexWishlist') }}">
+                                        <i class="fa-regular fa-heart fa-xl"></i>
+                                        <span id="yeu_thich_2" class="items__count mb-2 bello"></span>
+                                        <span class="minicart__btn--text hello">Wishlist<br></span>
                                     </a>
                                 </li>
                                 <li class="header__account--items ha">
@@ -159,10 +159,10 @@
                             @if (Auth::guard('client')->check())
                                 <li class="header__account--items header__minicart--items hi">
                                     <a class="header__account--btn minicart__open--btn"
-                                        href="{{ Route('indexCheckout') }}" data-offcanvas="">
-                                        <i class="fa-solid fa-car fa-xl"></i>
-                                        <span id="mycar1" class="items__count mb-2 bello"></span>
-                                        <span class="minicart__btn--text hello">My Car<br></span>
+                                        href="{{ Route('indexWishlist') }}" data-offcanvas="">
+                                        <i class="fa-regular fa-heart fa-xl"></i>
+                                        <span id="yeu_thich_1" class="items__count mb-2 bello"></span>
+                                        <span class="minicart__btn--text hello">Wishlist<br></span>
                                     </a>
                                 </li>
                                 <li class="header__account--items ha">
@@ -252,24 +252,25 @@
     new Vue({
         el: '#app_header',
         data: {
-            listCar: [],
-            tong_tien: 0,
-            index: 0,
-            tien_coc: 0,
+            list: [],
         },
         created() {
-            this.listGioHang();
+            this.loadDataWishlist();
         },
         methods: {
-            listGioHang() {
+            loadDataWishlist() {
                 axios
-                    .get('{{ Route('dataGioHang') }}')
+                    .get('{{ Route('dataWishlist') }}')
                     .then((res) => {
-                        this.listCar = res.data.data;
-                        mycar1 = this.listCar.length;
-                        mycar2 = this.listCar.length;
-                        $("#mycar1").html(mycar1);
-                        $("#mycar2").html(mycar2);
+                        yeu_thich_1 = res.data.yeu_thich;
+                        yeu_thich_2 = res.data.yeu_thich;
+                        $("#yeu_thich_1").html(yeu_thich_1);
+                        $("#yeu_thich_2").html(yeu_thich_2);
+                    })
+                    .catch((res) => {
+                        $.each(res.response.data.errors, function(k, v) {
+                            toastr.error(v[0], 'Error');
+                        });
                     });
             },
 

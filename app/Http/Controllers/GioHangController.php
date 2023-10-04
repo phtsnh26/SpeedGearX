@@ -282,7 +282,7 @@ class GioHangController extends Controller
             ]);
         }
     }
-    public function indexCheckout()
+    public function indexCheckOut()
     {
         return view('page.customer.checkout.index');
     }

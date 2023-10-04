@@ -128,8 +128,8 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr class="align-middle text-nowrap">
-                                                            <td>Tên Xe</td>
+                                                        <tr class="align-middle text-nowrap" v-for='(v,k) in chitiet'>
+                                                            <td>@{{ chitiet.ten_xe }}</td>
                                                             <td>
                                                                 <img src="" class="img-fluid">
                                                             </td>
@@ -261,7 +261,6 @@
                             .get('{{ Route('dataBooking') }}')
                             .then((res) => {
                                 this.list = res.data.data
-                                console.log(this.list);
                             });
                     },
                     numberFormat(number) {
@@ -318,7 +317,7 @@
                                     toastr.error(v[0], 'error');
                                 });
                             });
-                    }
+                    },
                 },
             });
         })

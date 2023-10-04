@@ -19,8 +19,6 @@ class CustomerController extends Controller
     {
         return view('page.customer.home.index');
     }
-
-
     public function indexDetail($slug_xe)
 
     {
@@ -51,5 +49,4 @@ class CustomerController extends Controller
         Auth::guard('client')->logout();
         return redirect('/');
     }
-
 }

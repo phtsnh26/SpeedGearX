@@ -17,9 +17,11 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileClientController;
+use App\Http\Controllers\ThanhToanController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WareHouseController;
 use App\Http\Controllers\WareHouseReceiptController;
+use App\Http\Controllers\WishlistController;
 use App\Models\Booking;
 use App\Models\Brand;
 use App\Models\LoginCustomer;
@@ -165,7 +167,6 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
         Route::post('/del', [GioHangController::class, 'del'])->name('delGioHang');
         Route::post('/create', [GioHangController::class, 'create'])->name('createGioHang');
         Route::post('/update', [GioHangController::class, 'update'])->name('updateGioHang');
-
     });
 
     Route::group(['prefix' => '/profile'], function () {
@@ -177,8 +178,16 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
         Route::get('/order', [ProfileClientController::class, 'order'])->name('orderClient');
     });
 
-    Route::group(['prefix' => '/checkout'], function () {
-        Route::get('/', [GioHangController::class, 'indexCheckout'])->name('indexCheckout');
+    Route::group(['prefix' => '/Wishlist'], function () {
+        Route::get('/', [WishlistController::class, 'indexWishlist'])->name('indexWishlist');
+        Route::get('/data', [WishlistController::class, 'dataWishlist'])->name('dataWishlist');
+        Route::post('/create', [WishlistController::class, 'createWishlist'])->name('createWishlist');
+    });
+    Route::group(['prefix' => '/check-out'], function () {
+        Route::get('/', [GioHangController::class, 'indexCheckOut'])->name('indexCheckOut');
+    });
+    Route::group(['prefix' => '/thanh-toan'], function () {
+        Route::post('/thanhToanTienMat', [ThanhToanController::class, 'thanhToanTienMat'])->name('thanhToanTienMat');
     });
 });
 

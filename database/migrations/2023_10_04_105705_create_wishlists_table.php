@@ -11,17 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-            $table->string('ma_hoa_don');
-            $table->double('thanh_tien');
-            $table->date('ngay_dat');
-            $table->date('ngay_tra');
-            $table->date('ngay_nhan_xe');
-            $table->text('ghi_chu')->nullable();
-            $table->integer('tinh_trang')->default(0);
             $table->integer('id_khach_hang');
-            $table->integer('id_hop_dong')->nullable();
+            $table->integer('id_xe');
             $table->timestamps();
         });
     }
@@ -31,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('wishlists');
     }
 };

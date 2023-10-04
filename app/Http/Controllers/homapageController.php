@@ -6,24 +6,49 @@ use App\Models\Brand;
 use App\Models\Classification;
 use App\Models\Images;
 use App\Models\Vehicle;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class homapageController extends Controller
 {
     //
     public function data()
     {
-        $brand = Brand::where('tinh_trang', 1)->get();
-        $classification = Classification::get();
-        $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
-            ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
-            ->select('vehicles.*', 'classifications.so_cho_ngoi')
-            ->where('brands.tinh_trang', 1)
-            ->where('vehicles.tinh_trang', 1)
-            ->orderByDESC('vehicles.created_at')
-            ->get();
-        $image = Images::get();
-        // dd($data->toArray());
+        $check = Auth::guard('client')->user();
+        if ($check) {
+            $brand = Brand::where('tinh_trang', 1)->get();
+            $classification = Classification::get();
+            $wishlist = Wishlist::where('id_khach_hang', $check->id)->get();
+            $wishlistIds = $wishlist->pluck('id_xe')->toArray();
+            $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+                ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                ->where('brands.tinh_trang', 1)
+                ->where('vehicles.tinh_trang', 1)
+                ->orderByDESC('vehicles.created_at')
+                ->get()
+                ->map(function ($item) use ($wishlistIds) {
+                    // Kiểm tra xem id của mục hiện tại có trong danh sách wishlist không
+                    $item->isWishlists = in_array($item->id, $wishlistIds) ? 1 : 0;
+
+                    return $item;
+                });
+            // dd($data->all());
+            $image = Images::get();
+        } else {
+            $brand = Brand::where('tinh_trang', 1)->get();
+            $classification = Classification::get();
+            $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+                ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                ->where('brands.tinh_trang', 1)
+                ->where('vehicles.tinh_trang', 1)
+                ->orderByDESC('vehicles.created_at')
+                ->get();
+            $image = Images::get();
+            // dd($data->toArray());
+        }
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,
