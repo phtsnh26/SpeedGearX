@@ -9,6 +9,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        .yeuThich {
+            background: var(--secondary-color);
+            color: var(--text-white-color);
+        }
     </style>
     <div id="app" class="row">
         <div class="col-xl-3 col-lg-4 shop-col-width-lg-4">
@@ -95,9 +100,34 @@
                                             <span class="visually-hidden">Quick View</span>
                                         </a>
                                     </li>
-                                    <li class="product__card--action__list">
-                                        <a id="yeuThich_28" style="" class="product__card--action__btn yeuThich"
-                                            data-id="28" title="Wishlist">
+                                    <li v-if="v.isWishlists == 0 && user == 1" class="product__card--action__list">
+                                        <a :id="'wishList1' + v.id" class="product__card--action__btn"
+                                            :class="{ 'favorite': v.isFavorite }" @mouseover="mouseoverWishlist(v)"
+                                            @click="toggleWishlist(v)">
+                                            <svg class="product__card--action__btn--svg" width="18" height="18"
+                                                viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                            <span class="visually-hidden">Wishlist</span>
+                                        </a>
+                                    </li>
+                                    <li v-else-if='v.isWishlists == 1 && user == 1' class="product__card--action__list">
+                                        <a :id="'wishList2' + v.id" class="product__card--action__btn yeuThich"
+                                            :class="{ 'favorite': v.isFavorite }" @mouseover="mouseoverWishlist(v)"
+                                            @click="toggleWishlist(v)">
+                                            <svg class="product__card--action__btn--svg" width="18" height="18"
+                                                viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                            <span class="visually-hidden">Wishlist</span>
+                                        </a>
+                                    </li>
+                                    <li v-else class="product__card--action__list">
+                                        <a href='/login/client'class="product__card--action__btn ">
                                             <svg class="product__card--action__btn--svg" width="18" height="18"
                                                 viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path
@@ -159,8 +189,9 @@
                         </li>
                         <li>
                         </li>
-                        <li style="cursor: pointer" v-for='(v, k) in 2' @click='changePage(k)' class="pagination__list">
-                            <span
+                        <li style="cursor: pointer" v-for='(v, k) in soPage' @click='changePage(k)'
+                            class="pagination__list">
+                            <span :id='"mauPage" + k'
                                 :class="{ 'pagination__item': true, 'pagination__item--current': k == currentPage }">@{{ k + 1 }}</span>
                         </li>
 
@@ -199,33 +230,55 @@
                     filter_price: {},
                     link: {},
                     currentPage: 0,
+                    soPage: 0,
+                    user: {!! json_encode($user_login) !!}
                 },
                 created() {
                     this.getData();
                     this.getMenu();
-                    this.listGioHang();
-                    this.loadMyCar();
                 },
                 methods: {
                     getData() {
                         axios
                             .get('{{ Route('dataHomePageAll') }}')
                             .then((res) => {
-                                this.link = res.data.data;
-                                console.log(this.link);
-                                console.log(this.link);
-                                this.list = res.data.data.data;
-                                this.list_images = res.data.images;
-                                this.list.forEach(a => {
-                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
-                                    this.list_images.forEach(b => {
-                                        if (a.id === b.id_xe) {
-                                            a.images.push(b
-                                                .hinh_anh_xe
-                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
-                                        }
+                                if (res.data.check) {
+                                    this.link = res.data.data;
+                                    console.log(this.link);
+                                    this.list = res.data.data.data;
+                                    this.soPage = parseInt(Math.ceil(res.data.data.total / 9));
+                                    console.log(this.soPage);
+                                    this.list_images = res.data.images;
+                                    this.list.forEach(a => {
+                                        a
+                                            .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                        this.list_images.forEach(b => {
+                                            if (a.id === b.id_xe) {
+                                                a.images.push(b
+                                                    .hinh_anh_xe
+                                                ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                            }
+                                        });
                                     });
-                                });
+                                } else {
+                                    this.link = res.data.data;
+                                    this.list = res.data.data.data;
+                                    this.soPage = parseInt(Math.ceil(res.data.data.total / 9));
+                                    console.log(res.data.check);
+                                    this.list_images = res.data.images;
+                                    this.list.forEach(a => {
+                                        a
+                                            .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                        this.list_images.forEach(b => {
+                                            if (a.id === b.id_xe) {
+                                                a.images.push(b
+                                                    .hinh_anh_xe
+                                                ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                            }
+                                        });
+                                    });
+                                }
+
                             });
                     },
                     numberFormat(number) {
@@ -271,8 +324,6 @@
                         axios
                             .post('{{ route('filterAllProduct') }}', payload)
                             .then((res) => {
-                                console.log(res.data);
-
                                 this.list = res.data.data;
                                 this.list_images = res.data.image;
                                 this.list.forEach(a => {
@@ -294,15 +345,29 @@
                             });
                     },
                     nextPage() {
-                        console.log(this.link.next_page_url);
+                        if (this.link.next_page_url != null) {
+                            var a = this.link.next_page_url
+                        } else {
+                            var a = this.link.first_page_url
+                        }
                         axios
-                            .get(this.link.next_page_url)
+                            .get(a)
                             .then((res) => {
                                 this.link = res.data.data;
                                 this.list = res.data.data.data;
                                 this.list_images = res.data.images;
+                                for (let index = 0; index < this.soPage; index++) {
+                                    var b = '#mauPage' + index;
+                                    if (index == this.link.current_page - 1) {
+                                        $(b).addClass('pagination__item--current')
+                                    } else {
+                                        $(b).removeClass('pagination__item--current');
+                                    }
+                                }
+
                                 this.list.forEach(a => {
-                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                    a
+                                        .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
                                     this.list_images.forEach(b => {
                                         if (a.id === b.id_xe) {
                                             a.images.push(b
@@ -314,29 +379,41 @@
                             });
                     },
                     prePage() {
-                        axios
-                            .get(this.link.prev_page_url)
-                            .then((res) => {
-
-                                this.link = res.data.data;
-                                this.list = res.data.data.data;
-                                this.list_images = res.data.images;
-                                this.list.forEach(a => {
-                                    a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
-                                    this.list_images.forEach(b => {
-                                        if (a.id === b.id_xe) {
-                                            a.images.push(b
-                                                .hinh_anh_xe
-                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
+                        if (this.link.prev_page_url != null) {
+                            axios
+                                .get(this.link.prev_page_url)
+                                .then((res) => {
+                                    this.link = res.data.data;
+                                    this.list = res.data.data.data;
+                                    this.list_images = res.data.images;
+                                    for (let index = 0; index < this.soPage; index++) {
+                                        var b = '#mauPage' + index;
+                                        if (index == this.link.current_page - 1) {
+                                            $(b).addClass('pagination__item--current')
+                                        } else {
+                                            $(b).removeClass('pagination__item--current');
                                         }
+                                    }
+                                    this.list.forEach(a => {
+                                        a
+                                            .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                        this.list_images.forEach(b => {
+                                            if (a.id === b.id_xe) {
+                                                a.images.push(b
+                                                    .hinh_anh_xe
+                                                ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                            }
+                                        });
                                     });
                                 });
-                            });
+                        } else {}
+
                     },
                     changePage(k) {
                         this.currentPage = k;
+                        // console.log(this.currentPage);
                         axios
-                            .get("http://127.0.0.1:8000/data-all?2=" + (k + 1))
+                            .get("http://127.0.0.1:8000/data-all?" + this.soPage + "=" + (k + 1))
                             .then((res) => {
                                 this.link = res.data.data;
                                 this.list = res.data.data.data;
@@ -353,26 +430,27 @@
                                 });
                             });
                     },
-                    listGioHang() {
-                        axios
-                            .get('{{ Route('dataGioHang') }}')
+                    mouseoverWishlist(vehicle) {},
+                    toggleWishlist(vehicle) {
+                        var payload = {
+                            'id': vehicle.id,
+                        };
+                        axios.post('{{ Route('createWishlist') }}', payload)
                             .then((res) => {
-                                this.listCar = res.data.data
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
-                                // console.log(this.list);
-                            });
-                    },
-                    loadMyCar() {
-                        axios
-                            .get('{{ Route('dataGioHang') }}')
-                            .then((res) => {
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
+                                $("#yeu_thich_1").html(res.data.danhsachTim);
+                                $("#yeu_thich_2").html(res.data.danhsachTim);
+                                vehicle.isFavorite = res.data.trang_thai;
+                                var id = '#wishList1' + vehicle.id;
+                                var id1 = '#wishList2' + vehicle.id;
+                                if (res.data.trang_thai == 1) {
+                                    $(id).toggleClass('yeuThich');
+                                    $(id1).toggleClass('yeuThich');
+                                    toastr.success(res.data.message);
+                                } else if (res.data.trang_thai == 0) {
+                                    $(id).removeClass('yeuThich');
+                                    $(id1).removeClass('yeuThich');
+                                    toastr.info(res.data.message);
+                                }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
@@ -380,28 +458,6 @@
                                 });
                             });
                     },
-                    themMoi() {
-                        var payload = {
-                            ...this.add,
-                            id: this.data['id'],
-                            don_gia: this.data['don_gia'],
-                        }
-                        axios
-                            .post('{{ Route('createGioHang') }}', payload)
-                            .then((res) => {
-                                if (res.data.status) {
-                                    toastr.success(res.data.message, 'Thành Công');
-                                    this.listGioHang();
-                                } else {
-                                    toastr.error(res.data.message, 'Lỗi');
-                                }
-                            })
-                            .catch((res) => {
-                                $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Lỗi');
-                                });
-                            });
-                    }
                 },
             });
         })

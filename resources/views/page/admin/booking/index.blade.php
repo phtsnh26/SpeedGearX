@@ -26,7 +26,7 @@
                                             <th>Tên Người Thuê</th>
                                             <th>Ngày Đặt</th>
                                             <th>Ngày Trả</th>
-                                            <th>Ngày Nhận Xe</th>
+                                            <th>Ghi Chú</th>
                                             <th>Tổng Tiền</th>
                                             <th>Tình Trạng</th>
                                             <th>Phương Thức</th>
@@ -55,11 +55,15 @@
                                                         class="form-control">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input style="width: 170px;" v-model="v.ngay_nhan_xe" type="datetime"
-                                                        class="form-control">
+                                                    <i v-on:click='mo_ta.mo_ta_ngan = v.mo_ta_ngan'
+                                                        class="fa-solid fa-circle-info text-info"
+                                                        style="font-size: 35px; cursor: pointer;"
+                                                        data-bs-target="#ghiChuModal" data-bs-toggle="modal"></i>
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    @{{ numberFormat(v.thanh_tien) }}
+                                                    <b>Tổng tiền: </b>@{{ numberFormat(v.thanh_tien) }}
+                                                    <br>
+                                                    <b>Đã cọc 30%: </b>123123d
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <template v-if="v.tinh_trang == 0">
@@ -94,8 +98,6 @@
                                                     </template>
                                                 </td>
                                                 <td class="text-nowrap text-center">
-                                                    <button data-bs-target="#chiTietModal" data-bs-toggle="modal"
-                                                        class='btn btn-primary'>Chi Tiết</button>
                                                     <button @click='del = v; index = k' data-bs-target="#deleteModal"
                                                         data-bs-toggle="modal" class='btn btn-danger'>Xóa</button>
                                                 </td>
@@ -103,59 +105,8 @@
                                         </template>
                                     </tbody>
                                 </table>
-                                <div class="modal fade" id="chiTietModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                <div class="modal fade" id="ghiChuModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-xl">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Chi Tiết</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr class='text-primary text-center'>
-                                                            <th>Tên Xe</th>
-                                                            <th>Hình Ảnh</th>
-                                                            <th>Thương Hiệu</th>
-                                                            <th>Số Chỗ</th>
-                                                            <th>Đơn Giá</th>
-                                                            <th>Số Ngày Thuê</th>
-                                                            <th>Số Lượng</th>
-                                                            <th>Ghi Chú</th>
-                                                            <th>Tổng Tiền</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr class="align-middle text-nowrap" v-for='(v,k) in chitiet'>
-                                                            <td>@{{ chitiet.ten_xe }}</td>
-                                                            <td>
-                                                                <img src="" class="img-fluid">
-                                                            </td>
-                                                            <td>Thương Hiệu</td>
-                                                            <td>Số Chỗ</td>
-                                                            <td>Đơn Giá</td>
-                                                            <td>Số Ngày Thuê</td>
-                                                            <td>Số Lượng</td>
-                                                            <td>
-                                                                <textarea class='form-control'cols="30" rows="5">
-                                                                </textarea>
-                                                            </td>
-                                                            <td>Tổng Tiền</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Thoát</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal fade" id="ghiChuModal" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -164,7 +115,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p class="mt-1">@{{ ghiChu.ghi_chu }}</p>
+                                                <p class="mt-1">1212121</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"

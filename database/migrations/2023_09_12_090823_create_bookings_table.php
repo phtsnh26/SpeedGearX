@@ -17,11 +17,9 @@ return new class extends Migration
             $table->double('thanh_tien');
             $table->date('ngay_dat');
             $table->date('ngay_tra');
-            $table->date('ngay_nhan_xe');
             $table->text('ghi_chu')->nullable();
             $table->integer('tinh_trang')->default(0);
             $table->integer('id_khach_hang');
-            $table->integer('id_hop_dong')->nullable();
             $table->timestamps();
         });
     }

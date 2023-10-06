@@ -9,6 +9,7 @@ use App\Models\Vehicle;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class homapageController extends Controller
 {
@@ -34,7 +35,6 @@ class homapageController extends Controller
 
                     return $item;
                 });
-            // dd($data->all());
             $image = Images::get();
         } else {
             $brand = Brand::where('tinh_trang', 1)->get();
@@ -53,34 +53,56 @@ class homapageController extends Controller
             'brand'   =>  $brand,
             'classification'   =>  $classification,
             'data'   =>  $data,
-            'images' => $image
+            'images' => $image,
         ]);
     }
 
     public function data_all()
     {
-        $brand = Brand::where('tinh_trang', 1)->get();
-        $classification = Classification::get();
-        $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
-            ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
-            ->select('vehicles.*', 'classifications.so_cho_ngoi')
-            ->where('brands.tinh_trang', 1)
-            ->where('vehicles.tinh_trang', 1)
-            ->orderByDESC('vehicles.created_at')
-            ->paginate(9, ["*"], 2);
+        $check = Auth::guard('client')->user();
+        if ($check) {
+            $brand = Brand::where('tinh_trang', 1)->get();
+            $classification = Classification::get();
+            $wishlist = Wishlist::where('id_khach_hang', $check->id)->get();
+            $wishlistIds = $wishlist->pluck('id_xe')->toArray();
+            $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+                ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                ->where('brands.tinh_trang', 1)
+                ->where('vehicles.tinh_trang', 1)
+                ->orderByDESC('vehicles.created_at');
+            $soPage = ceil($data->count() / 9);
+            $data->addSelect(DB::raw('IF(vehicles.id IN (' . implode(',', $wishlistIds) . '), 1, 0) as isWishlists'));
+            $data = $data->paginate(9, ["*"], $soPage);
+        } else {
+            $brand = Brand::where('tinh_trang', 1)->get();
+            $classification = Classification::get();
+            $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+                ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                ->where('brands.tinh_trang', 1)
+                ->where('vehicles.tinh_trang', 1)
+                ->orderByDESC('vehicles.created_at')
+                ->paginate(9, ["*"], 2);
+        }
+        // dd($data->toArray())
         $image = Images::get();
-        // dd($data->toArray());
+
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,
             'data'   =>  $data,
-            'images' => $image
+            'images' => $image,
+            'check' => $check,
         ]);
     }
 
     public function allProduct()
     {
-        return view('page.customer.all-product.index');
+        $user_login = Auth::guard('client')->check();
+
+        //   $user_login = 1;
+        return view('page.customer.all-product.index', compact('user_login'));
     }
     public function dataMenuAllProduct()
     {

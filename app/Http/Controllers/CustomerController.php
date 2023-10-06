@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Checkout;
 use App\Models\Classification;
 use App\Models\Client;
 use App\Models\Customer;
@@ -17,7 +18,8 @@ class CustomerController extends Controller
 
     public function indexHome()
     {
-        return view('page.customer.home.index');
+        $user_login = Auth::guard('client')->check();
+        return view('page.customer.home.index', compact('user_login'));
     }
     public function indexDetail($slug_xe)
 

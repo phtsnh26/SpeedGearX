@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContactController;
@@ -127,6 +128,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::post('/delete', [BookingController::class, 'delete'])->name('deleteBooking');
         Route::post('/search', [BookingController::class, 'search'])->name('searchBooking');
         Route::post('/changeStatus', [BookingController::class, 'changeStatus'])->name('changeStatusBooking');
+        Route::post('/create', [BookingController::class, 'create'])->name('createBooking');
     });
 
     Route::group(['prefix' => 'testimonials'], function () {
@@ -177,17 +179,17 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
         Route::post('/updatePassword', [ProfileClientController::class, 'updatePassword'])->name('updatePassword');
         Route::get('/order', [ProfileClientController::class, 'order'])->name('orderClient');
     });
-
-    Route::group(['prefix' => '/Wishlist'], function () {
+    Route::group(['prefix' => '/wishlist'], function () {
         Route::get('/', [WishlistController::class, 'indexWishlist'])->name('indexWishlist');
         Route::get('/data', [WishlistController::class, 'dataWishlist'])->name('dataWishlist');
         Route::post('/create', [WishlistController::class, 'createWishlist'])->name('createWishlist');
+        Route::post('/del', [WishlistController::class, 'del'])->name('delWishlist');
+        Route::post('/update', [WishlistController::class, 'updateWishlist'])->name('updateWishlist');
     });
     Route::group(['prefix' => '/check-out'], function () {
-        Route::get('/', [GioHangController::class, 'indexCheckOut'])->name('indexCheckOut');
-    });
-    Route::group(['prefix' => '/thanh-toan'], function () {
-        Route::post('/thanhToanTienMat', [ThanhToanController::class, 'thanhToanTienMat'])->name('thanhToanTienMat');
+        Route::get('/', [CheckoutController::class, 'indexCheckOut'])->name('indexCheckOut');
+        Route::post('/create', [CheckoutController::class, 'create'])->name('createCehckOut');
+        Route::post('/data', [CheckoutController::class, 'data'])->name('dataCheckout');
     });
 });
 
@@ -200,6 +202,7 @@ Route::group(['prefix' => 'contact'], function () {
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
 Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::post('/update', [CustomerController::class, 'update'])->name('updateDetail');
 Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
 Route::get('/data-thuong-hieu', [CustomerController::class, 'getThuongHieu'])->name('getThuongHieu');
 

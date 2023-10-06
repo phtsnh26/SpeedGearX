@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('id_khach_hang');
             $table->integer('id_xe');
+            $table->integer('so_luong')->default(1);
+            $table->double('tong_tien')->nullable();
+            $table->double('tien_coc')->nullable();
             $table->timestamps();
         });
     }

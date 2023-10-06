@@ -14,10 +14,8 @@ class Booking extends Model
         'thanh_tien',
         'ngay_dat',
         'ngay_tra',
-        'ngay_nhan_xe',
         'ghi_chu',
         'tinh_trang',
         'id_khach_hang',
-        'id_hop_dong',
     ];
 }
