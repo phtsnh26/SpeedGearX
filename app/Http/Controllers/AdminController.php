@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Brand;
 use App\Models\Client;
 use App\Models\Personnel;
+use App\Models\Review;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,14 +24,8 @@ class AdminController extends Controller
         return view('page.admin.dashboard.index');
     }
 
-    public function indexTestimonial()
-    {
-        return view("page.admin.testimonial.index");
-    }
-    public function indexReports()
-    {
-        return view('page.admin.report.index');
-    }
+
+
 
     public function signIn(Request $request)
     {
@@ -60,6 +55,7 @@ class AdminController extends Controller
         $data['vehicle'] = Vehicle::all()->count();
         $data['booking'] = Booking::all()->count();
         $data['client'] = Client::all()->count();
+        $data['reviews'] = Review::all()->count();
         return response()->json([
             'data'   => $data,
         ]);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Classification;
 use App\Models\Images;
+use App\Models\Review;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
@@ -15,20 +16,37 @@ class homapageController extends Controller
     {
         $brand = Brand::where('tinh_trang', 1)->get();
         $classification = Classification::get();
-        $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
-            ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+        $data = Vehicle::leftJoin('classifications', 'classifications.id', '=', 'vehicles.id_loai_xe')
+            ->leftJoin('brands', 'brands.id', '=', 'vehicles.id_thuong_hieu')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
             ->where('brands.tinh_trang', 1)
             ->where('vehicles.tinh_trang', 1)
-            ->orderByDESC('vehicles.created_at')
+            ->orderBy('vehicles.created_at', 'DESC')
             ->get();
-        $image = Images::get();
-        // dd($data->toArray());
+        $images = Images::get();
+
+        // Kiểm tra xem có dữ liệu nào được trả về không trước khi tiếp tục
+        if ($data->isNotEmpty()) {
+            foreach ($data as $vehicle) {
+                $images = Images::get();
+                $totalRating = 0;
+                $reviews = Review::where('id_xe', $vehicle->id)->get();
+                foreach ($reviews as $review) {
+                    $totalRating += $review->so_sao;
+                }
+                $averageRating = ($reviews->count() > 0) ? round($totalRating / $reviews->count()) : 0;
+                $vehicle->so_luot_danh_gia = $reviews->count();
+                $vehicle->tbc_sao = $averageRating;
+                $vehicle->reviews = $reviews;
+            }
+        } else {
+            // Xử lý trường hợp không có dữ liệu được tìm thấy
+        }
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,
             'data'   =>  $data,
-            'images' => $image
+            'images' => $images
         ]);
     }
 
@@ -44,7 +62,19 @@ class homapageController extends Controller
             ->orderByDESC('vehicles.created_at')
             ->paginate(9, ["*"], 2);
         $image = Images::get();
-        // dd($data->toArray());
+        if ($data->isNotEmpty()) {
+            foreach ($data as $vehicle) {
+                $totalRating = 0;
+                $reviews = Review::where('id_xe', $vehicle->id)->get();
+                foreach ($reviews as $review) {
+                    $totalRating += $review->so_sao;
+                }
+                $averageRating = ($reviews->count() > 0) ? round($totalRating / $reviews->count()) : 0;
+                $vehicle->so_luot_danh_gia = $reviews->count();
+                $vehicle->tbc_sao = $averageRating;
+                $vehicle->reviews = $reviews;
+            }
+        }
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,

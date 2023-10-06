@@ -16,6 +16,7 @@ class Client extends Authenticatable
         'ho_va_ten',
         'ten_dang_nhap',
         'password',
+        "anh_dai_dien",
         'dia_chi',
         'ngay_sinh',
         'gioi_tinh',

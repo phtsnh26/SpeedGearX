@@ -17,6 +17,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileClientController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WareHouseController;
 use App\Http\Controllers\WareHouseReceiptController;
@@ -127,13 +128,10 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::post('/changeStatus', [BookingController::class, 'changeStatus'])->name('changeStatusBooking');
     });
 
-    Route::group(['prefix' => 'testimonials'], function () {
-        Route::get('/', [AdminController::class, 'indexTestimonial'])->name('indexTestimonial');
+    Route::group(['prefix' => 'review'], function () {
+        Route::get('/', [ReviewController::class, 'indexTestimonial'])->name('indexTestimonial');
     });
 
-    Route::group(['prefix' => 'reports'], function () {
-        Route::get('/', [AdminController::class, 'indexReports'])->name('indexReports');
-    });
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [ClientController::class, 'indexUser'])->name('indexUser');
@@ -180,6 +178,10 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
     Route::group(['prefix' => '/checkout'], function () {
         Route::get('/', [GioHangController::class, 'indexCheckout'])->name('indexCheckout');
     });
+
+    Route::group(['prefix' => '/review'], function () {
+        Route::post('/create', [ReviewController::class, 'create'])->name('createDescription');
+    });
 });
 
 Route::group(['prefix' => 'contact'], function () {
@@ -200,3 +202,6 @@ Route::get('/all-product', [homapageController::class, 'allProduct'])->name('all
 Route::get('/all-product/data-menu', [homapageController::class, 'dataMenuAllProduct'])->name('dataMenuAllProduct');
 
 Route::post('/all-product/fillter', [homapageController::class, 'filter'])->name('filterAllProduct');
+
+Route::post('/data', [ReviewController::class, 'dataReview'])->name('dataReview');
+

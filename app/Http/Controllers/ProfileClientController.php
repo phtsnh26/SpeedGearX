@@ -30,6 +30,7 @@ class ProfileClientController extends Controller
                 'cccd' => $request->cccd,
                 'bang_lai_xe' => $request->bang_lai_xe,
                 'gioi_tinh' => $request->gioi_tinh,
+                'anh_dai_dien' => $request->anh_dai_dien
             ]);
         return response()->json([
             'status'    => 1,
