@@ -36,7 +36,7 @@ class PermisionController extends Controller
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
@@ -59,31 +59,42 @@ class PermisionController extends Controller
                 'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
-
     }
     public function delete(Request $request)
     {
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
         if (in_array('Quản Lý Phân Quyền', $check)) {
-            $check = Permision::find($request->id);
-            if ($check) {
-                $check->delete();
-                $test = PermisionDetail::where('id_quyen', $request->id)->delete();
-                return response()->json([
-                    'status'    => 1,
-                    'message'   => 'Xoá thành công!',
-                ]);
-            } else {
+            $checkk = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+                ->where('id_quyen', $request->id)
+                ->select('list_permisions.ten_hanh_dong')
+                ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+                ->toArray();
+            if (in_array('Quản Lý Phân Quyền', $checkk)) {
                 return response()->json([
                     'status'    => 0,
-                    'message'   => 'Xoá thất bại!',
+                    'message'   => 'Bạn không thể xoá chức vụ cao hơn mình!',
                 ]);
+            } else {
+                $check = Permision::find($request->id);
+                if ($check) {
+                    $check->delete();
+                    $test = PermisionDetail::where('id_quyen', $request->id)->delete();
+                    return response()->json([
+                        'status'    => 1,
+                        'message'   => 'Xoá thành công!',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status'    => 0,
+                        'message'   => 'Xoá thất bại!',
+                    ]);
+                }
             }
         } else {
             return response()->json([
@@ -91,14 +102,13 @@ class PermisionController extends Controller
                 'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
-
     }
     public function capQuyen(Request $request)
     {
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
@@ -152,13 +162,13 @@ class PermisionController extends Controller
                 'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
-
     }
-    public function addListPhanQuyen(Request $request){
+    public function addListPhanQuyen(Request $request)
+    {
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
@@ -192,11 +202,12 @@ class PermisionController extends Controller
             ]);
         }
     }
-    public function xoaListPhanQuyen(Request $request){
+    public function xoaListPhanQuyen(Request $request)
+    {
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
@@ -227,6 +238,5 @@ class PermisionController extends Controller
                 'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
             ]);
         }
-
     }
 }
