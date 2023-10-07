@@ -165,7 +165,6 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="col-3">
                     <div class="card">
                         <img src="https://handsontek.net/images/Teams/Custom%20Backgrounds/hero.png" style="height: 300px">
@@ -202,7 +201,7 @@
             new Vue({
                 el: '#app',
                 data: {
-                    data : {},
+                    data: {},
                 },
                 created() {
                     this.getData();

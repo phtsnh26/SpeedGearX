@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GioHang extends Model
+class WishList extends Model
 {
     use HasFactory;
-    protected $table = 'gio_hangs';
+    protected $table = 'wishlists';
+
     protected $fillable = [
-        'ten_xe',
-        'so_luong',
-        'ngay_dat',
-        'ngay_tra',
-        'tong_tien',
-        'tien_coc',
         'id_khach_hang',
         'id_xe',
-        'id_thue_xe',
+        'so_luong',
+        'tong_tien',
+        'tien_coc',
     ];
 }

@@ -14,10 +14,16 @@ class Booking extends Model
         'thanh_tien',
         'ngay_dat',
         'ngay_tra',
-        'ngay_nhan_xe',
+        'so_luong',
         'ghi_chu',
         'tinh_trang',
         'id_khach_hang',
-        'id_hop_dong',
+        'id_xe'
     ];
+
+    const   DA_HUY                      =   -1;
+    const   DANG_XU_LY                  =   0;
+    const   DA_COC                      =   1;
+    const   DANG_THUE                   =   2;
+    const   DA_TRA                      =   3;
 }

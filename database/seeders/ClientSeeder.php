@@ -25,6 +25,16 @@ class ClientSeeder extends Seeder
                 'so_dien_thoai' => '1231231231',
                 'is_active' => 1,
             ],
+            [
+                'email' => 'nbhung14dcvc@gmail.com',
+                'ho_va_ten' => 'Bảo Hưng',
+                'ten_dang_nhap' => 'hungdeptrai',
+                'password' => bcrypt('123123'),
+                'dia_chi' => 'Đà Nẵng',
+                'ngay_sinh' => '2002-02-12',
+                'so_dien_thoai' => '0954892017',
+                'is_active' => 1,
+            ],
         ]);
     }
 }

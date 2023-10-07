@@ -25,8 +25,6 @@ class AdminController extends Controller
     }
 
 
-
-
     public function signIn(Request $request)
     {
         $data = $request->all();
@@ -34,10 +32,10 @@ class AdminController extends Controller
         if ($check) {
             $admin = Personnel::where('ten_dang_nhap', $request->ten_dang_nhap)
                 ->first();
-                return response()->json([
-                    'status'    => true,
-                    'message'   => 'Đăng nhập thành công',
-                ]);
+            return response()->json([
+                'status'    => true,
+                'message'   => 'Đăng nhập thành công',
+            ]);
         } else {
             return response()->json([
                 'status'    => false,
@@ -50,7 +48,8 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         return redirect('/login/admin');
     }
-    public function dataDashboard(){
+    public function dataDashboard()
+    {
         $data['brand'] = Brand::all()->count();
         $data['vehicle'] = Vehicle::all()->count();
         $data['booking'] = Booking::all()->count();
@@ -60,6 +59,4 @@ class AdminController extends Controller
             'data'   => $data,
         ]);
     }
-
-
 }

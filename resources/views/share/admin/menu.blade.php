@@ -111,8 +111,7 @@
                                 <span data-i18n="Documentation">Personnel</span></a>
                         </li>
                         <li data-menu=""><a class="dropdown-item d-flex align-items-center"
-                                href="{{ Route('viewPermision') }}" data-bs-toggle=""
-                                data-i18n="Documentation">
+                                href="{{ Route('viewPermision') }}" data-bs-toggle="" data-i18n="Documentation">
                                 <i class="fas fa-user-lock"></i>
                                 <span data-i18n="Documentation">Permision</span></a>
                         </li>

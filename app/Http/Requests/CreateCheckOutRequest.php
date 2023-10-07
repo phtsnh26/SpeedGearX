@@ -2,23 +2,20 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Vehicle;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateGioHangRequest extends FormRequest
+class CreateCheckOutRequest extends FormRequest
 {
-
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
-
     public function rules(): array
     {
-        $vehicle = Vehicle::find($this->id);
-
         return [
             'so_luong' => [
                 'required',
@@ -30,7 +27,6 @@ class CreateGioHangRequest extends FormRequest
             'ngay_tra' => 'required|date|after:ngay_dat|before_or_equal:' . now()->addDays(30)->toDateString(),
         ];
     }
-
     public function messages()
     {
         return [

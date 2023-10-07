@@ -9,6 +9,16 @@
         #swiper-wrapper-7eedb9f2b2172155 {
             height: 380px;
         }
+
+        .yeuThich {
+            color: var(--secondary-color);
+            color: var(--text-white-color);
+        }
+
+        .form-check-input:checked {
+            background-color: red;
+            border-color: red;
+        }
     </style>
     <div id="app">
         <section class="product__details--section section--padding">
@@ -305,7 +315,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-20">
+                                    <div class="row">
                                         <div class="col-5">
                                             <div class="text-nowrap d-flex">
                                                 <span class="mt-1 me-3"><b>Số Lượng:</b></span>
@@ -332,11 +342,52 @@
                                                 sẵn</small>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="product__variant--list ">
+                                                @if (Auth::guard('client')->check())
+                                                    <a @click='themMoi()' class="variant__wishlist--icon mb-15"
+                                                        title="Add to wishlist">
+                                                        <div id='mauTim'>
+                                                            <template v-if='check == 1'><i v-if='check == 1'
+                                                                    class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>
+                                                            </template>
+                                                            <template v-if='check == 0'><svg
+                                                                    class="quickview__variant--wishlist__svg"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 512 512">
+                                                                    <path
+                                                                        d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
+                                                                        fill="none" stroke="currentColor"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="32" />
+                                                                </svg>
+                                                            </template>
+                                                        </div>
+                                                        Add to Wishlist
+                                                    </a>
+                                                @else
+                                                    <a class="variant__wishlist--icon mb-15" href="/login/client"
+                                                        title="Add to wishlist">
+                                                        <svg class="quickview__variant--wishlist__svg"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                            <path
+                                                                d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
+                                                                fill="none" stroke="currentColor"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="32" />
+                                                        </svg>
+                                                        Add to Wishlist
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-20">
                                     <div class="product__variant--list mb-15">
-                                        <button @click="themMoi()" class="variant__buy--now__btn primary__btn"
-                                            type="button">
-                                            <i class="fa-solid fa-car"></i> ADD MY CAR
-                                        </button>
+                                        <a @click='thueXe()' class="product__card--btn primary__btn" data-open="modal1">
+                                            Thuê Xe
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -515,12 +566,12 @@
                 el: '#app',
                 data: {
                     data: {!! json_encode($data) !!},
+                    check: {!! json_encode($check) !!},
                     images: [{
                         hinh_anh_xe: ''
                     }],
                     index: 0,
                     add: {
-                        ngay_dat: '',
                         'so_luong': 1,
                     },
                     check: true,
@@ -536,7 +587,6 @@
                     const today = new Date().toISOString().split('T')[0];
                     this.add.ngay_dat = today;
                     this.loadImage();
-                    this.listGioHang();
                     this.loadMyCar();
                     this.dataReview();
 
@@ -626,33 +676,43 @@
                     selectImage(k) {
                         this.index = k;
                     },
-                    listGioHang() {
+                    themMoi() {
+                        var payload = {
+                            ...this.add,
+                            id: this.data['id'],
+                        }
                         axios
-                            .get('{{ Route('dataGioHang') }}')
+                            .post('{{ Route('createWishlist') }}', payload)
                             .then((res) => {
-                                this.listCar = res.data.data
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
-                            });
-                    },
-                    loadMyCar() {
-                        axios
-                            .get('{{ Route('dataGioHang') }}')
-                            .then((res) => {
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
+                                $("#yeu_thich_1").html(res.data.danhsachTim);
+                                $("#yeu_thich_2").html(res.data.danhsachTim);
+                                var noi_dung = '';
+
+                                if (res.data.trang_thai == 1) {
+                                    noi_dung =
+                                        '<i class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>';
+                                    $('#mauTim').html(noi_dung);
+                                    toastr.success(res.data.message);
+                                } else if (res.data.trang_thai == 0) {
+                                    noi_dung =
+                                        '<svg class="quickview__variant--wishlist__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>'
+                                    $('#mauTim').html(noi_dung);
+                                    toastr.info(res.data.message);
+                                } else {
+                                    toastr.error('Bạn cần đăng nhập trước khi thêm vào Wishlist');
+                                    setTimeout(() => {
+                                        location.href = "/login/client";
+                                    }, 1500);
+                                }
+                                $('#mauTim').html(noi_dung);
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Error');
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
                     },
-                    themMoi() {
+                    thueXe() {
                         var payload = {
                             ...this.add,
                             id: this.data['id'],
@@ -660,15 +720,20 @@
                             tien_coc: this.data['tien_coc']
                         }
                         axios
-                            .post('{{ Route('createGioHang') }}', payload)
+                            .post('{{ Route('createCehckOut') }}', payload)
                             .then((res) => {
                                 if (res.data.status == 1) {
-                                    toastr.success(res.data.message, 'Thành Công');
-                                    this.listGioHang();
+                                    var queryString = Object.keys(res.data.add).map(function(key) {
+                                        return encodeURIComponent(key) + '=' +
+                                            encodeURIComponent(res.data.add[key]);
+                                    }).join('&');
+                                    var newUrl = 'http://127.0.0.1:8000/client/check-out/?' +
+                                        queryString;
+                                    window.location.replace(newUrl);
                                 } else if (res.data.status == 0) {
                                     toastr.error(res.data.message, 'Lỗi');
                                 } else {
-                                    toastr.error('Bạn cần đăng nhập trước khi thêm vào My Car');
+                                    toastr.error('Bạn cần đăng nhập để có thể thuê xe', 'Lỗi');
                                     setTimeout(() => {
                                         location.href = "/login/client";
                                     }, 1500);
@@ -680,6 +745,7 @@
                                 });
                             });
                     },
+
                     cong() {
                         if (this.add.so_luong >= 0) {
                             this.add.so_luong++;
