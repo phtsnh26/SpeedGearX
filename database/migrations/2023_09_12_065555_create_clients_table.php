@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ho_va_ten');
             $table->string('ten_dang_nhap');
             $table->string('password');
+            $table->string('anh_dai_dien')->nullable();
             $table->string('dia_chi');
             $table->date('ngay_sinh');
             $table->string('gioi_tinh')->nullable();

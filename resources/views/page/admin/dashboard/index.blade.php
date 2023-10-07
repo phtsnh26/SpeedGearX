@@ -150,8 +150,8 @@
                         <img src="https://vietnamcleanroom.com/vcr-media/23/3/10/danh-gia-noi-bo-9.jpg"
                             style="height: 300px">
                         <div class="card-body">
-                            <h1 class='text-center'>52</h1>
-                            <h2 class="card-text text-center">Testimonials</h2>
+                            <h1 class='text-center'>@{{ data.reviews }}</h1>
+                            <h2 class="card-text text-center">Reviews</h2>
                         </div>
                         <div class="card-footer text-center">
                             <a class="learn-more" href="{{ Route('indexTestimonial') }}">

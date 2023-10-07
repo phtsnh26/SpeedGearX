@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Classification;
 use App\Models\Images;
+use App\Models\Review;
 use App\Models\Vehicle;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -48,12 +49,14 @@ class homapageController extends Controller
                 ->get();
             $image = Images::get();
             // dd($data->toArray());
+
         }
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,
             'data'   =>  $data,
             'images' => $image,
+
         ]);
     }
 
@@ -89,6 +92,19 @@ class homapageController extends Controller
         // dd($data->toArray())
         $image = Images::get();
 
+        if ($data->isNotEmpty()) {
+            foreach ($data as $vehicle) {
+                $totalRating = 0;
+                $reviews = Review::where('id_xe', $vehicle->id)->get();
+                foreach ($reviews as $review) {
+                    $totalRating += $review->so_sao;
+                }
+                $averageRating = ($reviews->count() > 0) ? round($totalRating / $reviews->count()) : 0;
+                $vehicle->so_luot_danh_gia = $reviews->count();
+                $vehicle->tbc_sao = $averageRating;
+                $vehicle->reviews = $reviews;
+            }
+        }
         return response()->json([
             'brand'   =>  $brand,
             'classification'   =>  $classification,
