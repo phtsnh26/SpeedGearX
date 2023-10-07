@@ -42,25 +42,28 @@ class WishlistController extends Controller
         $check = Auth::guard('client')->check();
         if ($check) {
             $client = Auth::guard('client')->user();
-
+            // dd($client);
             $wishlist = Wishlist::where('id_khach_hang', $client->id)
                 ->where('id_xe', $request->id)
                 ->first();
             if ($wishlist) {
                 $wishlist->delete();
+                $dem = Wishlist::where('id_khach_hang', $client->id)->get();
                 return response()->json([
-                    'danhsachTim'  => $wishlist->count(),
+                    'danhsachTim'  => $dem->count(),
                     'trang_thai'    => 0,
                     'message'   => 'Đã bỏ khỏi danh sách yêu thích'
                 ]);
             } else {
+
                 $danhsach =  Wishlist::create([
                     'id_khach_hang'   => $client->id,
                     'id_xe'   => $request->id,
                 ]);
+                $dem = Wishlist::where('id_khach_hang', $client->id)->get();
                 return response()->json([
                     'trang_thai'    => 1,
-                    'danhsachTim'  => $danhsach->count(),
+                    'danhsachTim'  => $dem->count(),
                     'message'   => 'Đã thêm vào danh sách yêu thích'
                 ]);
             }
