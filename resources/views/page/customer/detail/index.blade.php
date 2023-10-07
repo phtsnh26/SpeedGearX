@@ -349,8 +349,9 @@
                                                     <a @click='themMoi()' class="variant__wishlist--icon mb-15"
                                                         title="Add to wishlist">
                                                         <div id='mauTim'>
-                                                            <template v-if='check == 1'><i v-if='check == 1'
-                                                                    class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>
+                                                            <template v-if='check == 1'>
+                                                                <i class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg">
+                                                                </i>
                                                             </template>
                                                             <template v-if='check == 0'><svg
                                                                     class="quickview__variant--wishlist__svg"
@@ -574,14 +575,12 @@
                     add: {
                         'so_luong': 1,
                     },
-                    check: true,
                     comment: {
                         so_sao: 0,
                     },
                     reviews: [],
                     total: 0,
                     tong_danh_gia: 0,
-
                 },
                 created() {
                     const today = new Date().toISOString().split('T')[0];

@@ -196,74 +196,77 @@
 
 @section('js')
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                list_vehicles: [],
-                list_images: [],
-                user: {!! json_encode($user_login) !!}
-            },
-            created() {
-                this.getData();
-            },
-            methods: {
-                getData() {
-                    axios.get('{{ Route('dataHomePage') }}')
-                        .then((res) => {
-                            this.list_brands = res.data.brand;
-                            this.list_classification = res.data.classification;
-                            this.list_vehicles = res.data.data;
-                            this.list_images = res.data.images;
-                            this.list_vehicles.forEach(a => {
-                                a.images = [];
-                                this.list_images.forEach(b => {
-                                    if (a.id === b.id_xe) {
-                                        a.images.push(b.hinh_anh_xe);
-                                    }
+        $(document).ready(function() {
+            new Vue({
+                el: '#app',
+                data: {
+                    list_vehicles: [],
+                    list_images: [],
+                    user: {!! json_encode($user_login) !!},
+                },
+                created() {
+                    this.getData();
+                },
+                methods: {
+                    getData() {
+                        axios.get('{{ Route('dataHomePage') }}')
+                            .then((res) => {
+                                console.log(res.data.data);
+                                this.list_brands = res.data.brand;
+                                this.list_classification = res.data.classification;
+                                this.list_vehicles = res.data.data;
+                                this.list_images = res.data.images;
+                                this.list_vehicles.forEach(a => {
+                                    a.images = [];
+                                    this.list_images.forEach(b => {
+                                        if (a.id === b.id_xe) {
+                                            a.images.push(b.hinh_anh_xe);
+                                        }
+                                    });
                                 });
                             });
-                        });
-                },
-                numberFormat(number) {
-                    return new Intl.NumberFormat('vi-VI', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }).format(number);
-                },
-                mouseoverWishlist(vehicle) {
+                    },
+                    numberFormat(number) {
+                        return new Intl.NumberFormat('vi-VI', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(number);
+                    },
+                    mouseoverWishlist(vehicle) {
 
-                },
-                toggleWishlist(vehicle) {
-                    var payload = {
-                        'id': vehicle.id,
-                    };
-                    axios.post('{{ Route('createWishlist') }}', payload)
-                        .then((res) => {
-                            // this.list_vehicles[index].isWishlists = !this.list_vehicles[index].isWishlists;
-                            $("#yeu_thich_1").html(res.data.danhsachTim);
-                            $("#yeu_thich_2").html(res.data.danhsachTim);
-                            vehicle.isFavorite = res.data.trang_thai;
-                            var id = '#wishList1' + vehicle.id;
-                            var id1 = '#wishList2' + vehicle.id;
-                            this.getData();
-                            if (res.data.trang_thai == 1) {
-                                $(id).toggleClass('yeuThich');
-                                $(id1).toggleClass('yeuThich');
-                                toastr.success(res.data.message);
-                            } else if (res.data.trang_thai == 0) {
-                                $(id).removeClass('yeuThich');
-                                $(id1).removeClass('yeuThich');
-                                toastr.info(res.data.message);
-                            }
-                        })
-                        .catch((res) => {
-                            $.each(res.response.data.errors, function(k, v) {
-                                toastr.error(v[0], 'Error');
+                    },
+                    toggleWishlist(vehicle) {
+                        var payload = {
+                            'id': vehicle.id,
+                        };
+                        axios.post('{{ Route('createWishlist') }}', payload)
+                            .then((res) => {
+                                // this.list_vehicles[index].isWishlists = !this.list_vehicles[index].isWishlists;
+                                $("#yeu_thich_1").html(res.data.danhsachTim);
+                                $("#yeu_thich_2").html(res.data.danhsachTim);
+                                vehicle.isFavorite = res.data.trang_thai;
+                                var id = '#wishList1' + vehicle.id;
+                                var id1 = '#wishList2' + vehicle.id;
+                                this.getData();
+                                if (res.data.trang_thai == 1) {
+                                    $(id).toggleClass('yeuThich');
+                                    $(id1).toggleClass('yeuThich');
+                                    toastr.success(res.data.message);
+                                } else if (res.data.trang_thai == 0) {
+                                    $(id).removeClass('yeuThich');
+                                    $(id1).removeClass('yeuThich');
+                                    toastr.info(res.data.message);
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Error');
 
+                                });
                             });
-                        });
+                    },
                 },
-            },
-        });
+            });
+        })
     </script>
 @endsection
