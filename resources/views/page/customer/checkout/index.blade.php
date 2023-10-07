@@ -107,9 +107,11 @@
                                 </div>
 
                             </div>
-                            <button @click='thueXe()' class="checkout__now--btn primary__btn" type="button">THUÊ
-                                XE</button>
+                            <button id='btnThueXe' @click='thueXe()' class="checkout__now--btn primary__btn" type="button">
+                                THUÊ XE
+                            </button>
                         </aside>
+
                     </div>
                 </div>
             </div>
@@ -166,14 +168,24 @@
                         this.add.ngay_dat = this.data.get('ngay_dat')
                         this.add.ngay_tra = this.data.get('ngay_tra')
                         this.add.tong_tien = this.data.get('tong_tien')
-                        this.add.tong_tien = this.data.get('tong_tien')
                         this.add.id = this.data.get('id')
                         this.add.so_luong = this.data.get('so_luong')
+                        this.add.ghi_chu = this.add.ghi_chu
                         this.add.hinh_anh = this.info_xe.hinh_anh_xe
+                        this.add.ten_xe = this.info_xe.ten_xe
+                        $('#btnThueXe').prop('disabled', true);
                         axios
                             .post('{{ Route('createBooking') }}', this.add)
                             .then((res) => {
-
+                                if (res.data.status == 1) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    setTimeout(() => {
+                                        window.location.href = '/';
+                                    }, 1000);
+                                } else {
+                                    $('#btnThueXe').prop('disabled', false);
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {

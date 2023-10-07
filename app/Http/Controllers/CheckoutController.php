@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
+
+
     public function indexCheckOut()
     {
         return view('page.customer.checkout.index');
@@ -56,10 +58,9 @@ class CheckoutController extends Controller
             'first_images.id_xe'
         )
             ->leftJoin('images AS first_image', 'first_images.min_id', 'first_image.id')
-            ->select('vehicles.*' , 'first_image.hinh_anh_xe' )->find($request->id);
-            return response()->json([
-                'xe'    => $vehicle,
-            ]);
+            ->select('vehicles.*', 'first_image.hinh_anh_xe')->find($request->id);
+        return response()->json([
+            'xe'    => $vehicle,
+        ]);
     }
-    
 }

@@ -88,7 +88,6 @@
                             .post('{{ Route('signInClient') }}', this.signIn)
                             .then((res) => {
                                 if (res.data.status) {
-                                    toastr.success(res.data.message, 'Thành Công');
                                     setTimeout(() => {
                                         window.location.replace(
                                             '{{ Route('indexHome') }}');

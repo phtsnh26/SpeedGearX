@@ -21,14 +21,13 @@ class CustomerController extends Controller
         $user_login = Auth::guard('client')->check();
         return view('page.customer.home.index', compact('user_login'));
     }
-    public function indexDetail($slug_xe)
-
+    public function indexDetail($slug_xe, $check)
     {
         $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
             ->where('slug_xe', '=', $slug_xe)->first();
         // dd($data);
-        return view('page.customer.detail.index', compact('data'));
+        return view('page.customer.detail.index', compact('data', 'check'));
     }
     public function loadImageDetail(Request $request)
     {

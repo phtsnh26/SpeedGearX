@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CheckoutController;
@@ -9,16 +8,13 @@ use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\GioHangController;
 use App\Http\Controllers\ProfileAdminController;
 use App\Http\Controllers\homapageController;
 use App\Http\Controllers\LoginCustomerController;
-use App\Http\Controllers\NhapKhoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileClientController;
-use App\Http\Controllers\ThanhToanController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WareHouseController;
 use App\Http\Controllers\WareHouseReceiptController;
@@ -28,6 +24,8 @@ use App\Models\Brand;
 use App\Models\LoginCustomer;
 use App\Models\WareHouse;
 use Illuminate\Support\Facades\Route;
+//  =============================================BANKING============================================================
+
 
 
 //  =============================================ADMINS============================================================
@@ -164,13 +162,6 @@ Route::get('/', [CustomerController::class, 'indexHome'])->name('indexHome');
 
 
 Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
-    Route::group(['prefix' => 'cart'], function () {
-        Route::get('/data', [GioHangController::class, 'data'])->name('dataGioHang');
-        Route::post('/del', [GioHangController::class, 'del'])->name('delGioHang');
-        Route::post('/create', [GioHangController::class, 'create'])->name('createGioHang');
-        Route::post('/update', [GioHangController::class, 'update'])->name('updateGioHang');
-    });
-
     Route::group(['prefix' => '/profile'], function () {
         Route::get('/', [ProfileClientController::class, 'indexProfile'])->name('indexProfile');
         Route::get('/dataProfile', [ProfileClientController::class, 'dataProfile'])->name('dataProfile');
@@ -178,6 +169,7 @@ Route::group(['prefix' => '/client', 'middleware' => 'client'], function () {
         Route::get('/change-password', [ProfileClientController::class, 'indexChangePass'])->name('indexChangePass');
         Route::post('/updatePassword', [ProfileClientController::class, 'updatePassword'])->name('updatePassword');
         Route::get('/order', [ProfileClientController::class, 'order'])->name('orderClient');
+        Route::get('/data-order', [ProfileClientController::class, 'dataOrder'])->name('dataOrderClient');
     });
     Route::group(['prefix' => '/wishlist'], function () {
         Route::get('/', [WishlistController::class, 'indexWishlist'])->name('indexWishlist');
@@ -201,7 +193,7 @@ Route::group(['prefix' => 'contact'], function () {
 
 
 Route::get('/detail', [CustomerController::class, 'indexDetail'])->name('indexDetail');
-Route::get('/detail/{slug_xe}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
+Route::get('/detail/{slug_xe}/{check}', [CustomerController::class, 'indexDetail'])->name('indexDetail');
 Route::post('/update', [CustomerController::class, 'update'])->name('updateDetail');
 Route::post('/detail/image', [CustomerController::class, 'loadImageDetail'])->name('loadImageDetail');
 Route::get('/data-thuong-hieu', [CustomerController::class, 'getThuongHieu'])->name('getThuongHieu');

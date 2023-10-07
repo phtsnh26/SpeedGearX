@@ -26,7 +26,7 @@ class homapageController extends Controller
                 ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
                 ->select('vehicles.*', 'classifications.so_cho_ngoi')
                 ->where('brands.tinh_trang', 1)
-                ->where('vehicles.tinh_trang', 1)
+                ->where('vehicles.so_luong', '>=', 1)
                 ->orderByDESC('vehicles.created_at')
                 ->get()
                 ->map(function ($item) use ($wishlistIds) {
@@ -70,6 +70,7 @@ class homapageController extends Controller
                 ->select('vehicles.*', 'classifications.so_cho_ngoi')
                 ->where('brands.tinh_trang', 1)
                 ->where('vehicles.tinh_trang', 1)
+                ->where('vehicles.so_luong', '>=', 1)
                 ->orderByDESC('vehicles.created_at');
             $soPage = ceil($data->count() / 9);
             $data->addSelect(DB::raw('IF(vehicles.id IN (' . implode(',', $wishlistIds) . '), 1, 0) as isWishlists'));

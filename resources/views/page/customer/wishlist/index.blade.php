@@ -84,7 +84,6 @@
                 new Vue({
                     el: '#app',
                     data: {
-                        list: [],
                         tien_coc: 0,
                         index: 0,
                         selectedItems: [],
@@ -93,17 +92,9 @@
                         listYeuThich: [],
                     },
                     created() {
-                        this.getData();
                         this.getWishlist();
                     },
                     methods: {
-                        getData() {
-                            axios
-                                .get('{{ Route('dataGioHang') }}')
-                                .then((res) => {
-                                    this.list = res.data.data;
-                                });
-                        },
                         getWishlist() {
                             axios
                                 .get('{{ Route('dataWishlist') }}')

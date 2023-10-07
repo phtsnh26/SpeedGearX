@@ -44,7 +44,7 @@
                                         <article class="product__card" style="height: 372px;">
                                             <div class="product__card--thumbnail">
                                                 <a class="product__card--thumbnail__link display-block"
-                                                    :href="`/detail/${v.slug_xe}`">
+                                                    :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                                     <img style="width: 100%; height: 150px;"
                                                         class=" product__card--thumbnail__img product__primary--img"
                                                         :src="v.images[0]" alt="product-img">
@@ -56,7 +56,7 @@
                                                     class="product__card--action d-flex align-items-center justify-content-center">
                                                     <li class="product__card--action__list">
                                                         <a class="product__card--action__btn" title="Quick View"
-                                                            :href="`/detail/${v.slug_xe}`">
+                                                            :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                                             <svg class="product__card--action__btn--svg" width="16"
                                                                 height="16" viewBox="0 0 16 16" fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +128,7 @@
                                             </div>
                                             <div class="product__card--content">
                                                 <h3 class="product__card--title">
-                                                    <a :href="`/detail/${v.slug_xe}`">
+                                                    <a :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                                         @{{ v.ten_xe }}
                                                     </a>
                                                 </h3>
@@ -149,7 +149,7 @@
                                                     <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                                 </div>
                                                 <div class="product__card--footer">
-                                                    <a :href="`/detail/${v.slug_xe}`"
+                                                    <a :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`"
                                                         class="product__card--btn primary__btn" data-open="modal1">
                                                         <i class="fa-solid fa-dollar-sign"></i>
                                                         Thuê Xe
@@ -214,11 +214,13 @@
                     };
                     axios.post('{{ Route('createWishlist') }}', payload)
                         .then((res) => {
+                            // this.list_vehicles[index].isWishlists = !this.list_vehicles[index].isWishlists;
                             $("#yeu_thich_1").html(res.data.danhsachTim);
                             $("#yeu_thich_2").html(res.data.danhsachTim);
                             vehicle.isFavorite = res.data.trang_thai;
                             var id = '#wishList1' + vehicle.id;
                             var id1 = '#wishList2' + vehicle.id;
+                            this.getData();
                             if (res.data.trang_thai == 1) {
                                 $(id).toggleClass('yeuThich');
                                 $(id1).toggleClass('yeuThich');

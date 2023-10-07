@@ -325,10 +325,9 @@
                                                             id="button-addon1" style="background-color: transparent;">
                                                             <i class="fa-solid fa-minus text-dark"></i>
                                                         </button>
-                                                        <input  v-model="add.so_luong"
-                                                            style="font-size: 13px" type="number"
-                                                            class="form-control text-center" placeholder=""
-                                                            aria-label="Example text with button addon"
+                                                        <input v-model="add.so_luong" style="font-size: 13px"
+                                                            type="number" class="form-control text-center"
+                                                            placeholder="" aria-label="Example text with button addon"
                                                             aria-describedby="button-addon1">
                                                         <button @click="cong()" class="btn btn-secondary" type="button"
                                                             id="button-addon1" style="background-color: transparent;">
@@ -350,8 +349,20 @@
                                                     <a @click='themMoi()' class="variant__wishlist--icon mb-15"
                                                         title="Add to wishlist">
                                                         <div id='mauTim'>
-                                                            <i
-                                                                class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>
+                                                            <template v-if='check == 1'><i v-if='check == 1'
+                                                                    class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>
+                                                            </template>
+                                                            <template v-if='check == 0'><svg
+                                                                    class="quickview__variant--wishlist__svg"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 512 512">
+                                                                    <path
+                                                                        d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
+                                                                        fill="none" stroke="currentColor"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="32" />
+                                                                </svg>
+                                                            </template>
                                                         </div>
                                                         Add to Wishlist
                                                     </a>
@@ -704,6 +715,7 @@
                 el: '#app',
                 data: {
                     data: {!! json_encode($data) !!},
+                    check: {!! json_encode($check) !!},
                     images: [{
                         hinh_anh_xe: ''
                     }],
@@ -807,13 +819,12 @@
                                     window.location.replace(newUrl);
                                 } else if (res.data.status == 0) {
                                     toastr.error(res.data.message, 'Lỗi');
+                                } else {
+                                    toastr.error('Bạn cần đăng nhập để có thể thuê xe', 'Lỗi');
+                                    setTimeout(() => {
+                                        location.href = "/login/client";
+                                    }, 1500);
                                 }
-                                // } else {
-                                //     toastr.error('Bạn cần đăng nhập trước khi thêm vào My Car');
-                                //     setTimeout(() => {
-                                //         location.href = "/login/client";
-                                //     }, 1500);
-                                // }
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->date('ngay_tra');
             $table->text('ghi_chu')->nullable();
             $table->integer('tinh_trang')->default(0);
+            $table->integer('so_luong')->default(0);
             $table->integer('id_khach_hang');
+            $table->integer('id_xe');
             $table->timestamps();
         });
     }

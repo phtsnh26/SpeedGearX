@@ -26,6 +26,7 @@
                                             <th>Tên Người Thuê</th>
                                             <th>Ngày Đặt</th>
                                             <th>Ngày Trả</th>
+                                            <th>Số Lượng</th>
                                             <th>Ghi Chú</th>
                                             <th>Tổng Tiền</th>
                                             <th>Tình Trạng</th>
@@ -47,52 +48,55 @@
                                                     </button>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input style="width: 170px;" v-model="v.ngay_dat" type="datetime"
-                                                        class="form-control">
+                                                    @{{ formatDate(v.ngay_dat) }}
                                                 </td>
                                                 <td class="text-center">
-                                                    <input style="width: 170px;" v-model="v.ngay_tra" type="datetime"
-                                                        class="form-control">
+                                                    @{{ formatDate(v.ngay_tra) }}
                                                 </td>
                                                 <td class="text-center">
-                                                    <i v-on:click='mo_ta.mo_ta_ngan = v.mo_ta_ngan'
-                                                        class="fa-solid fa-circle-info text-info"
+                                                    @{{ v.so_luong }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <i @click="ghiChu = v.ghi_chu" class="fa-solid fa-circle-info text-info"
                                                         style="font-size: 35px; cursor: pointer;"
                                                         data-bs-target="#ghiChuModal" data-bs-toggle="modal"></i>
                                                 </td>
                                                 <td class="text-nowrap">
-                                                    <b>Tổng tiền: </b>@{{ numberFormat(v.thanh_tien) }}
-                                                    <br>
-                                                    <b>Đã cọc 30%: </b>123123d
+                                                    @{{ numberFormat(v.thanh_tien) }}
                                                 </td>
                                                 <td class="text-nowrap text-center">
                                                     <template v-if="v.tinh_trang == 0">
-                                                        <button @click='changeStatus(v)' type="button"
+                                                        <button @click='edit = v' data-bs-toggle="modal"
+                                                            data-bs-target="#tinhTrangModal" type="button"
                                                             class="btn btn-relief-secondary" style="width: 130px">
                                                             Đang Xử Lý
                                                         </button>
                                                     </template>
                                                     <template v-else-if="v.tinh_trang == 1">
-                                                        <button type="button" class="btn btn-relief-warning"
-                                                            style="width: 130px">
-                                                            Đã Thuê
+                                                        <button @click='edit = v' data-bs-toggle="modal"
+                                                            data-bs-target="#tinhTrangModal" type="button"
+                                                            class="btn btn-relief-warning" style="width: 130px">
+                                                            Đã Cọc
                                                         </button>
                                                     </template>
                                                     <template v-else-if="v.tinh_trang == 2">
-                                                        <button type="button" class="btn btn-relief-success"
-                                                            style="width: 130px">
+                                                        <button @click='edit = v' data-bs-toggle="modal"
+                                                            data-bs-target="#tinhTrangModal" type="button"
+                                                            class="btn btn-relief-primary" style="width: 130px">
+                                                            Đang Thuê
+                                                        </button>
+                                                    </template>
+                                                    <template v-else-if="v.tinh_trang == 3">
+                                                        <button @click='edit = v' data-bs-toggle="modal"
+                                                            data-bs-target="#tinhTrangModal" type="button"
+                                                            class="btn btn-relief-success" style="width: 130px">
                                                             Đã Trả
                                                         </button>
                                                     </template>
                                                     <template v-else-if="v.tinh_trang == -1">
-                                                        <button type="button" class="btn btn-relief-danger"
-                                                            style="width: 130px">
-                                                            Hết Hạn
-                                                        </button>
-                                                    </template>
-                                                    <template v-else-if="v.tinh_trang == -2">
-                                                        <button type="button" class="btn btn-relief-dark"
-                                                            style="width: 130px">
+                                                        <button @click='edit = v' data-bs-toggle="modal"
+                                                            data-bs-target="#tinhTrangModal" type="button"
+                                                            class="btn btn-relief-danger" style="width: 130px">
                                                             Đã Hủy
                                                         </button>
                                                     </template>
@@ -115,11 +119,61 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p class="mt-1">1212121</p>
+                                                <p class="mt-1">@{{ ghiChu }}</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Thoát</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div div class="modal fade" id="tinhTrangModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Tình Trạng</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-check form-check-danger mb-1">
+                                                    <input v-model='don_hang.tinh_trang' id="xyz1"
+                                                        name="inlineRadioOptions" type="radio" value="-1"
+                                                        class="form-check-input">
+                                                    <label class="form-check-label" for="xyz1">Đã Hủy</label>
+                                                </div>
+                                                <div class="form-check form-check-secondary mb-1">
+                                                    <input v-model='don_hang.tinh_trang' id="xyz2"
+                                                        name="inlineRadioOptions" type="radio" value="0"
+                                                        class="form-check-input">
+                                                    <label class="form-check-label" for="xyz2">Đang Xử Lý</label>
+                                                </div>
+                                                <div class="form-check form-check-warning mb-1">
+                                                    <input v-model='don_hang.tinh_trang' id="xyz3"
+                                                        name="inlineRadioOptions" type="radio" value="1"
+                                                        class="form-check-input">
+                                                    <label class="form-check-label" for="xyz3">Đã Cọc</label>
+                                                </div>
+                                                <div class="form-check form-check-primary mb-1">
+                                                    <input v-model='don_hang.tinh_trang' id='xyz4'
+                                                        name="inlineRadioOptions" type="radio" value="2"
+                                                        class="form-check-input">
+                                                    <label class="form-check-label" for="xyz4">Đang Thuê</label>
+                                                </div>
+                                                <div class="form-check form-check-success mb-1">
+                                                    <input v-model='don_hang.tinh_trang' id='xyz5'
+                                                        name="inlineRadioOptions" type="radio" value="3"
+                                                        class="form-check-input">
+                                                    <label class="form-check-label" for='xyz5'>Đã Trả</label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button  data-bs-dismiss="modal" v-on:click="changeStatus()" type="button"
+                                                    class="btn btn-primary">Save</button>
                                             </div>
                                         </div>
                                     </div>
@@ -198,10 +252,12 @@
                 data: {
                     list: [],
                     thongTin: {},
-                    ghiChu: {},
+                    ghiChu: "",
                     del: {},
                     index: 0,
                     gia_tri: '',
+                    don_hang: {},
+                    edit: {},
                 },
                 created() {
                     this.getData();
@@ -252,9 +308,16 @@
                                 });
                             });
                     },
-                    changeStatus(v) {
+                    formatDate(datetime) {
+                        // Assuming `datetime` is a string in the format "YYYY-MM-DDTHH:mm:ss"
+                        const dateObject = new Date(datetime);
+                        return dateObject.toLocaleDateString(
+                            'vi-VN'); // 'vi-VN' is the locale for Vietnamese
+                    },
+                    changeStatus() {
+                        this.edit.tinh_trang_new = this.don_hang.tinh_trang;
                         axios
-                            .post('{{ Route('changeStatusBooking') }}', v)
+                            .post('{{ Route('changeStatusBooking') }}', this.edit)
                             .then((res) => {
                                 if (res.data.status) {
                                     toastr.success(res.data.message, 'Thành Công');

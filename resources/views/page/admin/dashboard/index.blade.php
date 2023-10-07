@@ -167,24 +167,6 @@
             <div class="row">
                 <div class="col-3">
                     <div class="card">
-                        <img src="https://img.freepik.com/premium-vector/illustration-vector-graphic-cartoon-character-company-activity-report_516790-1825.jpg"
-                            style="height: 300px">
-                        <div class="card-body">
-                            <h1 class='text-center'>23</h1>
-                            <h2 class="card-text text-center">Reports</h2>
-                        </div>
-                        <div class="card-footer text-center">
-                            <a class="learn-more" href="{{ Route('indexReports') }}">
-                                <span class="circle" aria-hidden="true">
-                                    <span class="icon arrow"></span>
-                                </span>
-                                <span class="button-text">Chi Tiết</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card">
                         <img src="https://handsontek.net/images/Teams/Custom%20Backgrounds/hero.png" style="height: 300px">
                         <div class="card-body">
                             <h1 class='text-center'>@{{ data.client }}</h1>
@@ -219,7 +201,7 @@
             new Vue({
                 el: '#app',
                 data: {
-                    data : {},
+                    data: {},
                 },
                 created() {
                     this.getData();

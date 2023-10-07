@@ -19,7 +19,7 @@
         <div class="col-xl-3 col-lg-4 shop-col-width-lg-4">
             <div class="shop__sidebar--widget widget__area d-none d-lg-block">
                 <div class="single__widget widget__bg">
-                    <h2 class="widget__title h3">Dietary Needs</h2>
+                    <h2 class="widget__title h3">Thương Hiệu</h2>
                     <ul class="widget__form--check">
                         <li v-for='(v, k) in list_brands' class="widget__form--check__list">
                             <label class="widget__form--check__label" :for="'brand' + v.id">@{{ v.ten_thuong_hieu }} </label>
@@ -31,7 +31,7 @@
                     </ul>
                 </div>
                 <div class="single__widget widget__bg">
-                    <h2 class="widget__title h3">Dietary Needs</h2>
+                    <h2 class="widget__title h3">Loại Xe</h2>
                     <ul class="widget__form--check">
                         <li v-for='(v, k) in list_classification' class="widget__form--check__list">
                             <label class="widget__form--check__label" :for="'classification' + v.id">@{{ v.so_cho_ngoi }}
@@ -44,7 +44,7 @@
                     </ul>
                 </div>
                 <div class="single__widget price__filter widget__bg">
-                    <h2 class="widget__title h3">Filter By Price</h2>
+                    <h2 class="widget__title h3">Giá Thuê</h2>
                     <div class="price__filter--form__inner mb-15 d-flex align-items-center">
                         <div class="price__filter--group">
                             <label class="price__filter--label" for="Filter-Price-GTE2">From</label>
@@ -79,7 +79,8 @@
                     <div v-for='(v, k) in list' class="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30 ">
                         <article class="product__card" style="height: 372px;">
                             <div class="product__card--thumbnail">
-                                <a class="product__card--thumbnail__link display-block" :href="`/detail/${v.slug_xe}`">
+                                <a class="product__card--thumbnail__link display-block"
+                                    :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                     <img style="width: 100%; height: 150px;"
                                         class=" product__card--thumbnail__img product__primary--img" :src="v.images[0]"
                                         alt="product-img">
@@ -90,7 +91,7 @@
                                 <ul class="product__card--action d-flex align-items-center justify-content-center">
                                     <li class="product__card--action__list">
                                         <a class="product__card--action__btn" title="Quick View"
-                                            :href="`/detail/${v.slug_xe}`">
+                                            :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                             <svg class="product__card--action__btn--svg" width="16" height="16"
                                                 viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path
@@ -141,7 +142,7 @@
                             </div>
                             <div class="product__card--content">
                                 <h3 class="product__card--title">
-                                    <a :href="`/detail/${v.slug_xe}`">
+                                    <a :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`">
                                         @{{ v.ten_xe }}
                                     </a>
                                 </h3>
@@ -161,8 +162,8 @@
                                     <span class="old__price">@{{ numberFormat(v.gia_theo_ngay) }}</span>
                                 </div>
                                 <div class="product__card--footer">
-                                    <a :href="`/detail/${v.slug_xe}`" class="product__card--btn primary__btn"
-                                        data-open="modal1">
+                                    <a :href="`/detail/${v.slug_xe}/${v.isWishlists === 1 ? 1 : 0}`"
+                                        class="product__card--btn primary__btn" data-open="modal1">
                                         <i class="fa-solid fa-dollar-sign"></i>
                                         Thuê Xe
                                     </a>
@@ -437,6 +438,7 @@
                         };
                         axios.post('{{ Route('createWishlist') }}', payload)
                             .then((res) => {
+                                this.getData();
                                 $("#yeu_thich_1").html(res.data.danhsachTim);
                                 $("#yeu_thich_2").html(res.data.danhsachTim);
                                 vehicle.isFavorite = res.data.trang_thai;

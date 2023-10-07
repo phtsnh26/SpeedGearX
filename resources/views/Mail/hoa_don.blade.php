@@ -471,7 +471,7 @@
                                                             <tr>
                                                                 <td align="center"
                                                                     style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px;font-size:0px">
-                                                                    <img src="https://dzfullstack.com/assets/images/logo-1.png"
+                                                                    <img src="https://t3.ftcdn.net/jpg/02/76/92/60/360_F_276926042_iJjGU3S5pfmsyWkYBfhekgR5FLTduesS.jpg"
                                                                         alt
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         width="100">
@@ -479,7 +479,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td align="center" class="es-m-txt-c"
-                                                                    style="padding:0;Margin:0;padding-bottom:10px">
+                                                                    style="padding:0;Margin:0;padding-bottom:10px;">
                                                                     <h1
                                                                         style="Margin:0;line-height:44px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:44px;font-style:normal;font-weight:bold;color:#333333">
                                                                         ĐẶT HÀNG THÀNH CÔNG</h1>
@@ -506,7 +506,7 @@
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                        Chào,{{ $donHang['ten_nguoi_nhan'] }} . Chúng
+                                                                        Chào,{{ $data['ten_nguoi_nhan'] }} . Chúng
                                                                         tôi đã nhận được đơn đặt hàng của bạn của bạn.
                                                                         Đơn hàng của bạn được liệt kê ở bên dưới</p>
                                                                 </td>
@@ -544,7 +544,7 @@
                                                                     style="padding:0;Margin:0">
                                                                     <h2
                                                                         style="Margin:0;line-height:31px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:26px;font-style:normal;font-weight:bold;color:#333333">
-                                                                        Giỏ hàng</h2>
+                                                                        Hoá Đơn</h2>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -553,123 +553,120 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    @foreach ($chiTiet as $key => $value)
-                                        <tr>
-                                            <td class="esdev-adapt-off" align="left"
-                                                style="Margin:0;padding-top:10px;padding-bottom:10px;padding-left:20px;padding-right:20px">
-                                                <table cellpadding="0" cellspacing="0" class="esdev-mso-table"
-                                                    style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:560px">
-                                                    <tr>
-                                                        <td class="esdev-mso-td" valign="top"
-                                                            style="padding:0;Margin:0">
-                                                            <table cellpadding="0" cellspacing="0" class="es-left"
-                                                                align="left"
-                                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
-                                                                <tr>
-                                                                    <td class="es-m-p0r" align="center"
-                                                                        style="padding:0;Margin:0;width:110px">
-                                                                        <table cellpadding="0" cellspacing="0"
-                                                                            width="100%" role="presentation"
-                                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                            <tr>
-                                                                                <td align="center"
-                                                                                    style="padding:0;Margin:0;font-size:0px">
-                                                                                    <img class="adapt-img"
-                                                                                        src="{{ $value->hinh_anh }}"
-                                                                                        alt
-                                                                                        style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
-                                                                                        width="110">
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                        <td style="padding:0;Margin:0;width:20px"></td>
-                                                        <td class="esdev-mso-td" valign="top"
-                                                            style="padding:0;Margin:0">
-                                                            <table cellpadding="0" cellspacing="0" class="es-left"
-                                                                align="left"
-                                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
-                                                                <tr>
-                                                                    <td align="center"
-                                                                        style="padding:0;Margin:0;width:254px">
-                                                                        <table cellpadding="0" cellspacing="0"
-                                                                            width="100%" role="presentation"
-                                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                            <tr>
-                                                                                <td align="left"
-                                                                                    style="padding:0;Margin:0">
-                                                                                    <p
-                                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                                        <strong>{{ $value->ten_san_pham }}</strong>
-                                                                                    </p>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                        <td style="padding:0;Margin:0;width:20px"></td>
-                                                        <td class="esdev-mso-td" valign="top"
-                                                            style="padding:0;Margin:0">
-                                                            <table cellpadding="0" cellspacing="0" class="es-left"
-                                                                align="left"
-                                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
-                                                                <tr>
-                                                                    <td align="center"
-                                                                        style="padding:0;Margin:0;width:68px">
-                                                                        <table cellpadding="0" cellspacing="0"
-                                                                            width="100%" role="presentation"
-                                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                            <tr>
-                                                                                <td align="center"
-                                                                                    style="padding:0;Margin:0">
-                                                                                    <p
-                                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                                        {{ $value->so_luong_mua }}</p>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                        <td style="padding:0;Margin:0;width:20px"></td>
-                                                        <td class="esdev-mso-td" valign="top"
-                                                            style="padding:0;Margin:0">
-                                                            <table cellpadding="0" cellspacing="0" class="es-right"
-                                                                align="right"
-                                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right">
-                                                                <tr>
-                                                                    <td align="left"
-                                                                        style="padding:0;Margin:0;width:68px">
-                                                                        <table cellpadding="0" cellspacing="0"
-                                                                            width="100%" role="presentation"
-                                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                            <tr>
-                                                                                <td align="right"
-                                                                                    style="padding:0;Margin:0">
-                                                                                    <p
-                                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                                        <strong>{{ $value->thanh_tien_mua }}</strong>
-                                                                                    </p>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    <tr>
+                                        <td class="esdev-adapt-off" align="left"
+                                            style="Margin:0;padding-top:10px;padding-bottom:10px;padding-left:20px;padding-right:20px">
+                                            <table cellpadding="0" cellspacing="0" class="esdev-mso-table"
+                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:560px">
+                                                <tr>
+                                                    <td class="esdev-mso-td" valign="top"
+                                                        style="padding:0;Margin:0">
+                                                        <table cellpadding="0" cellspacing="0" class="es-left"
+                                                            align="left"
+                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
+                                                            <tr>
+                                                                <td class="es-m-p0r" align="center"
+                                                                    style="padding:0;Margin:0;width:110px">
+                                                                    <table cellpadding="0" cellspacing="0"
+                                                                        width="100%" role="presentation"
+                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                                                        <tr>
+                                                                            <td align="center"
+                                                                                style="padding:0;Margin:0;font-size:0px">
+                                                                                <img class="adapt-img"
+                                                                                    src="{{ $data['hinh_anh'] }}" alt
+                                                                                    style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
+                                                                                    width="110">
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="padding:0;Margin:0;width:20px"></td>
+                                                    <td class="esdev-mso-td" valign="top"
+                                                        style="padding:0;Margin:0">
+                                                        <table cellpadding="0" cellspacing="0" class="es-left"
+                                                            align="left"
+                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
+                                                            <tr>
+                                                                <td align="center"
+                                                                    style="padding:0;Margin:0;width:254px">
+                                                                    <table cellpadding="0" cellspacing="0"
+                                                                        width="100%" role="presentation"
+                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                                                        <tr>
+                                                                            <td align="left"
+                                                                                style="padding:0;Margin:0; margin-top:20px">
+                                                                                <p
+                                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                                    <strong>{{ $data['ten_xe'] }}</strong>
+                                                                                </p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="padding:0;Margin:0;width:20px"></td>
+                                                    <td class="esdev-mso-td" valign="top"
+                                                        style="padding:0;Margin:0">
+                                                        <table cellpadding="0" cellspacing="0" class="es-left"
+                                                            align="left"
+                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
+                                                            <tr>
+                                                                <td align="center"
+                                                                    style="padding:0;Margin:0;width:68px">
+                                                                    <table cellpadding="0" cellspacing="0"
+                                                                        width="100%" role="presentation"
+                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                                                        <tr>
+                                                                            <td align="center"
+                                                                                style="padding:0;Margin:0;margin-top:20px">
+                                                                                <p
+                                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                                    {{ $data['so_luong_mua'] }}</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="padding:0;Margin:0;width:20px"></td>
+                                                    <td class="esdev-mso-td" valign="top"
+                                                        style="padding:0;Margin:0">
+                                                        <table cellpadding="0" cellspacing="0" class="es-right"
+                                                            align="right"
+                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right">
+                                                            <tr>
+                                                                <td align="left"
+                                                                    style="padding:0;Margin:0;width:68px">
+                                                                    <table cellpadding="0" cellspacing="0"
+                                                                        width="100%" role="presentation"
+                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                                                        <tr>
+                                                                            <td align="right"
+                                                                                style="padding:0;Margin:0;margin-top:20px">
+                                                                                <p
+                                                                                    style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                                    <strong>{{ $data['thanh_tien_mua'] }}</strong>
+                                                                                </p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="esdev-adapt-off" align="left"
                                             style="padding:0;Margin:0;padding-bottom:20px;padding-left:20px;padding-right:20px">
@@ -687,7 +684,7 @@
                                                                     <h3
                                                                         style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:20px;font-style:normal;font-weight:bold;color:#333333">
                                                                         Tổng
-                                                                        Tiền:&nbsp;<strong>{{ $donHang['tong_tien'] }}</strong>
+                                                                        Tiền:&nbsp;<strong>{{ $data['thanh_tien_mua'] }}</strong>
                                                                     </h3>
                                                                 </td>
                                                             </tr>
@@ -710,11 +707,12 @@
                                                             role="presentation">
                                                             <tr>
                                                                 <td align="center" class="es-m-txt-r"
-                                                                    bgcolor="#999999"
+                                                                    bgcolor="#00000"
                                                                     style="padding:0;Margin:0;padding-top:5px">
                                                                     <h3
                                                                         style="Margin:0;line-height:23px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:19px;font-style:normal;font-weight:bold;color:#f9221c">
-                                                                        THÔNG TIN TÀI KHOẢN</h3>
+                                                                        THÔNG TIN TÀI KHOẢN
+                                                                    </h3>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -771,6 +769,14 @@
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
+                                                                        <b>CỌC 30%</b>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" style="padding:0;Margin:0">
+                                                                    <p
+                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
                                                                         <b>NỘI DUNG CHUYỂN KHOẢN</b>
                                                                     </p>
                                                                 </td>
@@ -791,7 +797,7 @@
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                        <strong>NGUYEN VAN PHONG</strong>
+                                                                        <strong>Le Cong Anh</strong>
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -807,7 +813,7 @@
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                        <strong>9345884657</strong>
+                                                                        <strong>9706085418</strong>
                                                                     </p>
                                                                 </td>
                                                             </tr>
@@ -815,14 +821,17 @@
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                        {{ $donHang->tong_tien }}</p>
+                                                                        <b>{{ $data['thanh_tien_mua'] }}</b>
+                                                                    </p>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td align="left" style="padding:0;Margin:0">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                        {{ $donHang->ma_gui_mail }}</p>
+                                                                        <b
+                                                                            style="color: red">{{ $data['thanh_tien_mua'] * 0.3 }}</b>
+                                                                    </p>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -856,7 +865,7 @@
                                                                     style="padding:0;Margin:0;padding-bottom:5px">
                                                                     <p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px">
-                                                                        &nbsp;©DZFullStack</p>
+                                                                        &nbsp;©Online Car Rental</p>
                                                                 </td>
                                                             </tr>
                                                         </table>

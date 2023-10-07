@@ -27,6 +27,7 @@ class WishlistController extends Controller
             ->leftJoin('images AS first_image', 'first_images.min_id', 'first_image.id')
             ->leftJoin('wishlists', 'wishlists.id_xe', 'vehicles.id')
             ->select('wishlists.*', 'first_image.hinh_anh_xe', 'vehicles.ten_xe', 'vehicles.slug_xe', 'vehicles.so_luong', 'vehicles.gia_theo_ngay')
+            ->where('vehicles.so_luong', '>=', 1)
             ->where('id_khach_hang', $client->id)
             ->get();
         $yeu_thich = count($data);
