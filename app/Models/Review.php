@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BookingDetail extends Model
+class Review extends Model
 {
     use HasFactory;
-    protected $table = 'booking_details';
+    protected $table = 'reviews';
     protected $fillable = [
-        'gia_thue',
-        'id_thue_xe',
+        'danh_gia',
+        'thoi_gian',
+        'so_sao',
+        'id_khach_hang',
         'id_xe',
     ];
 }

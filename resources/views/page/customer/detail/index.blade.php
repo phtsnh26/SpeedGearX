@@ -9,6 +9,16 @@
         #swiper-wrapper-7eedb9f2b2172155 {
             height: 380px;
         }
+
+        .yeuThich {
+            color: var(--secondary-color);
+            color: var(--text-white-color);
+        }
+
+        .form-check-input:checked {
+            background-color: red;
+            border-color: red;
+        }
     </style>
     <div id="app">
         <section class="product__details--section section--padding">
@@ -305,7 +315,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-20">
+                                    <div class="row">
                                         <div class="col-5">
                                             <div class="text-nowrap d-flex">
                                                 <span class="mt-1 me-3"><b>Số Lượng:</b></span>
@@ -332,11 +342,52 @@
                                                 sẵn</small>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="product__variant--list ">
+                                                @if (Auth::guard('client')->check())
+                                                    <a @click='themMoi()' class="variant__wishlist--icon mb-15"
+                                                        title="Add to wishlist">
+                                                        <div id='mauTim'>
+                                                            <template v-if='check == 1'><i v-if='check == 1'
+                                                                    class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>
+                                                            </template>
+                                                            <template v-if='check == 0'><svg
+                                                                    class="quickview__variant--wishlist__svg"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 512 512">
+                                                                    <path
+                                                                        d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
+                                                                        fill="none" stroke="currentColor"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="32" />
+                                                                </svg>
+                                                            </template>
+                                                        </div>
+                                                        Add to Wishlist
+                                                    </a>
+                                                @else
+                                                    <a class="variant__wishlist--icon mb-15" href="/login/client"
+                                                        title="Add to wishlist">
+                                                        <svg class="quickview__variant--wishlist__svg"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                            <path
+                                                                d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
+                                                                fill="none" stroke="currentColor"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="32" />
+                                                        </svg>
+                                                        Add to Wishlist
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-20">
                                     <div class="product__variant--list mb-15">
-                                        <button @click="themMoi()" class="variant__buy--now__btn primary__btn"
-                                            type="button">
-                                            <i class="fa-solid fa-car"></i> ADD MY CAR
-                                        </button>
+                                        <a @click='thueXe()' class="product__card--btn primary__btn" data-open="modal1">
+                                            Thuê Xe
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -350,9 +401,11 @@
                 <div class="row row-cols-1">
                     <div class="col">
                         <ul class="product__tab--one product__details--tab d-flex mb-30">
-                            <li class="product__details--tab__list active" data-toggle="tab" data-target="#description">
+                            <li @click='toDescription()' id="mo_ta" class="product__details--tab__list active"
+                                data-toggle="tab" data-target="#description">
                                 Mô Tả Chi Tiết</li>
-                            <li class="product__details--tab__list" data-toggle="tab" data-target="#reviews">Đánh Giá Của
+                            <li id="danh_gia" @click='toReview(); ' class="product__details--tab__list"
+                                data-toggle="tab" data-target="#reviews">Đánh Giá Của
                                 Khách Hàng
                             </li>
                         </ul>
@@ -366,13 +419,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="reviews" class="tab_pane">
+                                <div id="reviews" class="tab_pane ">
                                     <div class="product__reviews">
                                         <div class="product__reviews--header">
-                                            <h2 class="product__reviews--header__title h3 mb-20">Đánh Giá</h2>
+                                            <h2 class="product__reviews--header__title h3 mb-20">Đánh
+                                                Giá(@{{ tong_danh_gia }})</h2>
                                             <div class="reviews__ratting d-flex align-items-center">
                                                 <ul class="rating d-flex">
-                                                    <li class="rating__list">
+                                                    <li v-for='i in total' class="rating__list">
                                                         <span class="rating__icon">
                                                             <svg width="14" height="13" viewBox="0 0 14 13"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -382,37 +436,7 @@
                                                             </svg>
                                                         </span>
                                                     </li>
-                                                    <li class="rating__list">
-                                                        <span class="rating__icon">
-                                                            <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                    fill="currentColor"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </li>
-                                                    <li class="rating__list">
-                                                        <span class="rating__icon">
-                                                            <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                    fill="currentColor"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </li>
-                                                    <li class="rating__list">
-                                                        <span class="rating__icon">
-                                                            <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                    fill="currentColor"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </li>
-                                                    <li class="rating__list">
+                                                    <li v-for='i in 5 - total' class="rating__list">
                                                         <span class="rating__icon">
                                                             <svg width="14" height="13" viewBox="0 0 14 13"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -428,17 +452,20 @@
                                                 Giá</a>
                                         </div>
                                         <div class="reviews__comment--area">
-                                            <div class="reviews__comment--list d-flex">
+                                            <div v-for='(v, k) in reviews' class="reviews__comment--list d-flex">
                                                 <div class="reviews__comment--thumb">
-                                                    <img src="/partsix/assets/img/other/comment-thumb1.webp"
+                                                    <img v-if='v.anh_dai_dien == null'
+                                                        src="https://i.pinimg.com/236x/55/3e/97/553e979fb595d33403941cace9f5ba62.jpg"
                                                         alt="comment-thumb">
+                                                    <img v-else :src="v.anh_dai_dien" alt="comment-thumb">
                                                 </div>
                                                 <div class="reviews__comment--content">
                                                     <div class="reviews__comment--top d-flex justify-content-between">
                                                         <div class="reviews__comment--top__left">
-                                                            <h3 class="reviews__comment--content__title h4">Phan Tánh</h3>
+                                                            <h3 class="reviews__comment--content__title h4">
+                                                                @{{ v.ho_va_ten }}</h3>
                                                             <ul class="rating d-flex">
-                                                                <li class="rating__list">
+                                                                <li v-for='i in v.so_sao * 1' class="rating__list">
                                                                     <span class="rating__icon">
                                                                         <svg width="14" height="13"
                                                                             viewBox="0 0 14 13" fill="none"
@@ -449,40 +476,8 @@
                                                                         </svg>
                                                                     </span>
                                                                 </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
+                                                                <li v-for='i in (5 - (v.so_sao * 1))'
+                                                                    class="rating__list">
                                                                     <span class="rating__icon">
                                                                         <svg width="14" height="13"
                                                                             viewBox="0 0 14 13" fill="none"
@@ -495,159 +490,66 @@
                                                                 </li>
                                                             </ul>
                                                         </div>
-                                                        <span class="reviews__comment--content__date">Ngày đánh giá</span>
+                                                        <span
+                                                            class="reviews__comment--content__date">@{{ v.thoi_gian }}</span>
                                                     </div>
                                                     <p class="reviews__comment--content__desc">
-                                                        Đánh giá của khách hàng
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="reviews__comment--list margin__left d-flex">
-                                                <div class="reviews__comment--thumb">
-                                                    <img src="/partsix/assets/img/other/comment-thumb2.webp"
-                                                        alt="comment-thumb">
-                                                </div>
-                                                <div class="reviews__comment--content">
-                                                    <div class="reviews__comment--top d-flex justify-content-between">
-                                                        <div class="reviews__comment--top__left">
-                                                            <h3 class="reviews__comment--content__title h4">Lê Tôm</h3>
-                                                            <ul class="rating d-flex">
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                                <li class="rating__list">
-                                                                    <span class="rating__icon">
-                                                                        <svg width="14" height="13"
-                                                                            viewBox="0 0 14 13" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                fill="currentColor"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <span class="reviews__comment--content__date">Ngày đánh giá</span>
-                                                    </div>
-                                                    <p class="reviews__comment--content__desc">
-                                                        trả lời đánh giá...
+                                                        @{{ v.danh_gia }}
                                                     </p>
                                                 </div>
                                             </div>
 
+
                                         </div>
                                         <div id="writereview" class="reviews__comment--reply__area">
                                             <form action="#">
-                                                <h3 class="reviews__comment--reply__title mb-15">Add a review </h3>
+                                                <h3 class="reviews__comment--reply__title mb-15 ">Add a
+                                                    review </h3>
                                                 <div class="reviews__ratting mb-20">
                                                     <ul class="rating d-flex">
-                                                        <li class="rating__list">
-                                                            <span class="rating__icon">
-                                                                <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
+                                                        <li v-for='i in comment.so_sao' class="rating__list"
+                                                            style="cursor: :pointer">
+                                                            <a @click='chooseDesc(i)'>
+                                                                <span class="rating__icon">
+                                                                    <svg width="14" height="13"
+                                                                        viewBox="0 0 14 13" fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
+                                                                            fill="currentColor"></path>
+                                                                    </svg>
+                                                                </span>
+                                                            </a>
+
                                                         </li>
-                                                        <li class="rating__list">
-                                                            <span class="rating__icon">
-                                                                <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li class="rating__list">
-                                                            <span class="rating__icon">
-                                                                <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li class="rating__list">
-                                                            <span class="rating__icon">
-                                                                <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li class="rating__list">
-                                                            <span class="rating__icon">
-                                                                <svg width="14" height="13" viewBox="0 0 14 13"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                        fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
+
+                                                        <li v-for='i in 5 - comment.so_sao' class="rating__list"
+                                                            style="cursor: :pointer">
+                                                            <a @click='chooseDesc(i + comment.so_sao)'>
+                                                                <span class="rating__icon">
+                                                                    <svg width="14" height="13"
+                                                                        viewBox="0 0 14 13" fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
+                                                                            fill="currentColor"></path>
+                                                                    </svg>
+                                                                </span>
+                                                            </a>
                                                         </li>
                                                     </ul>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12 mb-10">
-                                                        <textarea class="reviews__comment--reply__textarea" placeholder="Your Comments...."></textarea>
+                                                        <textarea v-model='comment.text' class="reviews__comment--reply__textarea" placeholder="Your Comments...."></textarea>
                                                     </div>
                                                 </div>
-                                                <button class="primary__btn text-white" data-hover="Submit"
-                                                    type="submit">Gửi</button>
+                                                <button class="primary__btn text-white" @click='danh_gia()'
+                                                    type="button">Gửi</button>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -664,23 +566,83 @@
                 el: '#app',
                 data: {
                     data: {!! json_encode($data) !!},
+                    check: {!! json_encode($check) !!},
                     images: [{
                         hinh_anh_xe: ''
                     }],
                     index: 0,
                     add: {
-                        ngay_dat: '',
                         'so_luong': 1,
                     },
+                    check: true,
+                    comment: {
+                        so_sao: 0,
+                    },
+                    reviews: [],
+                    total: 0,
+                    tong_danh_gia: 0,
+
                 },
                 created() {
                     const today = new Date().toISOString().split('T')[0];
                     this.add.ngay_dat = today;
                     this.loadImage();
-                    this.listGioHang();
                     this.loadMyCar();
+                    this.dataReview();
+
                 },
+
                 methods: {
+                    dataReview() {
+                        axios
+                            .post('{{ route('dataReview') }}', this.data)
+                            .then((res) => {
+                                this.reviews = res.data.reviews;
+                                this.total = res.data.total;
+                                this.tong_danh_gia = res.data.tong_danh_gia;
+
+                            }).catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    chooseDesc(z) {
+                        this.comment.so_sao = z;
+                    },
+                    danh_gia() {
+                        this.comment.id_xe = this.data.id;
+                        axios
+                            .post('{{ route('createDescription') }}', this.comment)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Success');
+                                    this.dataReview();
+
+                                } else {
+                                    toastr.error(res.data.message, 'Error');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    toReview() {
+                        $(document).ready(function() {
+                            $('#reviews').addClass('active show');
+                            $('#description').removeClass('active show');
+                            $('#mo_ta').removeClass('active');
+                            $('#danh_gia').addClass('active');
+                        });
+                    },
+                    toDescription() {
+                        $('#description').addClass('active show');
+                        $('#reviews').removeClass('active show');
+                        $('#danh_gia').removeClass('active');
+                        $('#mo_ta').addClass('active');
+                    },
                     numberFormat(number) {
                         return new Intl.NumberFormat('vi-VI', {
                             style: 'currency',
@@ -714,33 +676,43 @@
                     selectImage(k) {
                         this.index = k;
                     },
-                    listGioHang() {
+                    themMoi() {
+                        var payload = {
+                            ...this.add,
+                            id: this.data['id'],
+                        }
                         axios
-                            .get('{{ Route('dataGioHang') }}')
+                            .post('{{ Route('createWishlist') }}', payload)
                             .then((res) => {
-                                this.listCar = res.data.data
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
-                            });
-                    },
-                    loadMyCar() {
-                        axios
-                            .get('{{ Route('dataGioHang') }}')
-                            .then((res) => {
-                                mycar1 = this.listCar.length;
-                                mycar2 = this.listCar.length;
-                                $("#mycar1").html(mycar1);
-                                $("#mycar2").html(mycar2);
+                                $("#yeu_thich_1").html(res.data.danhsachTim);
+                                $("#yeu_thich_2").html(res.data.danhsachTim);
+                                var noi_dung = '';
+
+                                if (res.data.trang_thai == 1) {
+                                    noi_dung =
+                                        '<i class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg"></i>';
+                                    $('#mauTim').html(noi_dung);
+                                    toastr.success(res.data.message);
+                                } else if (res.data.trang_thai == 0) {
+                                    noi_dung =
+                                        '<svg class="quickview__variant--wishlist__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> <path d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" /></svg>'
+                                    $('#mauTim').html(noi_dung);
+                                    toastr.info(res.data.message);
+                                } else {
+                                    toastr.error('Bạn cần đăng nhập trước khi thêm vào Wishlist');
+                                    setTimeout(() => {
+                                        location.href = "/login/client";
+                                    }, 1500);
+                                }
+                                $('#mauTim').html(noi_dung);
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Error');
+                                    toastr.error(v[0], 'Lỗi');
                                 });
                             });
                     },
-                    themMoi() {
+                    thueXe() {
                         var payload = {
                             ...this.add,
                             id: this.data['id'],
@@ -748,15 +720,20 @@
                             tien_coc: this.data['tien_coc']
                         }
                         axios
-                            .post('{{ Route('createGioHang') }}', payload)
+                            .post('{{ Route('createCehckOut') }}', payload)
                             .then((res) => {
                                 if (res.data.status == 1) {
-                                    toastr.success(res.data.message, 'Thành Công');
-                                    this.listGioHang();
+                                    var queryString = Object.keys(res.data.add).map(function(key) {
+                                        return encodeURIComponent(key) + '=' +
+                                            encodeURIComponent(res.data.add[key]);
+                                    }).join('&');
+                                    var newUrl = 'http://127.0.0.1:8000/client/check-out/?' +
+                                        queryString;
+                                    window.location.replace(newUrl);
                                 } else if (res.data.status == 0) {
                                     toastr.error(res.data.message, 'Lỗi');
                                 } else {
-                                    toastr.error('Bạn cần đăng nhập trước khi thêm vào My Car');
+                                    toastr.error('Bạn cần đăng nhập để có thể thuê xe', 'Lỗi');
                                     setTimeout(() => {
                                         location.href = "/login/client";
                                     }, 1500);
@@ -768,6 +745,7 @@
                                 });
                             });
                     },
+
                     cong() {
                         if (this.add.so_luong >= 0) {
                             this.add.so_luong++;

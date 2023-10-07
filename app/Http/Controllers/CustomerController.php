@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Checkout;
 use App\Models\Classification;
 use App\Models\Client;
 use App\Models\Customer;
@@ -17,18 +18,16 @@ class CustomerController extends Controller
 
     public function indexHome()
     {
-        return view('page.customer.home.index');
+        $user_login = Auth::guard('client')->check();
+        return view('page.customer.home.index', compact('user_login'));
     }
-
-
-    public function indexDetail($slug_xe)
-
+    public function indexDetail($slug_xe, $check)
     {
         $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
             ->where('slug_xe', '=', $slug_xe)->first();
         // dd($data);
-        return view('page.customer.detail.index', compact('data'));
+        return view('page.customer.detail.index', compact('data', 'check'));
     }
     public function loadImageDetail(Request $request)
     {
@@ -51,5 +50,4 @@ class CustomerController extends Controller
         Auth::guard('client')->logout();
         return redirect('/');
     }
-
 }

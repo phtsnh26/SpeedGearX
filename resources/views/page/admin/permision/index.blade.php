@@ -125,7 +125,7 @@
                     <div class="card-header d-flex justify-content-between">
                         <h4>Phân Quyền</h4>
                         <div class="form-check">
-                            <input v-model="selectAllChecked" @change="selectAll" class="form-check-input"
+                            <input v-model="selectAllChecked" @change="selectAll()" class="form-check-input"
                                 type="checkbox" value="" id="abcc">
                             <label class="form-check-label" for="abcc">
                                 Select All
@@ -172,6 +172,26 @@
                                         data-bs-dismiss="modal">Close</button>
                                     <button @click='themPhanQuyen()' data-bs-dismiss="modal" type="button"
                                         class="btn btn-primary">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="checkModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
                                 </div>
                             </div>
                         </div>
@@ -273,6 +293,7 @@
                                 if (res.data.status) {
                                     toastr.success(res.data.message, 'Success');
                                 } else {
+                                    // $('#checkModal').modal('toggle')
                                     toastr.error(res.data.message, 'Error');
                                 }
                             })
@@ -299,7 +320,6 @@
                         } else {
                             this.selectedQuyen.splice(selectedIndex, 1);
                         }
-
                         // Cập nhật trạng thái của selectAllChecked dựa trên số lượng checkbox được chọn
                         this.selectAllChecked = this.selectedQuyen.length === this.list_quyen.length;
                     },
@@ -307,7 +327,7 @@
                         axios
                             .post('{{ route('xoaListPhanQuyen') }}', this.selectedQuyen)
                             .then((res) => {
-                                if(res.data.status) {
+                                if (res.data.status) {
                                     toastr.success(res.data.message, 'Success');
                                 } else {
                                     toastr.error(res.data.message, 'Error');
@@ -315,7 +335,7 @@
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0] , 'error');
+                                    toastr.error(v[0], 'error');
                                 });
                             });
                     }

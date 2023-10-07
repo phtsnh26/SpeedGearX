@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('ma_hoa_don');
             $table->double('thanh_tien');
-            $table->dateTime('ngay_dat');
-            $table->dateTime('ngay_tra');
-            $table->dateTime('ngay_nhan_xe');
+            $table->date('ngay_dat');
+            $table->date('ngay_tra');
             $table->text('ghi_chu')->nullable();
             $table->integer('tinh_trang')->default(0);
+            $table->integer('so_luong')->default(0);
             $table->integer('id_khach_hang');
-            $table->integer('id_hop_dong');
+            $table->integer('id_xe');
             $table->timestamps();
         });
     }

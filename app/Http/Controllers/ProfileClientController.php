@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordClientRequest;
 use App\Http\Requests\UpdateProfileClientRequest;
+use App\Models\Booking;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class ProfileClientController extends Controller
             'data'   => $client,
         ]);
     }
+
     public function updateProfile(UpdateProfileClientRequest $request)
     {
         $user_login = Auth::guard('client')->user();
@@ -30,6 +32,7 @@ class ProfileClientController extends Controller
                 'cccd' => $request->cccd,
                 'bang_lai_xe' => $request->bang_lai_xe,
                 'gioi_tinh' => $request->gioi_tinh,
+                'anh_dai_dien' => $request->anh_dai_dien
             ]);
         return response()->json([
             'status'    => 1,
@@ -52,7 +55,29 @@ class ProfileClientController extends Controller
         ]);
     }
 
-    public function order(){
+    public function order()
+    {
         return view('page.customer.order.index');
+    }
+    public function dataOrder()
+    {
+        $client = Auth::guard('client')->user();
+        $data = Booking::leftJoin('clients', 'bookings.id_khach_hang', 'clients.id')
+            ->leftJoin('vehicles', 'vehicles.id', 'bookings.id_xe')
+            ->leftJoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
+            ->leftJoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            ->select('bookings.*', 'vehicles.ten_xe',  'brands.ten_thuong_hieu', 'classifications.so_cho_ngoi')
+            ->addSelect('clients.ho_va_ten', 'clients.ngay_sinh', 'clients.gioi_tinh', 'clients.dia_chi', 'clients.so_dien_thoai', 'clients.cccd', 'clients.bang_lai_xe')
+            ->addSelect('images.hinh_anh_xe')
+            ->where('id_khach_hang', $client->id)
+            ->leftJoin('images', function ($join) {
+                $join->on('images.id_xe', '=', 'vehicles.id')
+                    ->whereRaw('images.id = (SELECT MIN(id) FROM images WHERE images.id_xe = vehicles.id)');
+            })
+            ->orderByDESC('created_at')
+            ->get();
+        return response()->json([
+            'data' => $data,
+        ]);
     }
 }

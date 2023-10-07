@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gio_hangs', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('ten_xe');
-            $table->integer('so_luong');
-            $table->dateTime('ngay_dat');
-            $table->dateTime('ngay_tra');
-            $table->double('tong_tien');
-            $table->double('tien_coc')->nullable();
+            $table->string('danh_gia')->nullable();
+            $table->string('thoi_gian')->nullable();
+            $table->string('so_sao');
             $table->integer('id_khach_hang');
             $table->integer('id_xe');
-            $table->integer('id_thue_xe');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gio_hangs');
+        Schema::dropIfExists('reviews');
     }
 };

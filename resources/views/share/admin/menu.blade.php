@@ -93,11 +93,6 @@
                                 <span data-i18n="Documentation">Testimonials </span></a>
                         </li>
                         <li data-menu=""><a class="dropdown-item d-flex align-items-center"
-                                href="{{ Route('indexReports') }}" data-bs-toggle="" data-i18n="Documentation">
-                                <i class="fa-solid fa-user-pen"></i>
-                                <span data-i18n="Documentation">Reports</span></a>
-                        </li>
-                        <li data-menu=""><a class="dropdown-item d-flex align-items-center"
                                 href="{{ Route('indexUser') }}" data-bs-toggle="" data-i18n="Documentation">
                                 <i class="fa-solid fa-users"></i>
                                 <span data-i18n="Documentation">Registered Users</span></a>
@@ -116,8 +111,7 @@
                                 <span data-i18n="Documentation">Personnel</span></a>
                         </li>
                         <li data-menu=""><a class="dropdown-item d-flex align-items-center"
-                                href="{{ Route('viewPermision') }}" data-bs-toggle=""
-                                data-i18n="Documentation">
+                                href="{{ Route('viewPermision') }}" data-bs-toggle="" data-i18n="Documentation">
                                 <i class="fas fa-user-lock"></i>
                                 <span data-i18n="Documentation">Permision</span></a>
                         </li>
