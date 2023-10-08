@@ -46,7 +46,7 @@
                             <div class="col">
                                 <div class="mb-1">
                                     <label for="" class="form-label">password</label>
-                                    <input v-model='add.password' type="text" class="form-control" name=""
+                                    <input v-model='add.password' type="password" class="form-control" name=""
                                         id="" aria-describedby="helpId" placeholder="">
                                 </div>
                             </div>
@@ -138,8 +138,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for='(v, k) in list' class='text-nowrap align-middle'>
-                                        <th class='text-center'>@{{ k + 1 }}</th>
+                                    <tr v-if='v.ten_quyen != "Giám Đốc"' v-for='(v, k) in list' class='text-nowrap align-middle'>
+                                        <th class='text-center'>@{{ k + 0 }}</th>
                                         <td class='text-center'>
                                             <img width="100px" height="133px" :src="v.anh_minh_chung" class='img-fluid'
                                                 alt="">
@@ -151,23 +151,27 @@
                                         <td>@{{ v.gioi_tinh }}</td>
                                         <td>@{{ v.so_dien_thoai }}</td>
                                         <td>@{{ v.cccd }}</td>
-                                        <td>@{{ v.id_phan_quyen }}</td>
-                                        <td class='text-center'>
-                                            <button @click='changeStatus(v, 1); index = k' v-if='v.tinh_trang == 1' style="width: 140px"
-                                                class='btn btn-relief-success'>Hiển Thị</button>
-                                            <button @click='changeStatus(v, -1); index = k' v-else-if='v.tinh_trang == -1' style="width: 140px"
-                                                class='btn btn-relief-danger'>Khoá</button>
+                                        <td v-if='v.ten_quyen'>@{{ v.ten_quyen }}</td>
+                                        <td v-else>Chưa được cấp quyền</td>
+                                        <td class='text-center align-middle'>
+                                            <button @click='changeStatus(v, 1); index = k' v-if='v.tinh_trang == 1'
+                                                style="width: 140px" class='btn btn-relief-success'>Hiển Thị</button>
+                                            <button @click='changeStatus(v, -1); index = k' v-else-if='v.tinh_trang == -1'
+                                                style="width: 140px" class='btn btn-relief-danger'>Khoá</button>
                                             <button v-else-if='v.tinh_trang == 0' style="width: 140px"
                                                 class='btn btn-relief-warning'>Chờ Xác Nhận</button>
                                         </td>
-                                        <td class="text-center ">
-                                            <button class="btn btn-primary mb-1">Cấp Quyền</button>
+                                        <td class="text-center align-middle ">
+                                            <button @click='uyQuyen = Object.assign({}, v); index = k; layQuyen()'
+                                                data-bs-toggle="modal" data-bs-target="#capQuyenModal"
+                                                class="btn btn-primary mb-1 mt-1">Cấp
+                                                Quyền</button>
                                             <i @click='edit = Object.assign({}, v); index = k' data-bs-toggle="modal"
-                                                data-bs-target="#capNhatModal" class="fa-solid fa-edit text-info mx-1"
-                                                style="font-size: 35px; cursor: pointer;"></i>
+                                                data-bs-target="#capNhatModal" class="fa-solid fa-edit text-info mx-1  "
+                                                style="font-size: 35px; cursor: pointer; margin-top: 10px"></i>
                                             <i @click='del = v; index = k' data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" class="fa-solid fa-trash text-danger"
-                                                style="font-size: 35px; cursor: pointer;"></i>
+                                                data-bs-target="#deleteModal" class="fa-solid fa-trash text-danger "
+                                                style="font-size: 35px; cursor: pointer; margin-top: 5px"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -195,6 +199,32 @@
                                             <button @click='xoa()' type="button" class="btn btn-primary"
                                                 data-bs-dismiss="modal">Đuổi
                                                 việc</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div div class="modal fade" id="capQuyenModal" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cấp Quyền</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select class='form-select' v-model='id_quyen'>
+                                                <option :value="v.id" v-for='(v,k) in list_quyen'
+                                                    :checked='v.id == id_quyen ? true : false'>
+                                                    @{{ v.ten_quyen }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Thoát</button>
+                                            <button data-bs-dismiss="modal" v-on:click="capChucVu()" type="button"
+                                                class="btn btn-primary">Cấp Quyền</button>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +270,7 @@
                                                 <div class="col">
                                                     <div class="mb-1">
                                                         <label for="" class="form-label">password</label>
-                                                        <input v-model='edit.password' type="text"
+                                                        <input v-model='edit.password' type="password"
                                                             class="form-control" name="" id=""
                                                             aria-describedby="helpId" placeholder="">
                                                     </div>
@@ -333,6 +363,9 @@
                     edit: {},
                     del: {},
                     index: 0,
+                    uyQuyen: {},
+                    id_quyen: 0,
+                    list_quyen: [],
                 },
                 created() {
                     this.getData();
@@ -343,6 +376,7 @@
                             .get('{{ route('dataPersonnel') }}')
                             .then((res) => {
                                 this.list = res.data.data;
+                                this.list_quyen = res.data.dataQuyen;
                             });
                     },
                     them_moi() {
@@ -351,7 +385,7 @@
                             .then((res) => {
                                 if (res.data.status) {
                                     this.add.id_phan_quyen = "nhân viên quèn";
-                                    this.add.tinh_trang = 1;
+                                    this.add.tinh_trang = 0;
                                     toastr.success(res.data.message, 'Success');
                                     this.list.push(this.add);
                                 } else {
@@ -398,17 +432,17 @@
                                 });
                             });
                     },
-                    changeStatus(v, a){
+                    changeStatus(v, a) {
                         axios
                             .post('{{ route('changeStatusPersonnel') }}', v)
                             .then((res) => {
-                                if(res.data.status) {
+                                if (res.data.status) {
                                     toastr.success(res.data.message, 'Success');
                                     // this.list[$this.index].tinh_trang
-                                    if(a == 1){
-                                       this.list[this.index].tinh_trang = -1;
-                                    }else{
-                                       this.list[this.index].tinh_trang = 1;
+                                    if (a == 1) {
+                                        this.list[this.index].tinh_trang = -1;
+                                    } else {
+                                        this.list[this.index].tinh_trang = 1;
 
                                     }
                                 } else {
@@ -417,7 +451,44 @@
                             })
                             .catch((res) => {
                                 $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0] , 'error');
+                                    toastr.error(v[0], 'error');
+                                });
+                            });
+                    },
+                    layQuyen() {
+                        axios
+                            .post('{{ Route('capQuyenPersonnel') }}', this.uyQuyen)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    this.id_quyen = res.data.id_quyen;
+                                } else {
+                                    this.id_quyen = 0;
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Error');
+                                });
+                            });
+                    },
+                    capChucVu() {
+                        var payload = {
+                            'id_quyen': this.id_quyen,
+                            'id': this.uyQuyen,
+                        }
+                        axios
+                            .post('{{ Route('capCVPersonnel') }}', payload)
+                            .then((res) => {
+                                if (res.data.status) {
+                                    toastr.success(res.data.message, 'Thành Công');
+                                    this.getData();
+                                } else {
+                                    toastr.error(res.data.message, 'Lỗi');
+                                }
+                            })
+                            .catch((res) => {
+                                $.each(res.response.data.errors, function(k, v) {
+                                    toastr.error(v[0], 'Error');
                                 });
                             });
                     }

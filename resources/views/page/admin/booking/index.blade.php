@@ -172,8 +172,8 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button  data-bs-dismiss="modal" v-on:click="changeStatus()" type="button"
-                                                    class="btn btn-primary">Save</button>
+                                                <button data-bs-dismiss="modal" v-on:click="changeStatus()"
+                                                    type="button" class="btn btn-primary">Save</button>
                                             </div>
                                         </div>
                                     </div>

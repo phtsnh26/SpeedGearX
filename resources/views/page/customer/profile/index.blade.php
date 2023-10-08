@@ -7,9 +7,9 @@
                 <div class="row d-flex align-items-center">
                     <div class="col-4">
                         <img v-if='profile.anh_dai_dien == null' @click="addImage" type="button"
-                            src="https://inkythuatso.com/uploads/thumbnails/800/2022/03/avatar-mac-dinh-nu-co-mau-30-10-31-43.jpg"
+                            src="https://i.pinimg.com/236x/55/3e/97/553e979fb595d33403941cace9f5ba62.jpg"
                             alt="" style="height: 100px; width: 100px;">
-                        <img v-else  @click="addImage" type="button" :src="profile.anh_dai_dien" alt=""
+                        <img v-else @click="addImage" type="button" :src="profile.anh_dai_dien" alt=""
                             style="height: 100px; width: 100px;">
                     </div>
                     <div class="col-8">

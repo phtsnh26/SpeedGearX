@@ -27,7 +27,7 @@ use App\Models\WareHouse;
 use Illuminate\Support\Facades\Route;
 //  =============================================BANKING============================================================
 
-
+// Route::post('/momo_payment', [CheckoutController::class, 'momo_payment']);
 
 //  =============================================ADMINS============================================================
 
@@ -43,6 +43,8 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::get('/data', [PersonnelController::class, 'dataPersonnel'])->name('dataPersonnel');
         Route::post('/create', [PersonnelController::class, 'store'])->name('createPersonnel');
         Route::post('/update', [PersonnelController::class, 'update'])->name('updatePersonnel');
+        Route::post('/cap-quyen', [PersonnelController::class, 'capQuyen'])->name('capQuyenPersonnel');
+        Route::post('/cap-chuc-vu', [PersonnelController::class, 'capCV'])->name('capCVPersonnel');
         Route::post('/delete', [PersonnelController::class, 'destroy'])->name('deletePersonnel');
         Route::post('/changeStatus', [PersonnelController::class, 'changeStatus'])->name('changeStatusPersonnel');
         Route::get('/dataNotification', [PermisionController::class, 'index'])->name('viewPermision');
@@ -132,6 +134,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 
     Route::group(['prefix' => 'review'], function () {
         Route::get('/', [ReviewController::class, 'indexTestimonial'])->name('indexTestimonial');
+        Route::get('/data', [ReviewController::class, 'data'])->name('dataTestimonial');
     });
 
 
@@ -149,6 +152,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 Route::get('/login/client', [LoginCustomerController::class, 'indexLoginCustomer'])->name('indexLoginCustomer');
 Route::post('/client/signIn', [LoginCustomerController::class, 'signIn'])->name('signInClient');
 Route::get('/active/{code}', [LoginCustomerController::class, 'activeAccount']);
+Route::get('/active-admin', [LoginCustomerController::class, 'activeAdmin']);
 Route::get('/logOut', [CustomerController::class, 'logOut'])->name('logOutClient');
 
 
@@ -208,4 +212,3 @@ Route::get('/all-product/data-menu', [homapageController::class, 'dataMenuAllPro
 Route::post('/all-product/fillter', [homapageController::class, 'filter'])->name('filterAllProduct');
 
 Route::post('/data', [ReviewController::class, 'dataReview'])->name('dataReview');
-
