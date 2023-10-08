@@ -61,9 +61,9 @@ class homapageController extends Controller
         }
         $image = Images::get();
         return response()->json([
-            'brand'   =>  $brand,
-            'classification'   =>  $classification,
-            'data'   =>  $data,
+            'brand' => $brand,
+            'classification' => $classification,
+            'data' => $data,
             'images' => $image,
 
         ]);
@@ -77,8 +77,8 @@ class homapageController extends Controller
             $classification = Classification::get();
             $wishlist = Wishlist::where('id_khach_hang', $check->id)->get();
             $wishlistIds = $wishlist->pluck('id_xe')->toArray();
-            if (count($wishlistIds)  == 0) {
-                $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            if (count($wishlistIds) == 0) {
+                $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
                     ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
                     ->select('vehicles.*', 'classifications.so_cho_ngoi')
                     ->where('brands.tinh_trang', 1)
@@ -89,7 +89,7 @@ class homapageController extends Controller
                 $soPage = ceil($data->count() / 9);
                 $data = $data->paginate(9, ["*"], $soPage);
             } else {
-                $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
                     ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
                     ->select('vehicles.*', 'classifications.so_cho_ngoi')
                     ->where('brands.tinh_trang', 1)
@@ -103,13 +103,14 @@ class homapageController extends Controller
         } else {
             $brand = Brand::where('tinh_trang', 1)->get();
             $classification = Classification::get();
-            $data =  Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+            $data = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
                 ->leftjoin('brands', 'brands.id', 'vehicles.id_thuong_hieu')
                 ->select('vehicles.*', 'classifications.so_cho_ngoi')
                 ->where('brands.tinh_trang', 1)
                 ->where('vehicles.tinh_trang', 1)
-                ->orderByDESC('vehicles.created_at')
-                ->paginate(9, ["*"], 2);
+                ->orderByDESC('vehicles.created_at');
+            $soPage = ceil($data->count() / 9);
+            $data = $data->paginate(9, ["*"], $soPage);
         }
         $image = Images::get();
 
@@ -127,11 +128,10 @@ class homapageController extends Controller
             }
         }
         return response()->json([
-            'brand'   =>  $brand,
-            'classification'   =>  $classification,
-            'data'   =>  $data,
+            'brand' => $brand,
+            'classification' => $classification,
+            'data' => $data,
             'images' => $image,
-            'check' => $check,
         ]);
     }
 
@@ -147,7 +147,7 @@ class homapageController extends Controller
         $list = Brand::get();
         $classification = Classification::get();
         return response()->json([
-            'list'   => $list,
+            'list' => $list,
             'classification' => $classification
         ]);
     }
@@ -168,33 +168,107 @@ class homapageController extends Controller
             $min = 0;
             $max = 999999999;
         }
-        // $min = $request->input('min', 0);
-        // $max = $request->input('max', 999999999);
+        $check = Auth::guard('client')->user();
+        if ($check) {
+            $brands = $request->input('id_brands', []);
+            $classifications = $request->input('id_classifications', []);
+            $wishlist = Wishlist::where('id_khach_hang', $check->id)->get();
+            $wishlistIds = $wishlist->pluck('id_xe')->toArray();
+            if (count($wishlistIds) == 0) {
+                $query = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                    ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                    ->addSelect(DB::raw('IF(true, 0, 1) as isWishlists'))
 
-        $brands = $request->input('id_brands', []);
-        $classifications = $request->input('id_classifications', []);
+                    ->where('gia_theo_ngay', '>=', $min)
+                    ->where('gia_theo_ngay', '<=', $max)
+                    ->where('tinh_trang', 1);
 
-        $query = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                if (!empty($brands)) {
+                    $query->whereIn('id_thuong_hieu', $brands);
+                }
+
+                if (!empty($classifications)) {
+                    $query->whereIn('id_loai_xe', $classifications);
+                }
+
+                $soPage = ceil($query->count() / 9);
+                $data = $query->paginate(9, ["*"], $soPage);
+                $image = Images::get();
+            } else {
+
+                $query = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
+                    ->select('vehicles.*', 'classifications.so_cho_ngoi')
+                    ->addSelect(DB::raw('IF(true, 0, 1) as isWishlists'))
+                    ->addSelect(DB::raw('IF(vehicles.id IN (' . implode(',', $wishlistIds) . '), 1, 0) as isWishlists'))
+                    ->where('gia_theo_ngay', '>=', $min)
+                    ->where('gia_theo_ngay', '<=', $max)
+                    ->where('tinh_trang', 1);
+                if (!empty($brands)) {
+                    $query->whereIn('id_thuong_hieu', $brands);
+                }
+                if (!empty($classifications)) {
+                    $query->whereIn('id_loai_xe', $classifications);
+                }
+                $soPage = ceil($query->count() / 9);
+                // $data = $query->paginate(9, ["*"], $soPage);
+                $data = $query->paginate(9, ["*"], $soPage);
+                $image = Images::get();
+                // dd($data->toArr());
+
+            }
+            if ($data->isNotEmpty()) {
+                foreach ($data as $vehicle) {
+                    $totalRating = 0;
+                    $reviews = Review::where('id_xe', $vehicle->id)->get();
+                    foreach ($reviews as $review) {
+                        $totalRating += $review->so_sao;
+                    }
+                    $averageRating = ($reviews->count() > 0) ? round($totalRating / $reviews->count()) : 0;
+                    $vehicle->so_luot_danh_gia = $reviews->count();
+                    $vehicle->tbc_sao = $averageRating;
+                    $vehicle->reviews = $reviews;
+                }
+            }
+            return response()->json([
+                'status' => 1,
+                'data' => $data,
+                'image' => $image,
+            ]);
+        }else{
+
+            $query = Vehicle::leftjoin('classifications', 'classifications.id', 'vehicles.id_loai_xe')
             ->select('vehicles.*', 'classifications.so_cho_ngoi')
+            ->addSelect(DB::raw('IF(true, 0, 1) as isWishlists'))
             ->where('gia_theo_ngay', '>=', $min)
-            ->where('gia_theo_ngay', '<=', $max)
-            ->where('tinh_trang', 1);
-
-        if (!empty($brands)) {
-            $query->whereIn('id_thuong_hieu', $brands);
+                ->where('gia_theo_ngay', '<=', $max)
+                ->where('tinh_trang', 1);
+            if (!empty($brands)) {
+                $query->whereIn('id_thuong_hieu', $brands);
+            }
+            if (!empty($classifications)) {
+                $query->whereIn('id_loai_xe', $classifications);
+            }
+            $soPage = ceil($query->count() / 9);
+            $data = $query->paginate(9, ["*"], $soPage);
+            $image = Images::get();
+            if ($data->isNotEmpty()) {
+                foreach ($data as $vehicle) {
+                    $totalRating = 0;
+                    $reviews = Review::where('id_xe', $vehicle->id)->get();
+                    foreach ($reviews as $review) {
+                        $totalRating += $review->so_sao;
+                    }
+                    $averageRating = ($reviews->count() > 0) ? round($totalRating / $reviews->count()) : 0;
+                    $vehicle->so_luot_danh_gia = $reviews->count();
+                    $vehicle->tbc_sao = $averageRating;
+                    $vehicle->reviews = $reviews;
+                }
+            }
+            return response()->json([
+                'status' => 1,
+                'data' => $data,
+                'image' => $image,
+            ]);
         }
-
-        if (!empty($classifications)) {
-            $query->whereIn('id_loai_xe', $classifications);
-        }
-
-        $data = $query->get();
-        $image = Images::get();
-
-        return response()->json([
-            'status' => 1,
-            'data' => $data,
-            'image' => $image,
-        ]);
     }
 }
