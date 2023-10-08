@@ -169,9 +169,10 @@ class homapageController extends Controller
             $max = 999999999;
         }
         $check = Auth::guard('client')->user();
+        $brands = $request->input('id_brands', []);
+        $classifications = $request->input('id_classifications', []);
         if ($check) {
-            $brands = $request->input('id_brands', []);
-            $classifications = $request->input('id_classifications', []);
+
             $wishlist = Wishlist::where('id_khach_hang', $check->id)->get();
             $wishlistIds = $wishlist->pluck('id_xe')->toArray();
             if (count($wishlistIds) == 0) {
