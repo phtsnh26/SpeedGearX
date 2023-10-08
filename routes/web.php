@@ -27,7 +27,7 @@ use App\Models\WareHouse;
 use Illuminate\Support\Facades\Route;
 //  =============================================BANKING============================================================
 
-// Route::post('/momo_payment', [CheckoutController::class, 'momo_payment']);
+Route::post('/momo_payment', [CheckoutController::class, 'momo_payment']);
 
 //  =============================================ADMINS============================================================
 
@@ -146,6 +146,8 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::post('/del', [ClientController::class, 'del'])->name('delUser');
     });
 });
+
+Route::get('/da-coc/{a}', [CheckoutController::class, 'daCoc'])->name('thanhToanThanhCong');
 
 //  =============================================CLIENTS============================================================
 

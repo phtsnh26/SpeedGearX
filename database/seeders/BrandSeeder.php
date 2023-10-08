@@ -32,7 +32,7 @@ class BrandSeeder extends Seeder
                 'ten_thuong_hieu' => 'Mercedes',
                 'slug_thuong_hieu' => 'mercedes',
                 'tinh_trang' => 0,
-                'hinh_anh' => 'https://choxe.vn/blog/wp-content/uploads/2019/01/Mercedes-Benz.png',
+                'hinh_anh' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/1200px-Mercedes-Logo.svg.png',
             ],
             [
                 'ten_thuong_hieu' => 'Ferrari',

@@ -188,7 +188,6 @@ class BookingController extends Controller
     }
     public function create(Request $request)
     {
-        dd($request->all());
         $client = Auth::guard('client')->user();
         $maxId = Booking::max('id');
 
@@ -213,6 +212,7 @@ class BookingController extends Controller
         ]);
 
         if ($thanh_toan) {
+
             $xe = Vehicle::find($request->id);
             $xe->update([
                 'so_luong' => $xe->so_luong - $request->so_luong,
@@ -230,10 +230,10 @@ class BookingController extends Controller
                 $accessKey = 'klm05TvNBzhg7h7j';
                 $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
                 $orderInfo = "Thanh toán qua MoMo";
-                $amount = str($_POST['total_momo'] * 10000);
+                $amount = str($request->tong_tien * 10000 * 0.3);
                 $orderId = time() . "";
-                $returnUrl = "http://127.0.0.1:8000/client/check-out";
-                $notifyurl = "http://127.0.0.1:8000/client/check-out";
+                $returnUrl = "http://127.0.0.1:8000/da-coc/" . $thanh_toan->id;
+                $notifyurl = "http://127.0.0.1:8000/da-coc/" . $thanh_toan->id;
                 $bankCode = "SML";
                 $requestId = time() . "";
                 $requestType = "payWithMoMoATM";
@@ -257,38 +257,25 @@ class BookingController extends Controller
                 ];
                 $result = $this->execPostRequest($endpoint, json_encode($data));
                 $jsonResult = json_decode($result, true);
-
                 if ($jsonResult) {
-                    // Thực hiện hàm khi $jsonResult thành công
-                    $xe = Vehicle::find($request->id);
-                    $xe->update([
-                        'so_luong' => $xe->so_luong - $request->so_luong,
-                    ]);
-
                     $data['ten_nguoi_nhan'] = $client->ho_va_ten;
                     $data['hinh_anh'] = 'https://autopro8.mediacdn.vn/2021/10/2/photo-3-16331375538842003973831.jpg';
                     $data['ten_xe'] = $xe->ten_xe;
                     $data['so_luong_mua'] = $request->so_luong;
                     $data['thanh_tien_mua'] = $request->tong_tien;
                     Mail::to($client->email)->send(new don_hang($data));
-
-                    return response()->json([
-                        'status' => 1,
-                        'message' => 'Kiểm tra hóa đơn trong Email',
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Xử lý khi $jsonResult không thành công',
-                    ]);
                 }
+                return response()->json([
+                    'status'    => 2,
+                    'linkUrl'   => $jsonResult['payUrl']
+                ]);
+                // return redirect($jsonResult['payUrl']);
             }
         }
 
-        // Xử lý khi $thanh_toan không thành công
         return response()->json([
             'status' => 0,
-            'message' => 'Xử lý khi $thanh_toan không thành công',
+            'message' => 'Xử lý khi thanh toán không thành công',
         ]);
     }
 }

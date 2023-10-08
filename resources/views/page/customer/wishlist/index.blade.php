@@ -40,14 +40,15 @@
                                                     <td class="cart__table--body__list">
                                                         <div class="product__image two  d-flex align-items-center">
                                                             <div class="product__thumbnail border-radius-5">
-                                                                <a class="display-block" :href="'/detail/' + v.slug_xe">
+                                                                <a class="display-block"
+                                                                    :href="'/detail/' + v.slug_xe + '/1'">
                                                                     <img class="display-block border-radius-5"
                                                                         v-bind:src="v.hinh_anh_xe" alt="cart-product">
                                                                 </a>
                                                             </div>
                                                             <div class="product__description">
                                                                 <h4 class="product__description--name">
-                                                                    <a :href="'/detail/' + v.slug_xe">
+                                                                    <a :href="'/detail/' + v.slug_xe + '/1'">
                                                                         @{{ v.ten_xe }}
                                                                     </a>
                                                                 </h4>
@@ -61,8 +62,8 @@
                                                             @{{ numberFormat(v.gia_theo_ngay) }}</p>
                                                     </td>
                                                     <td>
-                                                        <a :href="`/detail/${v.slug_xe}`" class="minicart__product--remove"
-                                                            type="button">
+                                                        <a :href="`/detail/${v.slug_xe}/1`"
+                                                            class="minicart__product--remove" type="button">
                                                             Thuê Xe
                                                         </a>
                                                     </td>

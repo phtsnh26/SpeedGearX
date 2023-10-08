@@ -113,13 +113,9 @@
                                 class="mb-3 checkout__now--btn primary__btn" type="button">
                                 THUÊ XE
                             </button>
-                            <form v-else action="{{ url('/admin/bookings/create') }}" method="POST">
-                                @csrf
-                                <input hidden type="text" name='total_momo' :value=" data.get('tong_tien') * 0.3">
-                                <button name='payUrl' class="checkout__now--btn primary__btn" type="submit">
-                                    THUÊ XE
-                                </button>
-                            </form>
+                            <button v-else name='payUrl' class="checkout__now--btn primary__btn" @click='thueXe()'>
+                                THUÊ XE
+                            </button>
                         </aside>
                     </div>
                 </div>
@@ -188,9 +184,13 @@
                             .post('{{ Route('createBooking') }}', this.add)
                             .then((res) => {
                                 if (res.data.status == 1) {
-                                    toastr.success(res.data.message, 'Thành Công');
+                                    toastr.success(res.data.message, 'Thành công')
                                     setTimeout(() => {
                                         window.location.href = '/';
+                                    }, 1000);
+                                } else if (res.data.status == 2) {
+                                    setTimeout(() => {
+                                        window.location.href = res.data.linkUrl;
                                     }, 1000);
                                 } else {
                                     $('#btnThueXe').prop('disabled', false);
@@ -198,9 +198,7 @@
                                 }
                             })
                             .catch((res) => {
-                                $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Error');
-                                });
+                                console.log(res);
                             });
                     }
                 },
