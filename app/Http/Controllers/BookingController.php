@@ -164,56 +164,118 @@ class BookingController extends Controller
             ]);
         }
     }
+    public function execPostRequest($url, $data)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
     public function create(Request $request)
     {
-        // dd($request->all());
         $client = Auth::guard('client')->user();
         $maxId = Booking::max('id');
+
         if (!$maxId) {
             $maxId = 0;
         }
+
         $randomNumber = random_int(10000, 99999);
         $randomNumber2 = random_int(10000, 99999);
         $ma_hoa_don = 'MHD' . $randomNumber . $maxId + 1 . $randomNumber2;
+
         $thanh_toan = Booking::create([
             'ma_hoa_don' => $ma_hoa_don,
-            'thanh_tien'    => $request->tong_tien,
-            'ngay_dat'  => $request->ngay_dat,
+            'thanh_tien' => $request->tong_tien,
+            'ngay_dat' => $request->ngay_dat,
             'ngay_tra' => $request->ngay_tra,
             'ghi_chu' => $request->ghi_chu,
-            'so_luong'  => $request->so_luong,
+            'so_luong' => $request->so_luong,
             'tinh_trang' => 0,
             'id_khach_hang' => $client->id,
             'id_xe' => $request->id,
-
         ]);
+
         if ($thanh_toan) {
+
             $xe = Vehicle::find($request->id);
             $xe->update([
-                'so_luong' =>   $xe->so_luong - $request->so_luong,
+                'so_luong' => $xe->so_luong - $request->so_luong,
             ]);
+
             if ($request->phuong_thuc_thanh_toan == 1) {
                 return response()->json([
-                    'status'    => 1,
-                    'message'   => 'Kiểm tra tình trạng đơn tại Profile',
+                    'status' => 1,
+                    'message' => 'Kiểm tra tình trạng đơn tại Profile',
                 ]);
-            } else {
-                $data['ten_nguoi_nhan'] = $client->ho_va_ten;
-                $data['hinh_anh'] = 'https://autopro8.mediacdn.vn/2021/10/2/photo-3-16331375538842003973831.jpg';
-                $data['ten_xe'] = $xe->ten_xe;
-                $data['so_luong_mua'] = $request->so_luong;
-                $data['thanh_tien_mua'] = $request->tong_tien;
-                Mail::to($client->email)->send(new don_hang($data));
+            } else if ($request->phuong_thuc_thanh_toan == 2) {
+                header('Content-type: text/html; charset=utf-8');
+                $endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
+                $partnerCode = 'MOMOBKUN20180529';
+                $accessKey = 'klm05TvNBzhg7h7j';
+                $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+                $orderInfo = "Thanh toán qua MoMo";
+                $amount = str($request->tong_tien * 10000 * 0.3);
+                $orderId = time() . "";
+                $returnUrl = "http://127.0.0.1:8000/da-coc/" . $thanh_toan->id;
+                $notifyurl = "http://127.0.0.1:8000/da-coc/" . $thanh_toan->id;
+                $bankCode = "SML";
+                $requestId = time() . "";
+                $requestType = "payWithMoMoATM";
+                $extraData = "";
+
+                $rawHash = "partnerCode=" . $partnerCode . "&accessKey=" . $accessKey . "&requestId=" . $requestId . "&bankCode=" . $bankCode . "&amount=" . $amount . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&returnUrl=" . $returnUrl . "&notifyUrl=" . $notifyurl . "&extraData=" . $extraData . "&requestType=" . $requestType;
+                $signature = hash_hmac("sha256", $rawHash, $secretKey);
+                $data = [
+                    'partnerCode' => $partnerCode,
+                    'accessKey' => $accessKey,
+                    'requestId' => $requestId,
+                    'amount' => $amount,
+                    'orderId' => $orderId,
+                    'orderInfo' => $orderInfo,
+                    'returnUrl' => $returnUrl,
+                    'bankCode' => $bankCode,
+                    'notifyUrl' => $notifyurl,
+                    'extraData' => $extraData,
+                    'requestType' => $requestType,
+                    'signature' => $signature
+                ];
+                $result = $this->execPostRequest($endpoint, json_encode($data));
+                $jsonResult = json_decode($result, true);
+                if ($jsonResult) {
+                    $data['ten_nguoi_nhan'] = $client->ho_va_ten;
+                    $data['hinh_anh'] = 'https://autopro8.mediacdn.vn/2021/10/2/photo-3-16331375538842003973831.jpg';
+                    $data['ten_xe'] = $xe->ten_xe;
+                    $data['so_luong_mua'] = $request->so_luong;
+                    $data['thanh_tien_mua'] = $request->tong_tien;
+                    Mail::to($client->email)->send(new don_hang($data));
+                }
                 return response()->json([
-                    'status'    => 1,
-                    'message'   => 'Kiểm tra hóa đơn trong Email',
+                    'status'    => 2,
+                    'linkUrl'   => $jsonResult['payUrl']
                 ]);
+                // return redirect($jsonResult['payUrl']);
             }
-        } else {
-            return response()->json([
-                'status'    => 0,
-                'message'   => 'Thanh toán thất bại',
-            ]);
         }
+
+        return response()->json([
+            'status' => 0,
+            'message' => 'Xử lý khi thanh toán không thành công',
+        ]);
     }
 }

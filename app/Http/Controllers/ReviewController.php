@@ -15,7 +15,7 @@ class ReviewController extends Controller
     }
     public function create(Request $request)
     {
-        if(isset($request->so_sao) && $request->so_sao != 0){
+        if (isset($request->so_sao) && $request->so_sao != 0) {
 
             $time = Carbon::now();
             $user = Auth::guard('client')->user();
@@ -37,22 +37,29 @@ class ReviewController extends Controller
                     'message'   => 'Đánh giá thất bại!',
                 ]);
             }
-        }else {
+        } else {
             return response()->json([
                 'status'    => 0,
                 'message'   => 'Bạn chưa đánh giá số sao!',
             ]);
         }
     }
+    public function data()
+    {
+        $data =  Review::leftJoin('clients', 'clients.id', '=', 'reviews.id_khach_hang')
+            ->select('reviews.*', 'clients.*')
+            ->orderBy('reviews.created_at', 'DESC')
+            ->get();
+        return response()->json([
+            'data' => $data,
+        ]);
+    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function dataReview(Request $request)
     {
         $totall = 0;
         $reviews = Review::leftjoin('clients', 'clients.id', 'reviews.id_khach_hang')->where('id_xe', $request->id)
-        ->select('reviews.*', 'clients.ho_va_ten', 'clients.anh_dai_dien')->get();
+            ->select('reviews.*', 'clients.ho_va_ten', 'clients.anh_dai_dien')->get();
         foreach ($reviews as $key => $value) {
             $totall += $value->so_sao;
         }
@@ -63,5 +70,4 @@ class ReviewController extends Controller
             "tong_danh_gia" => $reviews->count()
         ]);
     }
-
 }

@@ -32,6 +32,13 @@ class AdminController extends Controller
         if ($check) {
             $admin = Personnel::where('ten_dang_nhap', $request->ten_dang_nhap)
                 ->first();
+            if ($admin->tinh_trang == -1) {
+                Auth::guard('admin')->logout();
+                return response()->json([
+                    'status'    => 0,
+                    'message'   => 'Tài khoản của bạn đã bị khóa',
+                ]);
+            }
             return response()->json([
                 'status'    => true,
                 'message'   => 'Đăng nhập thành công',

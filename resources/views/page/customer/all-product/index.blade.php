@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="primary__btn " @click='getSelectedIDs()'>Filter</button>
+                    <button class="primary__btn " @click='getSelectedIDs()'>Tìm Kiếm</button>
                 </div>
 
             </div>

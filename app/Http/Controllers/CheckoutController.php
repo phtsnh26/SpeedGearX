@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCheckOutRequest;
 use App\Http\Requests\CreateGioHangRequest;
+use App\Models\Booking;
 use App\Models\Checkout;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -13,7 +14,17 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-
+    public function daCoc($a)
+    {
+        $thanh_toan = Booking::find($a);
+        if ($thanh_toan) {
+            $thanh_toan->tinh_trang = Booking::DA_COC;
+            $thanh_toan->save();
+            return redirect('/');
+        } else {
+            return redirect('https://www.youtube.com/');
+        }
+    }
 
     public function indexCheckOut()
     {

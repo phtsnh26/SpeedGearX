@@ -39,7 +39,7 @@ class ListPermisionSeeder extends Seeder
                 'tinh_trang' => 1,
             ],
             [
-                'ten_hanh_dong' => "Quản Lý NGười Dùng",
+                'ten_hanh_dong' => "Quản Lý Người Dùng",
                 'tinh_trang' => 1,
             ],
             [

@@ -87,15 +87,17 @@
                                         <h3 class="payment__history--title mb-20">Phương Thức Thanh Toán</h3>
                                         <ul class="payment__history--inner d-flex">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                    id="inlineRadio1" value="1" @click='thanhToan(1)' checked>
+                                                <input v-model="selectedPaymentMethod" class="form-check-input"
+                                                    type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                                    value="1" @click='thanhToan(1)' checked>
                                                 <label class="form-check-label" for="inlineRadio1">
                                                     Thanh toán khi nhận xe
                                                 </label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                                    id="inlineRadio2" value="2" @click='thanhToan(2)'>
+                                                <input v-model="selectedPaymentMethod" class="form-check-input"
+                                                    type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                                    value="2" @click='thanhToan(2)'>
                                                 <label class="form-check-label" for="inlineRadio2">Thanh toán Online</label>
                                             </div>
                                         </ul>
@@ -107,11 +109,14 @@
                                 </div>
 
                             </div>
-                            <button id='btnThueXe' @click='thueXe()' class="checkout__now--btn primary__btn" type="button">
+                            <button v-if="selectedPaymentMethod === 1" id='btnThueXe' @click='thueXe()'
+                                class="mb-3 checkout__now--btn primary__btn" type="button">
+                                THUÊ XE
+                            </button>
+                            <button v-else name='payUrl' class="checkout__now--btn primary__btn" @click='thueXe()'>
                                 THUÊ XE
                             </button>
                         </aside>
-
                     </div>
                 </div>
             </div>
@@ -130,6 +135,7 @@
                     add: {
                         'phuong_thuc_thanh_toan': 1,
                     },
+                    selectedPaymentMethod: 1,
                 },
                 created() {
                     this.getData();
@@ -178,9 +184,13 @@
                             .post('{{ Route('createBooking') }}', this.add)
                             .then((res) => {
                                 if (res.data.status == 1) {
-                                    toastr.success(res.data.message, 'Thành Công');
+                                    toastr.success(res.data.message, 'Thành công')
                                     setTimeout(() => {
                                         window.location.href = '/';
+                                    }, 1000);
+                                } else if (res.data.status == 2) {
+                                    setTimeout(() => {
+                                        window.location.href = res.data.linkUrl;
                                     }, 1000);
                                 } else {
                                     $('#btnThueXe').prop('disabled', false);
@@ -188,9 +198,7 @@
                                 }
                             })
                             .catch((res) => {
-                                $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'Error');
-                                });
+                                console.log(res);
                             });
                     }
                 },

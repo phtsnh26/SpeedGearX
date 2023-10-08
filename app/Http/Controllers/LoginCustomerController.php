@@ -6,8 +6,10 @@ use App\Http\Requests\SignUpRequest;
 use App\Mail\ActiveMail;
 use App\Models\Client;
 use App\Models\LoginCustomer;
+use App\Models\Personnel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -61,6 +63,21 @@ class LoginCustomerController extends Controller
         } else {
             toastr()->error('Liên kết không tồn tại!');
             return redirect('/login/client');
+        }
+    }
+    public function activeAdmin()
+    {
+
+        $customer = Personnel::where('id', Personnel::max('id'))->first();
+
+        if ($customer) {
+            $customer->tinh_trang    = 1;
+            $customer->save();
+            toastr()->success('Đã kích hoạt tài khoản thành công!');
+            return redirect('/login/admin');
+        } else {
+            toastr()->error('Liên kết không tồn tại!');
+            return redirect('/login/admin');
         }
     }
 

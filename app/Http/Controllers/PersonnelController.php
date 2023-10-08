@@ -3,22 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\createPersonnelRequest;
+use App\Mail\ActiveMail;
+use App\Models\Permision;
 use App\Models\PermisionDetail;
 use App\Models\Personnel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PersonnelController extends Controller
 {
+    public function capCV(Request $request)
+    {
+        // dd($request->all());
+        $who = Auth::guard('admin')->user();
+        $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
+            ->where('id_quyen', $who->id_phan_quyen)
+            ->select('list_permisions.ten_hanh_dong')
+            ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
+            ->toArray(); // Chuyển đổi sang mảng
+        if (in_array('Quản Lý Nhân Sự', $check)) {
+            $cap = Personnel::where('id', $request->id)->first();
+            if ($cap) {
+                $cap->update([
+                    'id_phan_quyen' => $request->id_quyen,
+                ]);
+                return response()->json([
+                    'status'    => 1,
+                    'message'   => 'Cấp quyền thành công',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Bạn không đủ thẩm quyền để thực hiện chức năng này',
+            ]);
+        }
+    }
+    public function capQuyen(Request $request)
+    {
+        $edit = Permision::where('id', $request->id_phan_quyen)->first();
+        if ($edit) {
+            return response()->json([
+                'status'    => 1,
+                'id_quyen'     => $edit->id,
+            ]);
+        }
+    }
+
     public function indexPersonnel()
     {
         return view('page.admin.personnel.index');
     }
     public function dataPersonnel()
     {
-        $data = Personnel::get();
+        $data = Personnel::leftjoin('permisions', 'permisions.id', 'personnels.id_phan_quyen')
+            ->select('permisions.*', 'personnels.*')
+            ->get();
+        $dataQuyen = Permision::get();
         return response()->json([
             'data'    => $data,
+            'dataQuyen' => $dataQuyen,
         ]);
     }
     public function store(createPersonnelRequest $request)
@@ -43,8 +88,11 @@ class PersonnelController extends Controller
                 'cccd'              => $request->cccd,
                 'anh_minh_chung'    => $request->anh_minh_chung,
                 'tinh_trang'        => 0,
-                'id_phan_quyen'     => 1,
+                'id_phan_quyen'     => 0,
             ]);
+            $dataA['link']          =   env('APP_URL') . '/active-admin/';
+            $dataA['full_name']      =   $request->ho_va_ten;
+            Mail::to($request->email)->send(new ActiveMail($dataA));
             if ($check) {
                 return response()->json([
                     'status'    => 1,
@@ -129,7 +177,7 @@ class PersonnelController extends Controller
         $who = Auth::guard('admin')->user();
 
         $check = PermisionDetail::join('list_permisions', 'list_permisions.id', 'permision_details.id_hanh_dong')
-        ->where('id_quyen', $who->id_phan_quyen)
+            ->where('id_quyen', $who->id_phan_quyen)
             ->select('list_permisions.ten_hanh_dong')
             ->pluck('ten_hanh_dong') // Lấy mảng của các giá trị 'ten_hanh_dong'
             ->toArray(); // Chuyển đổi sang mảng
@@ -142,7 +190,7 @@ class PersonnelController extends Controller
                 } else {
                     $check->tinh_trang = 1;
                 }
-                if($request->id == $who->id){
+                if ($request->id == $who->id) {
                     $check->save();
                     return response()->json([
                         'status'    => 0,

@@ -350,7 +350,8 @@
                                                         title="Add to wishlist">
                                                         <div id='mauTim'>
                                                             <template v-if='check == 1'>
-                                                                <i class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg">
+                                                                <i
+                                                                    class="quickview__variant--wishlist__svg fa-solid fa-heart text-danger fa-lg">
                                                                 </i>
                                                             </template>
                                                             <template v-if='check == 0'><svg
@@ -586,9 +587,7 @@
                     const today = new Date().toISOString().split('T')[0];
                     this.add.ngay_dat = today;
                     this.loadImage();
-                    this.loadMyCar();
                     this.dataReview();
-
                 },
 
                 methods: {

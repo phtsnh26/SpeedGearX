@@ -21,7 +21,13 @@ class PermisionSeeder extends Seeder
                 'ten_quyen' => "Giám Đốc"
             ],
             [
-                'ten_quyen' => "Trợ lý lao công"
+                'ten_quyen' => "Quản Lý Hóa Đơn"
+            ],
+            [
+                'ten_quyen' => "Quản Lý Người Dùng"
+            ],
+            [
+                'ten_quyen' => "Quản Kho"
             ],
         ]);
     }
