@@ -269,44 +269,22 @@
                         axios
                             .get('{{ Route('dataHomePageAll') }}')
                             .then((res) => {
-                                if (res.data.check) {
-                                    this.link = res.data.data;
-                                    console.log(this.link);
-                                    this.list = res.data.data.data;
-                                    this.soPage = parseInt(Math.ceil(res.data.data.total / 9));
-                                    console.log(this.soPage);
-                                    this.list_images = res.data.images;
-                                    this.list.forEach(a => {
-                                        a
-                                            .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
-                                        this.list_images.forEach(b => {
-                                            if (a.id === b.id_xe) {
-                                                a.images.push(b
-                                                    .hinh_anh_xe
-                                                ); // Thêm hình ảnh vào mảng images của đối tượng a
-                                            }
-                                        });
-
+                                console.log(res.data);
+                                this.link = res.data.data;
+                                this.list = res.data.data.data;
+                                this.soPage = parseInt(Math.ceil(res.data.data.total / 9));
+                                this.list_images = res.data.images;
+                                this.list.forEach(a => {
+                                    a
+                                        .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
+                                    this.list_images.forEach(b => {
+                                        if (a.id === b.id_xe) {
+                                            a.images.push(b
+                                                .hinh_anh_xe
+                                            ); // Thêm hình ảnh vào mảng images của đối tượng a
+                                        }
                                     });
-                                } else {
-                                    this.link = res.data.data;
-                                    this.list = res.data.data.data;
-                                    this.soPage = parseInt(Math.ceil(res.data.data.total / 9));
-                                    console.log(res.data.check);
-                                    this.list_images = res.data.images;
-                                    this.list.forEach(a => {
-                                        a
-                                            .images = []; // Khởi tạo mảng images cho mỗi đối tượng a
-                                        this.list_images.forEach(b => {
-                                            if (a.id === b.id_xe) {
-                                                a.images.push(b
-                                                    .hinh_anh_xe
-                                                ); // Thêm hình ảnh vào mảng images của đối tượng a
-                                            }
-                                        });
-                                    });
-                                }
-
+                                });
                             });
                     },
                     numberFormat(number) {
@@ -352,7 +330,8 @@
                         axios
                             .post('{{ route('filterAllProduct') }}', payload)
                             .then((res) => {
-                                this.list = res.data.data;
+                                this.link = res.data.data;
+                                this.list = res.data.data.data;
                                 this.list_images = res.data.image;
                                 this.list.forEach(a => {
                                     a.images = []; // Khởi tạo mảng images cho mỗi đối tượng a
@@ -364,12 +343,10 @@
                                         }
                                     });
                                 });
-
                             })
                             .catch((res) => {
-                                $.each(res.response.data.errors, function(k, v) {
-                                    toastr.error(v[0], 'error');
-                                });
+                                console.log(res);
+
                             });
                     },
                     nextPage() {
@@ -439,7 +416,6 @@
                     },
                     changePage(k) {
                         this.currentPage = k;
-                        // console.log(this.currentPage);
                         axios
                             .get("http://127.0.0.1:8000/data-all?" + this.soPage + "=" + (k + 1))
                             .then((res) => {
